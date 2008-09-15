@@ -2,6 +2,11 @@ package eu.spoonman.smasher.serverinfo;
 
 class NotValidResponseException extends Exception {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public NotValidResponseException() {
         // TODO Auto-generated constructor stub
     }

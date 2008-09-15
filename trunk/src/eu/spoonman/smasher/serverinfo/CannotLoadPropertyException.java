@@ -1,8 +1,13 @@
 package eu.spoonman.smasher.serverinfo;
 
-class CannotLoadPropertyException extends Exception {
+public class CannotLoadPropertyException extends Exception {
 
-	public CannotLoadPropertyException() {
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    public CannotLoadPropertyException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

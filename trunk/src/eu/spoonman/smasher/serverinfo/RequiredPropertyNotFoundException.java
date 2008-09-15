@@ -1,6 +1,6 @@
 package eu.spoonman.smasher.serverinfo;
 
-class RequiredPropertyNotFoundException extends Exception {
+public class RequiredPropertyNotFoundException extends Exception {
 
 	/**
      * 
