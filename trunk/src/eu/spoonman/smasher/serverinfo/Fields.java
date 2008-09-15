@@ -1,6 +1,6 @@
 package eu.spoonman.smasher.serverinfo;
 
-public enum Fields {
+enum Fields {
 	
 	GAME,
 	DEFAULTPORT,
