@@ -1,19 +1,19 @@
 package eu.spoonman.smasher.serverinfo.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import eu.spoonman.smasher.serverinfo.*;
+import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.ServerQuery;
 
 
 public class ServerQueryTest {
@@ -44,6 +44,7 @@ public class ServerQueryTest {
 		
 		while (matcher.find()) {
 			MatchResult matchResult = matcher.toMatchResult();
+            
 			char c = (char)Integer.parseInt(matchResult.group(1), 16);
 			sb.append(c);
 		}

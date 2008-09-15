@@ -29,7 +29,7 @@ public class ServerQueryManagerTest {
         
         assertNotNull(serverQuery);
         
-        ServerInfo serverInfo = serverQuery.Query();
+        ServerInfo serverInfo = serverQuery.query();
         System.out.println(serverInfo);
         
         assertNotNull(serverInfo);

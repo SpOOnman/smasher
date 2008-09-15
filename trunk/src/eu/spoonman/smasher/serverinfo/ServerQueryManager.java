@@ -5,7 +5,7 @@ import java.net.*;
 import java.util.*;
 
 public class ServerQueryManager {
-    
+
     private static final String path = "src/eu/spoonman/spider/serverinfo/";
 
     public static ServerQuery CreateServerQuery(String gameName, String address, int port) throws CannotLoadPropertyException,
@@ -50,7 +50,7 @@ public class ServerQueryManager {
 
         return value;
     }
-    
+
     private static String getStringProperty(Properties properties, Fields fieldone, Fields fieldtwo, String defaultValue)
             throws RequiredPropertyNotFoundException {
 
@@ -61,7 +61,8 @@ public class ServerQueryManager {
         return getProperty(properties, fieldone.toString(), null, true);
     }
 
-    private static String getStringProperty(Properties properties, Fields fieldone, Fields fieldtwo) throws RequiredPropertyNotFoundException {
+    private static String getStringProperty(Properties properties, Fields fieldone, Fields fieldtwo)
+            throws RequiredPropertyNotFoundException {
         return getProperty(properties, fieldone.toString() + "." + fieldtwo.toString(), null, true);
     }
 

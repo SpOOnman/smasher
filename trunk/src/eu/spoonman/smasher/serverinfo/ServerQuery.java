@@ -11,6 +11,8 @@ import java.util.regex.*;
 
 public class ServerQuery {
 
+    // <editor-fold defaultstate="collapsed" desc="fields">
+
     private byte[] queryHeader;
 
     private String response;
@@ -51,7 +53,9 @@ public class ServerQuery {
 
     private final int timeout = 3000;
 
-    public ServerInfo Query() {
+    // </editor-fold>
+
+    public ServerInfo query() {
         ServerInfo serverInfo = new ServerInfo();
 
         try {
@@ -130,6 +134,8 @@ public class ServerQuery {
 
         return resp;
     }
+
+    // <editor-fold defaultstate="collapsed" desc="properties">
 
     /**
      * @param queryHeader
@@ -267,4 +273,6 @@ public class ServerQuery {
     public void setPort(int port) {
         this.port = port;
     }
+
+    // </editor-fold>
 }
