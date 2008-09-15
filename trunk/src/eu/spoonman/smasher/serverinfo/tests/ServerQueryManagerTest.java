@@ -15,7 +15,7 @@ public class ServerQueryManagerTest {
         ServerQuery serverQuery = null;
         
         try {
-            serverQuery = ServerQueryManager.CreateServerQuery("quake3arena", "194.187.43.245", 27971);
+            serverQuery = ServerQueryManager.CreateServerQuery(Games.QUAKE3ARENA, "194.187.43.245", 27971);
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

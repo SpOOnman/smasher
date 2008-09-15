@@ -6,15 +6,13 @@ import java.util.*;
 
 public class ServerQueryManager {
 
-    private static final String path = "src/eu/spoonman/smasher/serverinfo/";
-
-    public static ServerQuery CreateServerQuery(String gameName, String address, int port) throws CannotLoadPropertyException,
+    public static ServerQuery CreateServerQuery(Games game, String address, int port) throws CannotLoadPropertyException,
             RequiredPropertyNotFoundException, UnknownHostException {
 
         Properties properties = null;
 
         try {
-            properties = LoadProperties(path + gameName + ".properties");
+            properties = LoadProperties(game.getFileName());
         } catch (IOException e) {
             throw new CannotLoadPropertyException(e);
         }
