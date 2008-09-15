@@ -6,7 +6,7 @@ import java.util.*;
 
 public class ServerQueryManager {
 
-    private static final String path = "src/eu/spoonman/spider/serverinfo/";
+    private static final String path = "src/eu/spoonman/smasher/serverinfo/";
 
     public static ServerQuery CreateServerQuery(String gameName, String address, int port) throws CannotLoadPropertyException,
             RequiredPropertyNotFoundException, UnknownHostException {
@@ -26,8 +26,8 @@ public class ServerQueryManager {
         serverQuery.setAddress(iaddress);
         serverQuery.setPort(port);
 
-        serverQuery.setQueryHeader(getStringProperty(properties, Fields.QUERY));
-        serverQuery.setResponse(getStringProperty(properties, Fields.RESPONSE));
+        serverQuery.setQueryHeader(getStringProperty(properties, Fields.QUERYHEADER));
+        serverQuery.setResponseHeader(getStringProperty(properties, Fields.RESPONSEHEADER));
         serverQuery.setServerRegex(getStringProperty(properties, Fields.SERVERSECTION, Fields.SERVERREGEX));
         serverQuery.setOrdinalKey(getIntProperty(properties, Fields.SERVERSECTION, Fields.ORDINALKEY));
         serverQuery.setOrdinalValue(getIntProperty(properties, Fields.SERVERSECTION, Fields.ORDINALVALUE));

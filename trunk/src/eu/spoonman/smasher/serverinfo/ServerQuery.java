@@ -15,7 +15,7 @@ public class ServerQuery {
 
     private byte[] queryHeader;
 
-    private String response;
+    private byte[] responseHeader;
 
     private Pattern serverRegex;
 
@@ -62,11 +62,14 @@ public class ServerQuery {
             DatagramPacket packet = this.queryServer();
 
             byte[] data = packet.getData();
-
+            
+            validateResponse(data);
             parseData(serverInfo, data);
 
             serverInfo.setStatus(ServerInfoStatus.OK);
 
+        } catch (NotValidResponseException e) {
+            serverInfo.setStatus(ServerInfoStatus.NOT_VALID_RESPONSE);
         } catch (UnknownHostException e) {
             serverInfo.setStatus(ServerInfoStatus.UNKNOWN_HOST);
         } catch (SocketTimeoutException e) {
@@ -77,6 +80,16 @@ public class ServerQuery {
 
         return serverInfo;
     }
+    
+    private void validateResponse(byte[] bytes) throws NotValidResponseException {
+        boolean valid = Arrays.equals(this.responseHeader, Arrays.copyOf(bytes, this.responseHeader.length));
+        
+        if (!valid)
+            throw new NotValidResponseException ();
+        
+        bytes = Arrays.copyOfRange(bytes, this.responseHeader.length, bytes.length);
+        
+    }
 
     public void parseData(ServerInfo serverInfo, byte[] bytes) {
         parseServerData(serverInfo, bytes);
@@ -84,6 +97,9 @@ public class ServerQuery {
     }
 
     public void parseServerData(ServerInfo serverInfo, byte[] bytes) {
+        
+        
+        
         String data = new String(bytes);
 
         Matcher matcher = this.serverRegex.matcher(data);
@@ -142,6 +158,10 @@ public class ServerQuery {
      *            the queryHeader to set
      */
     public void setQueryHeader(String queryHeader) {
+        this.queryHeader = translateHeader(queryHeader);
+    }
+
+    private byte[] translateHeader(String queryHeader) {
         Scanner scanner = new Scanner(queryHeader);
         List<Byte> bytes = new ArrayList<Byte>();
         while (scanner.hasNext()) {
@@ -149,17 +169,19 @@ public class ServerQuery {
             bytes.add((byte) (i.intValue()));
         }
 
-        this.queryHeader = new byte[bytes.size()];
+        byte[] returnBytes = new byte[bytes.size()];
         for (int i = 0; i < bytes.size(); i++)
-            this.queryHeader[i] = bytes.get(i);
+            returnBytes[i] = bytes.get(i);
+        
+        return returnBytes;
     }
 
     /**
      * @param response
      *            the response to set
      */
-    public void setResponse(String response) {
-        this.response = response;
+    public void setResponseHeader(String responseHeader) {
+        this.responseHeader = translateHeader(responseHeader);
     }
 
     public void setServerRegex(String serverRegex) {

@@ -1,6 +1,6 @@
 package eu.spoonman.smasher.serverinfo;
 
-public class CannotLoadPropertyException extends Exception {
+class CannotLoadPropertyException extends Exception {
 
 	public CannotLoadPropertyException() {
 		super();
