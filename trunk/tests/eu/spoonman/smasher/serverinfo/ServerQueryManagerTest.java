@@ -1,4 +1,4 @@
-package eu.spoonman.smasher.serverinfo.tests;
+package eu.spoonman.smasher.serverinfo;
 
 import static org.junit.Assert.*;
 
