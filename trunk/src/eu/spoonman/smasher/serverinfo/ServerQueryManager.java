@@ -12,7 +12,7 @@ public class ServerQueryManager {
         Properties properties = null;
 
         try {
-            properties = LoadProperties(game.getFileName());
+            properties = LoadProperties(game.getFiles());
         } catch (IOException e) {
             throw new CannotLoadPropertyException(e);
         }
@@ -74,10 +74,12 @@ public class ServerQueryManager {
         return Integer.parseInt(getProperty(properties, fieldone.toString() + "." + fieldtwo.toString(), null, true));
     }
 
-    private static Properties LoadProperties(String fileName) throws IOException {
+    private static Properties LoadProperties(List<String> files) throws IOException {
         Properties properties = new Properties();
-        properties.load(new FileInputStream(fileName));
-
+        for (String file : files) {
+            properties.load(new FileInputStream(file));
+        }
+        
         return properties;
     }
 }

@@ -1,12 +1,11 @@
 package eu.spoonman.smasher.serverinfo;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.net.UnknownHostException;
 
 import org.junit.Test;
-
-import eu.spoonman.smasher.serverinfo.*;
 
 public class ServerQueryManagerTest {
     
@@ -34,6 +33,20 @@ public class ServerQueryManagerTest {
         
         assertNotNull(serverInfo);
 
+    }
+    
+    @Test
+    public void creationTest() {
+        for (Games game : Games.values()) {
+            try {
+                @SuppressWarnings("unused")
+                ServerQuery serverQuery = ServerQueryManager.CreateServerQuery(game, "127.0.0.1", 20000);
+                assertNotNull(serverQuery);
+            } catch (Exception e) {
+                e.printStackTrace();
+                fail(game.toString());
+            }
+        }
     }
 
 }
