@@ -1,10 +1,17 @@
 package eu.spoonman.smasher.serverinfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import eu.spoonman.smasher.serverinfo.parser.timeinfo.TimeInfoParser;
 
 public class ServerInfo {
 	
 	private ServerInfoStatus status;
+	
+	private TimeInfoParser timeParser;
 
     private String name;
     private String map;
