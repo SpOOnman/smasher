@@ -13,7 +13,6 @@ import java.util.Scanner;
 
 import eu.spoonman.smasher.serverinfo.builder.Builder;
 import eu.spoonman.smasher.serverinfo.header.Header;
-import eu.spoonman.smasher.serverinfo.parser.ServerStatusParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.GameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.serverstatusinfo.ServerStatusInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.TimeInfoParser;
