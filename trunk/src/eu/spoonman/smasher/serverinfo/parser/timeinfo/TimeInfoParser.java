@@ -1,5 +1,6 @@
 package eu.spoonman.smasher.serverinfo.parser.timeinfo;
 
+import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TimeInfo;
 
 /**
@@ -8,6 +9,6 @@ import eu.spoonman.smasher.serverinfo.TimeInfo;
  */
 public interface TimeInfoParser {
     
-    public TimeInfo getTimeInfo();
+    public TimeInfo getTimeInfo(ServerInfo serverInfo);
 
 }
