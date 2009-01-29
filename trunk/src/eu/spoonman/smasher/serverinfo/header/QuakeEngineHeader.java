@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
  * General Quake engine based games header configuration.
  * @author Tomasz Kalkosiński
  */
-public class QuakeEngineHeader {
+public class QuakeEngineHeader implements Header{
 
     private final static String queryHeaderString = "\u00ff\u00ff\u00ff\u00ffgetstatus";
     private final static String responseHeaderString = "\u00ff\u00ff\u00ff\u00ffstatusResponse";

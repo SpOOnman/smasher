@@ -23,8 +23,8 @@ public class Quake3OSPTimeInfoParser extends Parser implements TimeInfoParser {
      * eu.spoonman.smasher.serverinfo.parser.timeinfo.TimeInfoParser#getTime()
      */
     @Override
-    public TimeInfo getTime() {
-        return new StandardTimeInfo();
+    public TimeInfo getTimeInfo() {
+        return new StandardTimeInfo("asd");
     }
 
 }

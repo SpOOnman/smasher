@@ -12,17 +12,17 @@ import eu.spoonman.smasher.serverinfo.ServerInfo;
 
 /**
  * @author spoonman
- *
+ * 
  */
-public abstract class RegexReader {
-    
+public abstract class RegexReader implements Reader {
+
     public void parseData(ServerInfo serverInfo, byte[] bytes) {
         parseServerData(serverInfo, bytes);
         parsePlayerData(serverInfo, bytes);
     }
 
     public void parseServerData(ServerInfo serverInfo, byte[] bytes) {
-        
+
         String data = new String(bytes);
 
         Matcher matcher = getServerPattern().matcher(data);
@@ -35,7 +35,7 @@ public abstract class RegexReader {
     }
 
     protected abstract Pattern getServerPattern();
-    
+
     protected abstract Pattern getPlayerPattern();
 
     public void parsePlayerData(ServerInfo serverInfo, byte[] bytes) {
@@ -47,18 +47,21 @@ public abstract class RegexReader {
             MatchResult matchResult = matcher.toMatchResult();
             PlayerInfo playerInfo = new PlayerInfo();
 
-            /*if (ordinalName > -1)
-                playerInfo.setName(matchResult.group(ordinalName));
-
-            if (ordinalPing > -1)
-                playerInfo.setPing(Integer.parseInt(matchResult.group(ordinalPing)));
-
-            if (ordinalScore > -1)
-                playerInfo.setScore(Integer.parseInt(matchResult.group(ordinalScore)));*/
+            /*
+             * if (ordinalName > -1)
+             * playerInfo.setName(matchResult.group(ordinalName));
+             * 
+             * if (ordinalPing > -1)
+             * playerInfo.setPing(Integer.parseInt(matchResult
+             * .group(ordinalPing)));
+             * 
+             * if (ordinalScore > -1)
+             * playerInfo.setScore(Integer.parseInt(matchResult
+             * .group(ordinalScore)));
+             */
 
             // if (ordinalClan > -1)
             // playerInfo.setClan(matchResult.group(ordinalClan));
-
             serverInfo.getPlayerInfos().add(playerInfo);
         }
     }

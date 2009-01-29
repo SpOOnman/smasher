@@ -6,44 +6,45 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.*;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
+import eu.spoonman.smasher.serverinfo.builder.Builder;
+import eu.spoonman.smasher.serverinfo.header.Header;
+import eu.spoonman.smasher.serverinfo.parser.ServerStatusParser;
+import eu.spoonman.smasher.serverinfo.parser.gameinfo.GameInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.timeinfo.TimeInfoParser;
+import eu.spoonman.smasher.serverinfo.reader.Reader;
+
+/**
+ * Main class for querying server with all logic to read and parse. After first
+ * query builder builds internal parsers depends on game version and
+ * modification version.
+ * 
+ * @author Tomasz Kalkosiński
+ * 
+ */
 public class ServerQuery {
 
-    // <editor-fold defaultstate="collapsed" desc="fields">
+    private ServerStatusParser serverStatusParser;
+
+    private GameInfoParser gameInfoParser;
+
+    private TimeInfoParser timeInfoParser;
+
+    // ...
+
+    private Reader reader;
+    
+    private Header header;
+
+    private Builder builder;
 
     private byte[] queryHeader;
 
     private byte[] responseHeader;
-
-    private Pattern serverRegex;
-
-    private int ordinalKey = -1;
-
-    private int ordinalValue = -1;
-
-    private String mapField;
-
-    private String serverNameField;
-
-    private String timeField;
-
-    private String modField;
-
-    private String versionField;
-
-    private String modVersionField;
-
-    private Pattern playerRegex;
-
-    private int ordinalName = -1;
-
-    private int ordinalScore = -1;
-
-    private int ordinalPing = -1;
-
-    private int ordinalClan = -1;
 
     private InetAddress address;
 
@@ -62,9 +63,9 @@ public class ServerQuery {
             DatagramPacket packet = this.queryServer();
 
             byte[] data = packet.getData();
-            
+
             validateResponse(data);
-            parseData(serverInfo, data);
+            reader.parseData(serverInfo, data);
 
             serverInfo.setStatus(ServerInfoStatus.OK);
 
@@ -80,60 +81,15 @@ public class ServerQuery {
 
         return serverInfo;
     }
-    
+
     private void validateResponse(byte[] bytes) throws NotValidResponseException {
         boolean valid = Arrays.equals(this.responseHeader, Arrays.copyOf(bytes, this.responseHeader.length));
-        
+
         if (!valid)
-            throw new NotValidResponseException ();
-        
+            throw new NotValidResponseException();
+
         bytes = Arrays.copyOfRange(bytes, this.responseHeader.length, bytes.length);
-        
-    }
 
-    public void parseData(ServerInfo serverInfo, byte[] bytes) {
-        parseServerData(serverInfo, bytes);
-        parsePlayerData(serverInfo, bytes);
-    }
-
-    public void parseServerData(ServerInfo serverInfo, byte[] bytes) {
-        
-        
-        
-        String data = new String(bytes);
-
-        Matcher matcher = this.serverRegex.matcher(data);
-
-        while (matcher.find()) {
-            MatchResult matchResult = matcher.toMatchResult();
-
-            serverInfo.getNamedAttributes().put(matchResult.group(1), matchResult.group(2));
-        }
-    }
-
-    public void parsePlayerData(ServerInfo serverInfo, byte[] bytes) {
-        String data = new String(bytes);
-
-        Matcher matcher = this.playerRegex.matcher(data);
-
-        while (matcher.find()) {
-            MatchResult matchResult = matcher.toMatchResult();
-            PlayerInfo playerInfo = new PlayerInfo();
-
-            if (ordinalName > -1)
-                playerInfo.setName(matchResult.group(ordinalName));
-
-            if (ordinalPing > -1)
-                playerInfo.setPing(Integer.parseInt(matchResult.group(ordinalPing)));
-
-            if (ordinalScore > -1)
-                playerInfo.setScore(Integer.parseInt(matchResult.group(ordinalScore)));
-
-            // if (ordinalClan > -1)
-            // playerInfo.setClan(matchResult.group(ordinalClan));
-
-            serverInfo.getPlayerInfos().add(playerInfo);
-        }
     }
 
     private DatagramPacket queryServer() throws IOException {
@@ -172,7 +128,7 @@ public class ServerQuery {
         byte[] returnBytes = new byte[bytes.size()];
         for (int i = 0; i < bytes.size(); i++)
             returnBytes[i] = bytes.get(i);
-        
+
         return returnBytes;
     }
 
@@ -182,102 +138,6 @@ public class ServerQuery {
      */
     public void setResponseHeader(String responseHeader) {
         this.responseHeader = translateHeader(responseHeader);
-    }
-
-    public void setServerRegex(String serverRegex) {
-        this.serverRegex = Pattern.compile(serverRegex);
-    }
-
-    public void setOrdinalKey(int ordinalKey) {
-        this.ordinalKey = ordinalKey;
-    }
-
-    public void setOrdinalValue(int ordinalValue) {
-        this.ordinalValue = ordinalValue;
-    }
-
-    /**
-     * @param mapField
-     *            the mapField to set
-     */
-    public void setMapField(String mapField) {
-        this.mapField = mapField;
-    }
-
-    /**
-     * @param serverNameField
-     *            the serverNameField to set
-     */
-    public void setServerNameField(String serverNameField) {
-        this.serverNameField = serverNameField;
-    }
-
-    /**
-     * @param timeField
-     *            the timeField to set
-     */
-    public void setTimeField(String timeField) {
-        this.timeField = timeField;
-    }
-
-    /**
-     * @param modField
-     *            the modField to set
-     */
-    public void setModField(String modField) {
-        this.modField = modField;
-    }
-
-    /**
-     * @param versionField
-     *            the versionField to set
-     */
-    public void setVersionField(String versionField) {
-        this.versionField = versionField;
-    }
-
-    /**
-     * @param modVersionField
-     *            the modVersionField to set
-     */
-    public void setModVersionField(String modVersionField) {
-        this.modVersionField = modVersionField;
-    }
-
-    public void setPlayerRegex(String playerRegex) {
-        this.playerRegex = Pattern.compile(playerRegex);
-    }
-
-    /**
-     * @param ordinalName
-     *            the ordinalName to set
-     */
-    public void setOrdinalName(int ordinalName) {
-        this.ordinalName = ordinalName;
-    }
-
-    /**
-     * @param ordinalScore
-     *            the ordinalScore to set
-     */
-    public void setOrdinalScore(int ordinalScore) {
-        this.ordinalScore = ordinalScore;
-    }
-
-    /**
-     * @param ordinalPing
-     *            the ordinalPing to set
-     */
-    public void setOrdinalPing(int ordinalPing) {
-        this.ordinalPing = ordinalPing;
-    }
-
-    /**
-     * @param ordinalClan
-     *            the ordinalClan to set
-     */
-    public void setOrdinalClan(int ordinalClan) {
-        this.ordinalClan = ordinalClan;
     }
 
     /**
@@ -295,6 +155,4 @@ public class ServerQuery {
     public void setPort(int port) {
         this.port = port;
     }
-
-    // </editor-fold>
 }
