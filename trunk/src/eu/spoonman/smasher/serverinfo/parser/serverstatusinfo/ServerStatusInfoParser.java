@@ -4,9 +4,9 @@
 package eu.spoonman.smasher.serverinfo.parser.serverstatusinfo;
 
 /**
- * @author spoonman
+ * @author Tomasz Kalkosiński
  *
  */
-public class ServerStatusInfoParser {
+public interface ServerStatusInfoParser {
 
 }
