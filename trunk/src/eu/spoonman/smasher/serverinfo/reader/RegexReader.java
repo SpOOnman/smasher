@@ -16,7 +16,7 @@ import eu.spoonman.smasher.serverinfo.ServerInfo;
  */
 public abstract class RegexReader implements Reader {
 
-    public void parseData(ServerInfo serverInfo, byte[] bytes) {
+    public void readData(ServerInfo serverInfo, byte[] bytes) {
         parseServerData(serverInfo, bytes);
         parsePlayerData(serverInfo, bytes);
     }

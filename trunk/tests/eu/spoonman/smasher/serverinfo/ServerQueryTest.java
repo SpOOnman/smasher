@@ -60,7 +60,7 @@ public class ServerQueryTest {
 		serverQuery.setOrdinalPing(2);
 		serverQuery.setOrdinalName(3);
 		
-		serverQuery.parseData(serverInfo, sb.toString().getBytes());
+		serverQuery.readData(serverInfo, sb.toString().getBytes());
 		
 		System.out.println(serverInfo);
 	}

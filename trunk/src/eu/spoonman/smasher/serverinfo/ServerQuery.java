@@ -41,6 +41,8 @@ public class ServerQuery {
     private Header header;
 
     private Builder builder;
+    
+    private boolean alreadyBuilded;
 
     private byte[] queryHeader;
 
@@ -53,19 +55,30 @@ public class ServerQuery {
     private final int packetSize = 65507;
 
     private final int timeout = 3000;
+    
+    /**
+     * 
+     */
+    public ServerQuery() {
+        alreadyBuilded = false;
+    }
 
-    // </editor-fold>
 
     public ServerInfo query() {
         ServerInfo serverInfo = new ServerInfo();
 
         try {
             DatagramPacket packet = this.queryServer();
-
             byte[] data = packet.getData();
 
             validateResponse(data);
-            reader.parseData(serverInfo, data);
+            
+            reader.readData(serverInfo, data);
+            
+            if (!alreadyBuilded)
+                buildParsers(serverInfo);
+            
+            parseData(serverInfo);
 
             serverInfo.setStatus(ServerInfoStatus.OK);
 
@@ -80,6 +93,15 @@ public class ServerQuery {
         }
 
         return serverInfo;
+    }
+    
+    private void buildParsers(ServerInfo serverInfo){
+        gameInfoParser = builder.getGameInfoParser(serverInfo);
+        timeInfoParser = builder.getTimeInfoParser(serverInfo);
+    }
+    
+    private void parseData(ServerInfo serverInfo){
+        serverInfo.setMap("map");
     }
 
     private void validateResponse(byte[] bytes) throws NotValidResponseException {
@@ -107,12 +129,6 @@ public class ServerQuery {
         return resp;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="properties">
-
-    /**
-     * @param queryHeader
-     *            the queryHeader to set
-     */
     public void setQueryHeader(String queryHeader) {
         this.queryHeader = translateHeader(queryHeader);
     }

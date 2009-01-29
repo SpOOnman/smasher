@@ -19,6 +19,6 @@ public interface Reader {
      * @param serverInfo
      * @param bytes
      */
-    public void parseData(ServerInfo serverInfo, byte[] bytes);
+    public void readData(ServerInfo serverInfo, byte[] bytes);
 
 }
