@@ -27,6 +27,7 @@ public class QuakeEngineHeader implements Header{
     /**
      * @return the queryHeader
      */
+    @Override
     public byte[] getQueryHeader() {
         return queryHeader;
     }
@@ -34,6 +35,7 @@ public class QuakeEngineHeader implements Header{
     /**
      * @return the responseHeader
      */
+    @Override
     public byte[] getResponseHeader() {
         return responseHeader;
     }

@@ -44,10 +44,6 @@ public class ServerQuery {
     
     private boolean alreadyBuilded;
 
-    private byte[] queryHeader;
-
-    private byte[] responseHeader;
-
     private InetAddress address;
 
     private int port;
@@ -105,12 +101,12 @@ public class ServerQuery {
     }
 
     private void validateResponse(byte[] bytes) throws NotValidResponseException {
-        boolean valid = Arrays.equals(this.responseHeader, Arrays.copyOf(bytes, this.responseHeader.length));
+        boolean valid = Arrays.equals(header.getResponseHeader(), Arrays.copyOf(bytes, header.getResponseHeader().length));
 
         if (!valid)
             throw new NotValidResponseException();
 
-        bytes = Arrays.copyOfRange(bytes, this.responseHeader.length, bytes.length);
+        bytes = Arrays.copyOfRange(bytes, header.getResponseHeader().length, bytes.length);
 
     }
 
@@ -118,7 +114,7 @@ public class ServerQuery {
 
         DatagramSocket socket = new DatagramSocket();
 
-        DatagramPacket query = new DatagramPacket(this.queryHeader, this.queryHeader.length, address, port);
+        DatagramPacket query = new DatagramPacket(header.getQueryHeader(), header.getQueryHeader().length, address, port);
         socket.send(query);
         socket.setSoTimeout(timeout);
 
@@ -128,34 +124,7 @@ public class ServerQuery {
 
         return resp;
     }
-
-    public void setQueryHeader(String queryHeader) {
-        this.queryHeader = translateHeader(queryHeader);
-    }
-
-    private byte[] translateHeader(String queryHeader) {
-        Scanner scanner = new Scanner(queryHeader);
-        List<Byte> bytes = new ArrayList<Byte>();
-        while (scanner.hasNext()) {
-            Integer i = Integer.valueOf(scanner.next(), 16);
-            bytes.add((byte) (i.intValue()));
-        }
-
-        byte[] returnBytes = new byte[bytes.size()];
-        for (int i = 0; i < bytes.size(); i++)
-            returnBytes[i] = bytes.get(i);
-
-        return returnBytes;
-    }
-
-    /**
-     * @param response
-     *            the response to set
-     */
-    public void setResponseHeader(String responseHeader) {
-        this.responseHeader = translateHeader(responseHeader);
-    }
-
+    
     /**
      * @param address
      *            the address to set

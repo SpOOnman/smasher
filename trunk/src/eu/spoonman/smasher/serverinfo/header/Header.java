@@ -5,5 +5,9 @@ package eu.spoonman.smasher.serverinfo.header;
  *
  */
 public interface Header {
+    
+    public byte[] getQueryHeader();
+    
+    public byte[] getResponseHeader();
 
 }
