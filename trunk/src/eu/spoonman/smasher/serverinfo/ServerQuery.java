@@ -37,11 +37,16 @@ public class ServerQuery {
     // ...
 
     private Reader reader;
-    
+
     private Header header;
 
     private Builder builder;
-    
+
+    /**
+     * Determines whether builder has already builded parsers. This should
+     * happen after first query has done and builder can determine parsers based
+     * on versions and mods.
+     */
     private boolean alreadyBuilded;
 
     private InetAddress address;
@@ -51,14 +56,13 @@ public class ServerQuery {
     private final int packetSize = 65507;
 
     private final int timeout = 3000;
-    
+
     /**
      * 
      */
     public ServerQuery() {
         alreadyBuilded = false;
     }
-
 
     public ServerInfo query() {
         ServerInfo serverInfo = new ServerInfo();
@@ -68,12 +72,12 @@ public class ServerQuery {
             byte[] data = packet.getData();
 
             validateResponse(data);
-            
+
             reader.readData(serverInfo, data);
-            
+
             if (!alreadyBuilded)
                 buildParsers(serverInfo);
-            
+
             parseData(serverInfo);
 
             serverInfo.setStatus(ServerInfoStatus.OK);
@@ -90,13 +94,13 @@ public class ServerQuery {
 
         return serverInfo;
     }
-    
-    private void buildParsers(ServerInfo serverInfo){
+
+    private void buildParsers(ServerInfo serverInfo) {
         gameInfoParser = builder.getGameInfoParser(serverInfo);
         timeInfoParser = builder.getTimeInfoParser(serverInfo);
     }
-    
-    private void parseData(ServerInfo serverInfo){
+
+    private void parseData(ServerInfo serverInfo) {
         serverInfo.setMap("map");
     }
 
@@ -124,7 +128,7 @@ public class ServerQuery {
 
         return resp;
     }
-    
+
     /**
      * @param address
      *            the address to set
