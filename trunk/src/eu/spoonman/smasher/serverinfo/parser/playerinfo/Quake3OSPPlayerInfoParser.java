@@ -10,10 +10,13 @@ import eu.spoonman.smasher.serverinfo.ServerInfo;
  * 
  */
 public class Quake3OSPPlayerInfoParser implements PlayerInfoParser {
-
+    
+    /* (non-Javadoc)
+     * @see eu.spoonman.smasher.serverinfo.parser.playerinfo.PlayerInfoParser#getPlayerInfo(eu.spoonman.smasher.serverinfo.PlayerInfo, eu.spoonman.smasher.serverinfo.ServerInfo)
+     */
     @Override
-    public List<PlayerInfo> getPlayerInfos(ServerInfo serverInfo) {
+    public List<PlayerInfo> getPlayerInfo(PlayerInfo playerInfo, ServerInfo serverInfo) {
+        // TODO Auto-generated method stub
         return null;
     }
-
 }
