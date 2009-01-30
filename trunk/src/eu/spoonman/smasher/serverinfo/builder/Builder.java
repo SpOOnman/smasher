@@ -4,11 +4,13 @@
 package eu.spoonman.smasher.serverinfo.builder;
 
 
+import java.util.List;
+
 import eu.spoonman.smasher.serverinfo.Mod;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.Version;
-import eu.spoonman.smasher.serverinfo.parser.gameinfo.GameInfoParser;
-import eu.spoonman.smasher.serverinfo.parser.timeinfo.TimeInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.PlayerInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 
 /**
  * @author spoonman
@@ -16,9 +18,9 @@ import eu.spoonman.smasher.serverinfo.parser.timeinfo.TimeInfoParser;
  */
 public interface Builder {
     
-    public GameInfoParser getGameInfoParser(ServerInfo serverInfo);
+    public List<ServerInfoParser> getServerInfoParsers(ServerInfo serverInfo);
     
-    public TimeInfoParser getTimeInfoParser(ServerInfo serverInfo);
+    public List<PlayerInfoParser> getPlayerInfoParsers(ServerInfo serverInfo);
     
     public Version getGameVersion(ServerInfo serverInfo);
     

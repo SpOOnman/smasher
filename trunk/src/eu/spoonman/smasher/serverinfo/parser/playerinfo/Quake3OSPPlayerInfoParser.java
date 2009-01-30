@@ -4,6 +4,7 @@ import java.util.List;
 
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.parser.PlayerInfoParser;
 
 /**
  * @author Tomasz Kalkosiński
