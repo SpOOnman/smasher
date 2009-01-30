@@ -9,7 +9,7 @@ import eu.spoonman.smasher.serverinfo.ServerInfo;
  * @author spoonman
  *
  */
-public interface Parser {
+public interface ServerInfoParser {
     
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException;
 
