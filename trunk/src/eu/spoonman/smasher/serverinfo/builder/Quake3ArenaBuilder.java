@@ -14,7 +14,7 @@ import eu.spoonman.smasher.serverinfo.parser.timeinfo.Quake3OSPTimeInfoParser;
  * @author spoonman
  *
  */
-public class Quake3ArenaBuilder implements Builder {
+public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
     
     
     @Override

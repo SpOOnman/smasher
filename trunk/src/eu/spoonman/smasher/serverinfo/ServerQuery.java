@@ -11,6 +11,7 @@ import java.util.List;
 
 import eu.spoonman.smasher.serverinfo.builder.Builder;
 import eu.spoonman.smasher.serverinfo.header.Header;
+import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
@@ -23,6 +24,9 @@ import eu.spoonman.smasher.serverinfo.reader.Reader;
  * 
  */
 public class ServerQuery {
+    
+    private final int packetSize = 65507;
+    private final int timeout = 3000;
     
     private List<ServerInfoParser> parserList;
     private Reader reader;
@@ -40,13 +44,6 @@ public class ServerQuery {
 
     private int port;
 
-    private final int packetSize = 65507;
-
-    private final int timeout = 3000;
-
-    /**
-     * 
-     */
     public ServerQuery() {
         alreadyBuilded = false;
     }
@@ -87,7 +84,13 @@ public class ServerQuery {
     }
 
     private void parseData(ServerInfo serverInfo) {
-        serverInfo.setMap("map");
+        for (ServerInfoParser parser : parserList) {
+            try {
+                parser.parseIntoServerInfo(serverInfo);
+            } catch (ParserException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void validateResponse(byte[] bytes) throws NotValidResponseException {
@@ -129,5 +132,12 @@ public class ServerQuery {
      */
     public void setPort(int port) {
         this.port = port;
+    }
+
+    /**
+     * @param builder
+     */
+    void setBuilder(Builder builder) {
+        this.builder = builder;
     }
 }
