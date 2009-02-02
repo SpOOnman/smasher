@@ -6,16 +6,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 import eu.spoonman.smasher.serverinfo.builder.Builder;
 import eu.spoonman.smasher.serverinfo.header.Header;
-import eu.spoonman.smasher.serverinfo.parser.gameinfo.GameInfoParser;
-import eu.spoonman.smasher.serverinfo.parser.serverstatusinfo.ServerStatusInfoParser;
-import eu.spoonman.smasher.serverinfo.parser.timeinfo.TimeInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
 /**
@@ -27,19 +23,10 @@ import eu.spoonman.smasher.serverinfo.reader.Reader;
  * 
  */
 public class ServerQuery {
-
-    private ServerStatusInfoParser serverStatusInfoParser;
-
-    private GameInfoParser gameInfoParser;
-
-    private TimeInfoParser timeInfoParser;
-
-    // ...
-
+    
+    private List<ServerInfoParser> parserList;
     private Reader reader;
-
     private Header header;
-
     private Builder builder;
 
     /**
@@ -96,8 +83,7 @@ public class ServerQuery {
     }
 
     private void buildParsers(ServerInfo serverInfo) {
-        gameInfoParser = builder.getGameInfoParser(serverInfo);
-        timeInfoParser = builder.getTimeInfoParser(serverInfo);
+        this.parserList = builder.getParserList(serverInfo);
     }
 
     private void parseData(ServerInfo serverInfo) {

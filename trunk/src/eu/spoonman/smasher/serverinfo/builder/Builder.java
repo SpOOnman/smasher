@@ -9,7 +9,6 @@ import java.util.List;
 import eu.spoonman.smasher.serverinfo.Mod;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.Version;
-import eu.spoonman.smasher.serverinfo.parser.PlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 
 /**
@@ -18,9 +17,7 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  */
 public interface Builder {
     
-    public List<ServerInfoParser> getServerInfoParsers(ServerInfo serverInfo);
-    
-    public List<PlayerInfoParser> getPlayerInfoParsers(ServerInfo serverInfo);
+    public List<ServerInfoParser> getParserList(ServerInfo serverInfo);
     
     public Version getGameVersion(ServerInfo serverInfo);
     
