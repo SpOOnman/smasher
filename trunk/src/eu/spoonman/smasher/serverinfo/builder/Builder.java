@@ -24,13 +24,19 @@ import java.util.List;
 import eu.spoonman.smasher.serverinfo.Mod;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.Version;
+import eu.spoonman.smasher.serverinfo.header.Header;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
+import eu.spoonman.smasher.serverinfo.reader.Reader;
 
 /**
  * @author spoonman
  *
  */
 public interface Builder {
+    
+    public Header getHeader();
+    
+    public Reader getReader();
     
     public List<ServerInfoParser> getParserList(ServerInfo serverInfo);
     

@@ -62,8 +62,12 @@ public class ServerQuery {
 
     private int port;
 
-    public ServerQuery() {
+    public ServerQuery(Builder builder) {
+        this.builder = builder;
         alreadyBuilded = false;
+        
+        this.reader = this.builder.getReader();
+        this.header = this.builder.getHeader();
     }
 
     public ServerInfo query() {
@@ -152,10 +156,4 @@ public class ServerQuery {
         this.port = port;
     }
 
-    /**
-     * @param builder
-     */
-    void setBuilder(Builder builder) {
-        this.builder = builder;
-    }
 }

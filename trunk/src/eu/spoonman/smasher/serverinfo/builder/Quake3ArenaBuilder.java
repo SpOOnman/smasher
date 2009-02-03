@@ -24,15 +24,32 @@ import java.util.List;
 import eu.spoonman.smasher.serverinfo.Mod;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.Version;
+import eu.spoonman.smasher.serverinfo.header.Header;
+import eu.spoonman.smasher.serverinfo.header.QuakeEngineHeader;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.Quake3OSPGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.Quake3OSPTimeInfoParser;
+import eu.spoonman.smasher.serverinfo.reader.QuakeEngineReader;
+import eu.spoonman.smasher.serverinfo.reader.Reader;
 
 /**
  * @author spoonman
  *
  */
 public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
+    
+    @Override
+    public Header getHeader() {
+        return new QuakeEngineHeader();
+    }
+    
+    /* (non-Javadoc)
+     * @see eu.spoonman.smasher.serverinfo.builder.Builder#getReader()
+     */
+    @Override
+    public Reader getReader() {
+        return new QuakeEngineReader();
+    }
     
     
     @Override
