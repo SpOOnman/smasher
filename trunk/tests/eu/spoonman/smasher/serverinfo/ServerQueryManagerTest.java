@@ -21,15 +21,21 @@ package eu.spoonman.smasher.serverinfo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.junit.Test;
 
 public class ServerQueryManagerTest {
 
     @Test
-    public void testCreateServerQuery() {
+    public void testCreateServerQuery() throws UnknownHostException {
         ServerQuery serverQuery = null;
+        
+        InetAddress address = InetAddress.getByName("194.187.43.245");
 
-        serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, "194.187.43.245", 27971);
+        serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, address, 27971);
 
         assertNotNull(serverQuery);
 
@@ -37,15 +43,17 @@ public class ServerQueryManagerTest {
         System.out.println(serverInfo);
 
         assertNotNull(serverInfo);
-
     }
 
     @Test
-    public void creationTest() {
+    public void creationTest() throws UnknownHostException {
+        
+        InetAddress localhost = InetAddress.getByName("127.0.0.1");
+        
         for (Games game : Games.values()) {
             try {
                 @SuppressWarnings("unused")
-                ServerQuery serverQuery = ServerQueryManager.CreateServerQuery(game, "127.0.0.1", 20000);
+                ServerQuery serverQuery = ServerQueryManager.createServerQuery(game, localhost, 20000);
                 assertNotNull(serverQuery);
             } catch (Exception e) {
                 e.printStackTrace();
