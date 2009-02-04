@@ -18,21 +18,12 @@
 
 package eu.spoonman.smasher.serverinfo;
 
-import static org.junit.Assert.fail;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
-
-import eu.spoonman.smasher.serverinfo.ServerInfo;
-import eu.spoonman.smasher.serverinfo.ServerQuery;
 
 public class ServerQueryTest {
 
@@ -52,8 +43,6 @@ public class ServerQueryTest {
             char c = (char) Integer.parseInt(matchResult.group(1), 16);
             sb.append(c);
         }
-
-        System.out.println(sb.toString());
 
         ServerQuery serverQuery2 = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, null, 0);
         ServerInfo serverInfo = serverQuery2.query(sb.toString().getBytes("ISO8859-1"));
