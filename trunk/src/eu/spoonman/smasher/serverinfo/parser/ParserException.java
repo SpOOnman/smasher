@@ -19,9 +19,37 @@
 package eu.spoonman.smasher.serverinfo.parser;
 
 /**
- * @author spoonman
+ * @author Tomasz Kalkosiński
  *
  */
 public class ParserException extends Exception{
 
+    /**
+     * 
+     */
+    public ParserException() {
+        super();
+    }
+
+    /**
+     * @param message
+     * @param cause
+     */
+    public ParserException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * @param message
+     */
+    public ParserException(String message) {
+        super(message);
+    }
+
+    /**
+     * @param cause
+     */
+    public ParserException(Throwable cause) {
+        super(cause);
+    }
 }

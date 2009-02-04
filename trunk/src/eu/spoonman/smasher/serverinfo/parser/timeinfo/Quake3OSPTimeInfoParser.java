@@ -18,11 +18,13 @@
 
 package eu.spoonman.smasher.serverinfo.parser.timeinfo;
 
+import java.util.regex.Pattern;
+
+import eu.spoonman.smasher.serverinfo.ProgressInfo;
+import eu.spoonman.smasher.serverinfo.ProgressInfoFlags;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
-import eu.spoonman.smasher.serverinfo.StandardTimeInfo;
-import eu.spoonman.smasher.serverinfo.TimeInfo;
-import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
+import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 
 /**
  * ProgressInfo parser for Quake 3 Arena OSP and CPMA mods.
@@ -30,6 +32,9 @@ import eu.spoonman.smasher.serverinfo.parser.ParserException;
  * @author Tomasz Kalkosiński
  */
 public class Quake3OSPTimeInfoParser implements ServerInfoParser {
+    
+    private static final Pattern normalTimeRegex = Pattern.compile("(OT )?([0-9]{1,2}):([0-9]{2})");         
+    private static final Pattern roundTimeRegex = Pattern.compile("^Round ([0-9]{1,3})/([0-9]{1,3})");         
 
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
@@ -39,7 +44,7 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
             throw new ParserException("Field Score_Time not found for parsing");
         
         if (scoreTime.equals("Warmup") || scoreTime.equals("Waiting for Players")) {
-            serverInfo.setProgressStatus
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.IN_PLAY));
             
         }
     }

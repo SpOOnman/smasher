@@ -26,15 +26,23 @@ package eu.spoonman.smasher.serverinfo;
  */
 public class ProgressInfo {
 
-    private ProgressInfoFlags progressInfoFlags;
-
     private String rawText;
+    private ProgressInfoFlags progressInfoFlags;
 
     /**
      * 
      */
     public ProgressInfo(String rawText) {
         this.rawText = rawText;
+    }
+    
+    /**
+     * @param progressInfoFlags
+     * @param rawText
+     */
+    public ProgressInfo(String rawText, ProgressInfoFlags progressInfoFlags) {
+        this(rawText);
+        this.progressInfoFlags = progressInfoFlags;
     }
 
     /**
