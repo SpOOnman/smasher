@@ -18,26 +18,42 @@
 
 package eu.spoonman.smasher.serverinfo.parser.playerinfo;
 
-import java.util.Iterator;
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import org.junit.Test;
 
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
-import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 
 /**
  * @author Tomasz Kalkosiński
- * 
+ *
  */
-public class Quake3OSPPlayerInfoParser implements ServerInfoParser {
+public class Quake3OSPPlayerInfoParserTest {
     
-    @Override
-    public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
-        for (PlayerInfo playerInfo : serverInfo.getPlayerInfos()) {
-            playerInfo.setName(playerInfo.getRawAttributes().get(2));
-            playerInfo.setScore(Integer.parseInt(playerInfo.getRawAttributes().get(1)));
-            playerInfo.setPing(Integer.parseInt(playerInfo.getRawAttributes().get(0)));
-        }
-            
+    @Test
+    public void parseIntoServerInfo() throws ParserException {
+        
+        ArrayList<String> player = new ArrayList<String>();
+        player.add("50");
+        player.add("10");
+        player.add("MyName");
+        
+        PlayerInfo playerInfo = new PlayerInfo();
+        playerInfo.setRawAttributes(player);
+        
+        ServerInfo serverInfo = new ServerInfo();
+        serverInfo.getPlayerInfos().add(playerInfo);
+        
+        Quake3OSPPlayerInfoParser quake3OSPPlayerInfoParser = new Quake3OSPPlayerInfoParser();
+        quake3OSPPlayerInfoParser.parseIntoServerInfo(serverInfo);
+        
+        assertEquals("MyName", serverInfo.getPlayerInfos().get(0).getName());
+        assertEquals(50, serverInfo.getPlayerInfos().get(0).getPing());
+        assertEquals(10, serverInfo.getPlayerInfos().get(0).getScore());
     }
+
 }
