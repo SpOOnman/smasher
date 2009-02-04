@@ -42,13 +42,17 @@ import eu.spoonman.smasher.serverinfo.reader.Reader;
  * 
  */
 public class ServerQuery {
-    
+
     private final int packetSize = 65507;
+
     private final int timeout = 3000;
-    
+
     private List<ServerInfoParser> parserList;
+
     private Reader reader;
+
     private Header header;
+
     private Builder builder;
 
     /**
@@ -65,17 +69,40 @@ public class ServerQuery {
     public ServerQuery(Builder builder) {
         this.builder = builder;
         alreadyBuilded = false;
-        
+
         this.reader = this.builder.getReader();
         this.header = this.builder.getHeader();
     }
 
     public ServerInfo query() {
-        ServerInfo serverInfo = new ServerInfo();
+
+        byte[] data = null;
 
         try {
             DatagramPacket packet = this.queryServer();
-            byte[] data = packet.getData();
+            data = packet.getData();
+        } catch (UnknownHostException e) {
+            return new ServerInfo(ServerInfoStatus.UNKNOWN_HOST);
+        } catch (SocketTimeoutException e) {
+            return new ServerInfo(ServerInfoStatus.TIMED_OUT);
+        } catch (IOException e) {
+            return new ServerInfo(ServerInfoStatus.IO_EXCEPTION);
+        }
+
+        return query(data);
+    }
+
+    /**
+     * Query suitable for tests.
+     * 
+     * @param data
+     *            Response data.
+     * @return ServerInfo.
+     */
+    ServerInfo query(byte[] data) {
+        ServerInfo serverInfo = new ServerInfo();
+
+        try {
 
             validateResponse(data);
 
@@ -90,12 +117,6 @@ public class ServerQuery {
 
         } catch (NotValidResponseException e) {
             serverInfo.setStatus(ServerInfoStatus.NOT_VALID_RESPONSE);
-        } catch (UnknownHostException e) {
-            serverInfo.setStatus(ServerInfoStatus.UNKNOWN_HOST);
-        } catch (SocketTimeoutException e) {
-            serverInfo.setStatus(ServerInfoStatus.TIMED_OUT);
-        } catch (IOException e) {
-            serverInfo.setStatus(ServerInfoStatus.IO_EXCEPTION);
         }
 
         return serverInfo;
