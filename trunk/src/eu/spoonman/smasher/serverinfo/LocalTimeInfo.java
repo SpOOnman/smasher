@@ -26,14 +26,14 @@ import org.joda.time.LocalTime;
  * @author Tomasz Kalkosiński
  * 
  */
-public class StandardTimeInfo extends TimeInfo {
+public class LocalTimeInfo extends ProgressInfo {
 
     private LocalTime localTime;
 
     /**
      * 
      */
-    public StandardTimeInfo(String rawText) {
+    public LocalTimeInfo(String rawText) {
         super(rawText);
     }
 

@@ -39,6 +39,8 @@ public class ServerInfo {
 	private List<PlayerInfo> playerInfos;
     private Map<String, String> namedAttributes;
     
+    private ProgressInfo progressInfo;
+    
     public ServerInfo(ServerInfoStatus status) {
         this();
         this.status = status;
@@ -188,6 +190,29 @@ public class ServerInfo {
 	public Map<String, String> getNamedAttributes() {
 		return namedAttributes;
 	}
+
+    /**
+     * @return the progressInfo
+     */
+    public ProgressInfo getProgressInfo() {
+        return progressInfo;
+    }
+
+    /**
+     * @param progressInfo the progressInfo to set
+     */
+    public void setProgressInfo(ProgressInfo progressInfo) {
+        this.progressInfo = progressInfo;
+    }
+
+    /**
+     * @param playerInfos the playerInfos to set
+     */
+    public void setPlayerInfos(List<PlayerInfo> playerInfos) {
+        this.playerInfos = playerInfos;
+    }
+	
+	
 	
     
     

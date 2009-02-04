@@ -25,7 +25,7 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 
 /**
- * TimeInfo parser for Quake 3 Arena OSP and CPMA mods.
+ * ProgressInfo parser for Quake 3 Arena OSP and CPMA mods.
  * 
  * @author Tomasz Kalkosiński
  */
@@ -33,6 +33,15 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
 
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
+        String scoreTime = serverInfo.getNamedAttributes().get("Score_Time");
+        
+        if (scoreTime == null)
+            throw new ParserException("Field Score_Time not found for parsing");
+        
+        if (scoreTime.equals("Warmup") || scoreTime.equals("Waiting for Players")) {
+            serverInfo.setProgressStatus
+            
+        }
     }
 
 }
