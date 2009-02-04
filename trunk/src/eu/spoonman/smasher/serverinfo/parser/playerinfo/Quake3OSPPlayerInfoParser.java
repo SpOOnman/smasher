@@ -18,6 +18,9 @@
 
 package eu.spoonman.smasher.serverinfo.parser.playerinfo;
 
+import java.util.Iterator;
+
+import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
@@ -30,5 +33,11 @@ public class Quake3OSPPlayerInfoParser implements ServerInfoParser {
     
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
+        for (PlayerInfo playerInfo : serverInfo.getPlayerInfos()) {
+            playerInfo.setName(playerInfo.getRawAttributes().get(0));
+            playerInfo.setScore(Integer.parseInt(playerInfo.getRawAttributes().get(1)));
+            playerInfo.setPing(Integer.parseInt(playerInfo.getRawAttributes().get(2)));
+        }
+            
     }
 }
