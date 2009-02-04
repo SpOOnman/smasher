@@ -18,8 +18,12 @@
 
 package eu.spoonman.smasher.serverinfo.parser.timeinfo;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.joda.time.LocalTime;
+
+import eu.spoonman.smasher.serverinfo.LocalTimeInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfoFlags;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
@@ -43,10 +47,42 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
         if (scoreTime == null)
             throw new ParserException("Field Score_Time not found for parsing");
         
-        if (scoreTime.equals("Warmup") || scoreTime.equals("Waiting for Players")) {
-            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.IN_PLAY));
-            
+        Matcher normalMatcher = normalTimeRegex.matcher(scoreTime);
+        
+        if (normalMatcher.matches()) {
+            parseNormalTime(serverInfo, normalMatcher, scoreTime);
+            return;
         }
+        
+        Matcher roundMatcher = roundTimeRegex.matcher(scoreTime);
+        
+        if (roundMatcher.matches()) {
+            parseRoundTime(serverInfo, roundMatcher);
+            return;
+        }
+        
+        if (scoreTime.equals("Warmup") || scoreTime.equals("Waiting for Players")) {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.WARMUP));
+        } else if (scoreTime.equals("Countdown") || scoreTime.equals("Starting")) {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.COUNTDOWN));
+        }
+    }
+
+    /**
+     * @param serverInfo
+     * @param normalMatcher
+     * @param scoreTime
+     */
+    private void parseNormalTime(ServerInfo serverInfo, Matcher normalMatcher, String scoreTime) {
+        
+        LocalTime localTime = new LocalTime(Integer.parseInt(normalMatcher.group(2)), Integer.parseInt(normalMatcher.group(3)));
+        
+        LocalTimeInfo localTimeInfo = new LocalTimeInfo(scoreTime, localTime);
+        
+        if (normalMatcher.group(1).length() > 0)
+            localTimeInfo.getProgressInfoFlags().add(ProgressInfoFlags.OVERTIME);
+        
+        serverInfo.setProgressInfo(localTimeInfo);
     }
 
 }

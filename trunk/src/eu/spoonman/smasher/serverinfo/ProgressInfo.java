@@ -18,16 +18,22 @@
 
 package eu.spoonman.smasher.serverinfo;
 
+import java.util.EnumSet;
+
 /**
  * Simple progress info with raw information and status flag.
  * 
  * @author Tomasz Kalkosiński
  * 
  */
+/**
+ * @author spoonman
+ *
+ */
 public class ProgressInfo {
 
     private String rawText;
-    private ProgressInfoFlags progressInfoFlags;
+    private EnumSet<ProgressInfoFlags> progressInfoFlags;
 
     /**
      * 
@@ -40,23 +46,14 @@ public class ProgressInfo {
      * @param progressInfoFlags
      * @param rawText
      */
+    public ProgressInfo(String rawText, EnumSet<ProgressInfoFlags> progressInfoFlags) {
+        this(rawText);
+        this.progressInfoFlags.addAll(progressInfoFlags);
+    }
+    
     public ProgressInfo(String rawText, ProgressInfoFlags progressInfoFlags) {
         this(rawText);
-        this.progressInfoFlags = progressInfoFlags;
-    }
-
-    /**
-     * @return the progressInfoFlags
-     */
-    public ProgressInfoFlags getProgressInfoFlags() {
-        return progressInfoFlags;
-    }
-
-    /**
-     * @param progressInfoFlags the progressInfoFlags to set
-     */
-    public void setProgressInfoFlags(ProgressInfoFlags progressInfoFlags) {
-        this.progressInfoFlags = progressInfoFlags;
+        this.progressInfoFlags.add(progressInfoFlags);
     }
 
     /**
@@ -72,7 +69,19 @@ public class ProgressInfo {
     public void setRawText(String rawText) {
         this.rawText = rawText;
     }
-    
-    
+
+    /**
+     * @return the progressInfoFlags
+     */
+    public EnumSet<ProgressInfoFlags> getProgressInfoFlags() {
+        return progressInfoFlags;
+    }
+
+    /**
+     * @param progressInfoFlags the progressInfoFlags to set
+     */
+    public void setProgressInfoFlags(EnumSet<ProgressInfoFlags> progressInfoFlags) {
+        this.progressInfoFlags = progressInfoFlags;
+    }
 
 }

@@ -36,6 +36,18 @@ public class LocalTimeInfo extends ProgressInfo {
     public LocalTimeInfo(String rawText) {
         super(rawText);
     }
+    
+
+    /**
+     * @param rawText
+     * @param localTime
+     */
+    public LocalTimeInfo(String rawText, LocalTime localTime) {
+        this(rawText);
+        this.localTime = localTime;
+    }
+
+
 
     /**
      * @return the localTime
