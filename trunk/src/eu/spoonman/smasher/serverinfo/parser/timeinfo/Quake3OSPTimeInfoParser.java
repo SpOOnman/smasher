@@ -26,6 +26,7 @@ import org.joda.time.LocalTime;
 import eu.spoonman.smasher.serverinfo.LocalTimeInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfoFlags;
+import eu.spoonman.smasher.serverinfo.RoundInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
@@ -57,7 +58,7 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
         Matcher roundMatcher = roundTimeRegex.matcher(scoreTime);
         
         if (roundMatcher.matches()) {
-            parseRoundTime(serverInfo, roundMatcher);
+            parseRoundTime(serverInfo, roundMatcher, scoreTime);
             return;
         }
         
@@ -66,6 +67,15 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
         } else if (scoreTime.equals("Countdown") || scoreTime.equals("Starting")) {
             serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.COUNTDOWN));
         }
+    }
+
+    /**
+     * @param serverInfo
+     * @param roundMatcher
+     * @param scoreTime
+     */
+    private void parseRoundTime(ServerInfo serverInfo, Matcher roundMatcher, String scoreTime) {
+        serverInfo.setProgressInfo(new RoundInfo(scoreTime, Integer.parseInt(roundMatcher.group(1)), Integer.parseInt(roundMatcher.group(2)), ProgressInfoFlags.IN_PLAY));
     }
 
     /**
