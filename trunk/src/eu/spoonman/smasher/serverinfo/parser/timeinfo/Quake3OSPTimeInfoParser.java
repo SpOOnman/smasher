@@ -21,6 +21,7 @@ package eu.spoonman.smasher.serverinfo.parser.timeinfo;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.joda.time.LocalTime;
 
 import eu.spoonman.smasher.serverinfo.LocalTimeInfo;
@@ -39,6 +40,8 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  */
 public class Quake3OSPTimeInfoParser implements ServerInfoParser {
     
+    private static Logger log = Logger.getLogger(Quake3OSPTimeInfoParser.class);
+    
     private static final Pattern normalTimeRegex = Pattern.compile("(OT )?([0-9]{1,2}):([0-9]{2})");         
     private static final Pattern roundTimeRegex = Pattern.compile("^Round ([0-9]{1,3})/([0-9]{1,3})");         
 
@@ -48,6 +51,8 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
         
         if (scoreTime == null)
             throw new AttributeNotFoundException("Score_Time");
+        
+        log.debug("Parsing Score_Time = '" + scoreTime + "'");
         
         Matcher normalMatcher = normalTimeRegex.matcher(scoreTime);
         
