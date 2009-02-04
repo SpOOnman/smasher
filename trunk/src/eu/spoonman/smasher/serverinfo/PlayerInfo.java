@@ -30,7 +30,7 @@ public class PlayerInfo
     
     @Override
     public String toString() {
-    	return this.name + "\t" + this.ping + " ms\t" + this.score;
+    	return "[PlayerInfo: " + this.name + ", P: " + this.ping + " ms, S: " + this.score + "]";
     }
     
     /**
