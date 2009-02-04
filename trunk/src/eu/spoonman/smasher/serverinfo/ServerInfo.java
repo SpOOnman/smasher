@@ -39,10 +39,14 @@ public class ServerInfo {
 	private List<PlayerInfo> playerInfos;
     private Map<String, String> namedAttributes;
     
+    public ServerInfo(ServerInfoStatus status) {
+        this();
+        this.status = status;
+    }
+    
     public ServerInfo() {
     	this.playerInfos = new ArrayList<PlayerInfo>();
 		this.namedAttributes = new LinkedHashMap<String, String>();
-		
 	}
     
     
