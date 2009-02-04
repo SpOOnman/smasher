@@ -28,6 +28,7 @@ import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfoFlags;
 import eu.spoonman.smasher.serverinfo.RoundInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.parser.AttributeNotFoundException;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 
@@ -46,7 +47,7 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
         String scoreTime = serverInfo.getNamedAttributes().get("Score_Time");
         
         if (scoreTime == null)
-            throw new ParserException("Field Score_Time not found for parsing");
+            throw new AttributeNotFoundException("Score_Time");
         
         Matcher normalMatcher = normalTimeRegex.matcher(scoreTime);
         
