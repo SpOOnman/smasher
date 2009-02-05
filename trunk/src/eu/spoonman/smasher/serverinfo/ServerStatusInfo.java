@@ -19,9 +19,64 @@
 package eu.spoonman.smasher.serverinfo;
 
 /**
- * @author spoonman
+ * @author Tomasz Kalkosiński
  *
  */
 public class ServerStatusInfo {
+    
+    private String name;
+    private int playersCount;
+    private int playersMax;
+    private int ping;
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    /**
+     * @return the playersCount
+     */
+    public int getPlayersCount() {
+        return playersCount;
+    }
+    /**
+     * @param playersCount the playersCount to set
+     */
+    public void setPlayersCount(int playersCount) {
+        this.playersCount = playersCount;
+    }
+    /**
+     * @return the playersMax
+     */
+    public int getPlayersMax() {
+        return playersMax;
+    }
+    /**
+     * @param playersMax the playersMax to set
+     */
+    public void setPlayersMax(int playersMax) {
+        this.playersMax = playersMax;
+    }
+    /**
+     * @return the ping
+     */
+    public int getPing() {
+        return ping;
+    }
+    /**
+     * @param ping the ping to set
+     */
+    public void setPing(int ping) {
+        this.ping = ping;
+    }
+    
+    
 
 }
