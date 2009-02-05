@@ -18,7 +18,8 @@
 
 package eu.spoonman.smasher.serverinfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class PlayerInfo
 {
@@ -26,11 +27,11 @@ public class PlayerInfo
     private int score;
     private int ping;
     private ArrayList<String> rawAttributes;
-    private Dictionary<String, String> namedAttributes;
+    private EnumSet<PlayerFlags> playerFlags;
     
     @Override
     public String toString() {
-    	return "[PlayerInfo: " + this.name + ", P: " + this.ping + " ms, S: " + this.score + "]";
+        return String.format("[PlayerInfo: %s, P: %d ms, S: %d, %s", name, ping, score, playerFlags);
     }
     
     /**
@@ -89,21 +90,19 @@ public class PlayerInfo
 		this.rawAttributes = rawAttributes;
 	}
 
-	/**
-	 * @return the namedAttributes
-	 */
-	public Dictionary<String, String> getNamedAttributes() {
-		return namedAttributes;
-	}
-
-	/**
-	 * @param namedAttributes the namedAttributes to set
-	 */
-	public void setNamedAttributes(Dictionary<String, String> namedAttributes) {
-		this.namedAttributes = namedAttributes;
-	}
-
-	public void setNamedAttribute (int ordinal, String name) {
-        namedAttributes.put(name, rawAttributes.get(ordinal));
+    /**
+     * @return the playerFlags
+     */
+    public EnumSet<PlayerFlags> getPlayerFlags() {
+        return playerFlags;
     }
+
+    /**
+     * @param playerFlags the playerFlags to set
+     */
+    public void setPlayerFlags(EnumSet<PlayerFlags> playerFlags) {
+        this.playerFlags = playerFlags;
+    }
+	
+	
 }
