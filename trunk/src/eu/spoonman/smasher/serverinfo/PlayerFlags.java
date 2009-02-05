@@ -29,32 +29,17 @@ public enum PlayerFlags {
      */
     IN_PLAY,
     
-    
-    /**
-     * Player is a member of red team. 
-     */
-    RED_TEAM_MEMBER,
-    
-    
-    /**
-     * Player is a member of blue team.
-     */
-    BLUE_TEAM_MEMBER,
-    
-    
     /**
      * Player is a first level administrator - he can change maps or force actions on other players.
      * This is considered often as 'admin' on 'referee'. 
      */
     FIRST_LEVEL_ADMIN,
     
-    
     /**
      * Player is a top level administrator.
      * This is considered often as 'rcon'.
      */
     ADMIN_OR_RCON,
-    
     
     /**
      * Player is in fact television player for streaming purposes - GTV/HLTV/UTV etc. 

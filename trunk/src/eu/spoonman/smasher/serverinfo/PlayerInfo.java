@@ -28,6 +28,7 @@ public class PlayerInfo
     private int ping;
     private ArrayList<String> rawAttributes;
     private EnumSet<PlayerFlags> playerFlags;
+    private TeamKey teamKey;
     
     @Override
     public String toString() {
@@ -103,6 +104,18 @@ public class PlayerInfo
     public void setPlayerFlags(EnumSet<PlayerFlags> playerFlags) {
         this.playerFlags = playerFlags;
     }
-	
-	
+
+    /**
+     * @return the teamKey
+     */
+    public TeamKey getTeamKey() {
+        return teamKey;
+    }
+
+    /**
+     * @param teamKey the teamKey to set
+     */
+    public void setTeamKey(TeamKey teamKey) {
+        this.teamKey = teamKey;
+    }
 }
