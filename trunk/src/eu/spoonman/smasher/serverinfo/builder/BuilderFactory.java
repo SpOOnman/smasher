@@ -37,6 +37,8 @@ public class BuilderFactory {
         switch (game) {
         case QUAKE3ARENA:
             return new Quake3ArenaBuilder();
+        case QUAKELIVE:
+            return new QuakeLiveBuilder();
         default:
             // it's our fault if we don't have builder for game we say is supported
             throw new EnumConstantNotPresentException(Games.class, game.toString());

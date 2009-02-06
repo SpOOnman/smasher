@@ -20,6 +20,7 @@ package eu.spoonman.smasher.serverinfo;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Map;
 
 public class PlayerInfo
 {
@@ -27,6 +28,7 @@ public class PlayerInfo
     private int score;
     private int ping;
     private ArrayList<String> rawAttributes;
+    private Map<String, String> namedAttributes;
     private EnumSet<PlayerFlags> playerFlags;
     private TeamKey teamKey;
     
@@ -118,4 +120,20 @@ public class PlayerInfo
     public void setTeamKey(TeamKey teamKey) {
         this.teamKey = teamKey;
     }
+
+    /**
+     * @return the namedAttributes
+     */
+    public Map<String, String> getNamedAttributes() {
+        return namedAttributes;
+    }
+
+    /**
+     * @param namedAttributes the namedAttributes to set
+     */
+    public void setNamedAttributes(Map<String, String> namedAttributes) {
+        this.namedAttributes = namedAttributes;
+    }
+    
+    
 }

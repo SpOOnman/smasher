@@ -24,6 +24,8 @@ package eu.spoonman.smasher.serverinfo;
  */
 public enum ProgressInfoFlags {
     
+    UNKONWN,
+    
     WARMUP,
     COUNTDOWN,
     
@@ -33,6 +35,6 @@ public enum ProgressInfoFlags {
     
     TIMEOUT,
     TIMEOUT_RED,
-    TIMEOUT_BLUE
+    TIMEOUT_BLUE,
 
 }

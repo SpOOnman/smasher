@@ -18,8 +18,10 @@
 
 package eu.spoonman.smasher.serverinfo;
 
+import org.joda.time.LocalDateTime;
+
 /**
- * @author spoonman
+ * @author Tomasz Kalkosiński
  *
  */
 public class Version {
@@ -30,6 +32,9 @@ public class Version {
     private Integer revision;
     private String  codeLetter;
     private String  codeName;
+    private PlatformSystem system;
+    private Platform platform;
+    private LocalDateTime buildTime;
     
     public Version() {
     }
@@ -115,6 +120,50 @@ public class Version {
     public void setCodeName(String codeName) {
         this.codeName = codeName;
     }
+    
+    /**
+     * @return the system
+     */
+    public PlatformSystem getSystem() {
+        return system;
+    }
+
+    /**
+     * @param system the system to set
+     */
+    public void setSystem(PlatformSystem system) {
+        this.system = system;
+    }
+
+    /**
+     * @return the platform
+     */
+    public Platform getPlatform() {
+        return platform;
+    }
+
+    /**
+     * @param platform the platform to set
+     */
+    public void setPlatform(Platform platform) {
+        this.platform = platform;
+    }
+
+    /**
+     * @return the buildTime
+     */
+    public LocalDateTime getBuildTime() {
+        return buildTime;
+    }
+
+    /**
+     * @param buildTime the buildTime to set
+     */
+    public void setBuildTime(LocalDateTime buildTime) {
+        this.buildTime = buildTime;
+    }
+    
+    
     
     
     

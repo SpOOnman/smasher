@@ -16,16 +16,24 @@
  * along with Smasher.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.spoonman.smasher.serverinfo;
+package eu.spoonman.smasher.serverinfo.reader;
+
+import java.util.regex.Pattern;
 
 /**
- * Supported games enum.
- * 
  * @author Tomasz Kalkosiński
- * 
+ *
  */
-public enum Games {
+public class QuakeLiveReader extends QuakeEngineReader {
+    
+    private final Pattern playerPattern = Pattern.compile("(\\d+) (\\d+) \"(.*)\" (\\d+)");
+    
+    /**
+     * @return the playerPattern
+     */
+    @Override
+    protected Pattern getPlayerPattern() {
+        return playerPattern;
+    }
 
-    QUAKE3ARENA,
-    QUAKELIVE;
 }
