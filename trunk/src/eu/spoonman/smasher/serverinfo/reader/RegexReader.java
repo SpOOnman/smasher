@@ -61,22 +61,10 @@ public abstract class RegexReader implements Reader {
         while (matcher.find()) {
             MatchResult matchResult = matcher.toMatchResult();
             PlayerInfo playerInfo = new PlayerInfo();
+            for (int i = 0; i < matchResult.groupCount(); i++) {
+                playerInfo.getRawAttributes().add(matchResult.group(i));
+            }
 
-            /*
-             * if (ordinalName > -1)
-             * playerInfo.setName(matchResult.group(ordinalName));
-             * 
-             * if (ordinalPing > -1)
-             * playerInfo.setPing(Integer.parseInt(matchResult
-             * .group(ordinalPing)));
-             * 
-             * if (ordinalScore > -1)
-             * playerInfo.setScore(Integer.parseInt(matchResult
-             * .group(ordinalScore)));
-             */
-
-            // if (ordinalClan > -1)
-            // playerInfo.setClan(matchResult.group(ordinalClan));
             serverInfo.getPlayerInfos().add(playerInfo);
         }
     }
