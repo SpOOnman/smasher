@@ -22,7 +22,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.joda.time.Period;
 
-import eu.spoonman.smasher.serverinfo.LocalTimeInfo;
+import eu.spoonman.smasher.serverinfo.TimePeriodInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfoFlags;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.parser.AttributeNotFoundException;
@@ -36,14 +36,14 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  * 
  */
 public class QuakeLiveTimeInfoParser implements ServerInfoParser {
-
+    
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
 
         String gameState = serverInfo.getNamedAttributes().get("g_gameState");
         String levelStartTime = serverInfo.getNamedAttributes().get("g_levelStartTime");
         
-        LocalTimeInfo localTimeInfo = new LocalTimeInfo(gameState + levelStartTime);
+        TimePeriodInfo timePeriodInfo = new TimePeriodInfo(gameState + levelStartTime);
 
         if (gameState == null)
             throw new AttributeNotFoundException("g_gameState");
@@ -52,18 +52,18 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
             throw new AttributeNotFoundException("g_levelStartTime");
         
         if (gameState.equals("IN_PROGRESS"))
-            localTimeInfo.getProgressInfoFlags().add(ProgressInfoFlags.IN_PLAY);
+            timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.IN_PLAY);
         else if (gameState.equals("PRE_GAME"))
-            localTimeInfo.getProgressInfoFlags().add(ProgressInfoFlags.WARMUP);
+            timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.WARMUP);
         else if (gameState.equals("COUNT_DOWN"))
-            localTimeInfo.getProgressInfoFlags().add(ProgressInfoFlags.COUNTDOWN);
+            timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.COUNTDOWN);
         else
-            localTimeInfo.getProgressInfoFlags().add(ProgressInfoFlags.UNKONWN);
+            timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.UNKONWN);
         
         LocalDateTime now = new LocalDateTime();
         LocalDateTime start = new LocalDateTime(Long.parseLong(levelStartTime) * 1000);
         Period period = new Period(start, now);
         
-        localTimeInfo.setLocalTime(new LocalTime(period));
+        timePeriodInfo.setPeriod(period);
     }
 }

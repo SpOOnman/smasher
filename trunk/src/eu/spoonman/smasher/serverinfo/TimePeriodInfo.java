@@ -18,22 +18,22 @@
 
 package eu.spoonman.smasher.serverinfo;
 
-import org.joda.time.LocalTime;
+import org.joda.time.Period;
 
 /**
- * Standard time information with time set in minutes, seconds and miliseconds.
+ * Standard time information with time set in minutes, seconds and milliseconds.
  * 
  * @author Tomasz Kalkosiński
  * 
  */
-public class LocalTimeInfo extends ProgressInfo {
+public class TimePeriodInfo extends ProgressInfo {
 
-    private LocalTime localTime;
+    private Period period;
 
     /**
      * 
      */
-    public LocalTimeInfo(String rawText) {
+    public TimePeriodInfo(String rawText) {
         super(rawText);
     }
     
@@ -42,26 +42,25 @@ public class LocalTimeInfo extends ProgressInfo {
      * @param rawText
      * @param localTime
      */
-    public LocalTimeInfo(String rawText, LocalTime localTime) {
+    public TimePeriodInfo(String rawText, Period period) {
         this(rawText);
-        this.localTime = localTime;
+        this.period = period;
     }
 
 
-
     /**
-     * @return the localTime
+     * @return the period
      */
-    public LocalTime getLocalTime() {
-        return localTime;
+    public Period getPeriod() {
+        return period;
     }
 
+
     /**
-     * @param localTime
-     *            the localTime to set
+     * @param period the period to set
      */
-    public void setLocalTime(LocalTime localTime) {
-        this.localTime = localTime;
+    public void setPeriod(Period period) {
+        this.period = period;
     }
 
 }

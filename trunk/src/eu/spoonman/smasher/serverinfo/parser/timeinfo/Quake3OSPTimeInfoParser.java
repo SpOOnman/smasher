@@ -22,13 +22,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.joda.time.LocalTime;
+import org.joda.time.Period;
 
-import eu.spoonman.smasher.serverinfo.LocalTimeInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfoFlags;
 import eu.spoonman.smasher.serverinfo.RoundInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.TimePeriodInfo;
 import eu.spoonman.smasher.serverinfo.parser.AttributeNotFoundException;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
@@ -91,14 +91,14 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
      */
     private void parseNormalTime(ServerInfo serverInfo, Matcher normalMatcher, String scoreTime) {
         
-        LocalTime localTime = new LocalTime(Integer.parseInt(normalMatcher.group(2)), Integer.parseInt(normalMatcher.group(3)));
+        Period period = new Period (0, Integer.parseInt(normalMatcher.group(2)), Integer.parseInt(normalMatcher.group(3)), 0);
         
-        LocalTimeInfo localTimeInfo = new LocalTimeInfo(scoreTime, localTime);
+        TimePeriodInfo timePeriodInfo = new TimePeriodInfo(scoreTime, period);
         
         if (normalMatcher.group(1).length() > 0)
-            localTimeInfo.getProgressInfoFlags().add(ProgressInfoFlags.OVERTIME);
+            timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.OVERTIME);
         
-        serverInfo.setProgressInfo(localTimeInfo);
+        serverInfo.setProgressInfo(timePeriodInfo);
     }
 
 }
