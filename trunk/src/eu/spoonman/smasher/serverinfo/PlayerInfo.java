@@ -20,6 +20,7 @@ package eu.spoonman.smasher.serverinfo;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerInfo
@@ -31,6 +32,12 @@ public class PlayerInfo
     private Map<String, String> namedAttributes;
     private EnumSet<PlayerFlags> playerFlags;
     private TeamKey teamKey;
+    
+    public PlayerInfo() {
+        rawAttributes = new ArrayList<String>();
+        namedAttributes = new HashMap<String, String>();
+        playerFlags = EnumSet.noneOf(PlayerFlags.class);
+    }
     
     @Override
     public String toString() {
