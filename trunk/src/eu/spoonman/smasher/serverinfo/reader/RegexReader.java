@@ -62,7 +62,7 @@ public abstract class RegexReader implements Reader {
             MatchResult matchResult = matcher.toMatchResult();
             PlayerInfo playerInfo = new PlayerInfo();
             for (int i = 0; i < matchResult.groupCount(); i++) {
-                playerInfo.getRawAttributes().add(matchResult.group(i));
+                playerInfo.getRawAttributes().add(matchResult.group(i + 1));
             }
 
             serverInfo.getPlayerInfos().add(playerInfo);
