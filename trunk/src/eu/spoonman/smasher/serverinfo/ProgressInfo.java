@@ -39,6 +39,7 @@ public class ProgressInfo {
      * 
      */
     public ProgressInfo(String rawText) {
+        progressInfoFlags = EnumSet.noneOf(ProgressInfoFlags.class);
         this.rawText = rawText;
     }
     
