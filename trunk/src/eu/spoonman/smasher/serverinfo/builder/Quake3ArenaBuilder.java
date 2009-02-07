@@ -28,6 +28,7 @@ import eu.spoonman.smasher.serverinfo.header.Header;
 import eu.spoonman.smasher.serverinfo.header.QuakeEngineHeader;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.Quake3OSPGameInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.playerinfo.Quake3OSPPlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.Quake3OSPTimeInfoParser;
 import eu.spoonman.smasher.serverinfo.reader.QuakeEngineReader;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
@@ -54,6 +55,7 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
         List<ServerInfoParser> list = new ArrayList<ServerInfoParser>();
         list.add(new Quake3OSPGameInfoParser());
         list.add(new Quake3OSPTimeInfoParser());
+        list.add(new Quake3OSPPlayerInfoParser());
         return list;
     }
     
