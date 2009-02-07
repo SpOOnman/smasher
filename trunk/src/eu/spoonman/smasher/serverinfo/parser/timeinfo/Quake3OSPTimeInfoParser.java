@@ -95,7 +95,7 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
         
         TimePeriodInfo timePeriodInfo = new TimePeriodInfo(scoreTime, period);
         
-        if (normalMatcher.group(1).length() > 0)
+        if (normalMatcher.group(1) != null && normalMatcher.group(1).length() > 0)
             timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.OVERTIME);
         
         serverInfo.setProgressInfo(timePeriodInfo);
