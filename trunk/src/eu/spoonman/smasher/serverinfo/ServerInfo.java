@@ -65,13 +65,18 @@ public class ServerInfo {
         
         sb.append("status\t : " + this.status + "\n");
 		
-		for (Map.Entry<String, String> entry : this.namedAttributes.entrySet()) {
-			
+/*		for (Map.Entry<String, String> entry : this.namedAttributes.entrySet()) {
 			sb.append(entry.getKey() + "\t : " + entry.getValue() + "\n");
 		}
+*/		
+		sb.append(progressInfo.toString());
+		sb.append("\n");
 		
-		for (PlayerInfo pi : this.playerInfos)
-			sb.append("\t\t" + pi.toString() + "\n");
+		for (PlayerInfo pi : this.playerInfos) {
+		    sb.append("\t");
+			sb.append(pi.toString());
+			sb.append("\n");
+		}
 		
 		return sb.toString();
 	}

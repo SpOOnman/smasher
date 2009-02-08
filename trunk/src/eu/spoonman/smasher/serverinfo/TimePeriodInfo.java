@@ -46,7 +46,11 @@ public class TimePeriodInfo extends ProgressInfo {
         this(rawText);
         this.period = period;
     }
-
+    
+    @Override
+    public String toString() {
+        return String.format("[TimePeriodInfo: %s, (%s)]", period, this.getProgressInfoFlags().toString());
+    }
 
     /**
      * @return the period

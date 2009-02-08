@@ -41,7 +41,7 @@ public class PlayerInfo
     
     @Override
     public String toString() {
-        return String.format("[PlayerInfo: %s, P: %d ms, S: %d, %s", name, ping, score, playerFlags);
+        return String.format("[PlayerInfo: %s, P: %d ms, S: %d, (%s)]", name, ping, score, playerFlags);
     }
     
     /**
