@@ -24,9 +24,10 @@ package eu.spoonman.smasher.serverinfo;
  */
 public enum GameTypes {
     
+    UNKOWN,
     DUEL,
     TEAM_DEATHMATCH,
     CAPTURE_THE_FLAG,
-    CLAN_ARENA,
+    CLAN_ARENA;
 
 }

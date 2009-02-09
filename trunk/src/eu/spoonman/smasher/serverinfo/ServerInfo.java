@@ -40,6 +40,7 @@ public class ServerInfo {
     private Map<String, String> namedAttributes;
     
     private ProgressInfo progressInfo;
+    private GameInfo gameInfo;
     
     public ServerInfo(ServerInfoStatus status) {
         this();
@@ -69,6 +70,10 @@ public class ServerInfo {
 			sb.append(entry.getKey() + "\t : " + entry.getValue() + "\n");
 		}
 */		
+        
+        sb.append(gameInfo.toString());
+        sb.append("\n");
+        
 		sb.append(progressInfo.toString());
 		sb.append("\n");
 		
@@ -216,9 +221,18 @@ public class ServerInfo {
     public void setPlayerInfos(List<PlayerInfo> playerInfos) {
         this.playerInfos = playerInfos;
     }
-	
-	
-	
-    
-    
+
+    /**
+     * @return the gameInfo
+     */
+    public GameInfo getGameInfo() {
+        return gameInfo;
+    }
+
+    /**
+     * @param gameInfo the gameInfo to set
+     */
+    public void setGameInfo(GameInfo gameInfo) {
+        this.gameInfo = gameInfo;
+    }
 }
