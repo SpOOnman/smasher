@@ -21,10 +21,15 @@ package eu.spoonman.smasher.serverinfo.parser;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 
 /**
- * @author spoonman
+ * @author Tomasz Kalkosiński
  *
  */
 public interface ServerInfoParser {
+    
+    /**
+     * Format to use when logging parsed attributes values.
+     */
+    public static final String fieldLogFormat = "Parsing attribute '%s' with field value '%s'";
     
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException;
 
