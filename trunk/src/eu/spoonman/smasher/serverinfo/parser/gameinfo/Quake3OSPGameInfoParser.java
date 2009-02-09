@@ -41,19 +41,20 @@ public class Quake3OSPGameInfoParser implements ServerInfoParser {
 
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
-        String gametype = serverInfo.getNamedAttributes().get("gametype");
+        GameInfo gameInfo = new GameInfo();
+        serverInfo.setGameInfo(gameInfo);
+        
+        String gametype = serverInfo.getNamedAttributes().get("g_gametype");
 
         log.debug("Parsing gametype: " + gametype);
 
         if (gametype == null)
-            throw new AttributeNotFoundException("gametype");
+            throw new AttributeNotFoundException("g_gametype");
 
-        GameInfo gameInfo = new GameInfo();
 
         gameInfo.setGame(Games.QUAKE3ARENA);
         gameInfo.setGameType(parseGametype(gametype));
 
-        serverInfo.setGameInfo(gameInfo);
     }
 
     /**
