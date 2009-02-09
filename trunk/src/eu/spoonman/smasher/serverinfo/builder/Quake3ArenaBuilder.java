@@ -20,6 +20,11 @@ package eu.spoonman.smasher.serverinfo.builder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import eu.spoonman.smasher.serverinfo.Mod;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
@@ -75,11 +80,12 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
             mod.setVersion(new Version(1, 3, null, null, "a", null));
             return mod;
         } else if (gamename.equals("cpma")) {
+            DateTimeFormatter localDateParser = DateTimeFormat.forPattern("MMM dd YYYY");
+            localDateParser.withLocale(Locale.US);
+            System.out.println(localDateParser.parseDateTime("Apr 26 2008"));
             
         }
         
         return null;
     }
-    
-
 }
