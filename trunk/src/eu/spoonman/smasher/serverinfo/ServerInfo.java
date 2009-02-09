@@ -66,10 +66,9 @@ public class ServerInfo {
         
         sb.append("status\t : " + this.status + "\n");
 		
-/*		for (Map.Entry<String, String> entry : this.namedAttributes.entrySet()) {
+		for (Map.Entry<String, String> entry : this.namedAttributes.entrySet()) {
 			sb.append(entry.getKey() + "\t : " + entry.getValue() + "\n");
 		}
-*/		
         
         sb.append(gameInfo.toString());
         sb.append("\n");
