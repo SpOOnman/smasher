@@ -39,35 +39,36 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  * @author Tomasz Kalkosiński
  */
 public class Quake3OSPTimeInfoParser implements ServerInfoParser {
-    
+
     private static Logger log = Logger.getLogger(Quake3OSPTimeInfoParser.class);
-    
-    private static final Pattern normalTimeRegex = Pattern.compile("(OT )?([0-9]{1,2}):([0-9]{2})");         
-    private static final Pattern roundTimeRegex = Pattern.compile("^Round ([0-9]{1,3})/([0-9]{1,3})");         
+
+    private static final Pattern normalTimeRegex = Pattern.compile("(OT )?([0-9]{1,2}):([0-9]{2})");
+
+    private static final Pattern roundTimeRegex = Pattern.compile("^Round ([0-9]{1,3})/([0-9]{1,3})");
 
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
         String scoreTime = serverInfo.getNamedAttributes().get("Score_Time");
-        
+
         if (scoreTime == null)
             throw new AttributeNotFoundException("Score_Time");
-        
-        log.debug("Parsing Score_Time = '" + scoreTime + "'");
-        
+
+        log.debug(String.format(ServerInfoParser.fieldLogFormat, "Score_Time", scoreTime));
+
         Matcher normalMatcher = normalTimeRegex.matcher(scoreTime);
-        
+
         if (normalMatcher.matches()) {
             parseNormalTime(serverInfo, normalMatcher, scoreTime);
             return;
         }
-        
+
         Matcher roundMatcher = roundTimeRegex.matcher(scoreTime);
-        
+
         if (roundMatcher.matches()) {
             parseRoundTime(serverInfo, roundMatcher, scoreTime);
             return;
         }
-        
+
         if (scoreTime.equals("Warmup") || scoreTime.equals("Waiting for Players")) {
             serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.WARMUP));
         } else if (scoreTime.equals("Countdown") || scoreTime.equals("Starting")) {
@@ -81,7 +82,8 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
      * @param scoreTime
      */
     private void parseRoundTime(ServerInfo serverInfo, Matcher roundMatcher, String scoreTime) {
-        serverInfo.setProgressInfo(new RoundInfo(scoreTime, Integer.parseInt(roundMatcher.group(1)), Integer.parseInt(roundMatcher.group(2)), ProgressInfoFlags.IN_PLAY));
+        serverInfo.setProgressInfo(new RoundInfo(scoreTime, Integer.parseInt(roundMatcher.group(1)), Integer
+                .parseInt(roundMatcher.group(2)), ProgressInfoFlags.IN_PLAY));
     }
 
     /**
@@ -90,14 +92,14 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
      * @param scoreTime
      */
     private void parseNormalTime(ServerInfo serverInfo, Matcher normalMatcher, String scoreTime) {
-        
-        Period period = new Period (0, Integer.parseInt(normalMatcher.group(2)), Integer.parseInt(normalMatcher.group(3)), 0);
-        
+
+        Period period = new Period(0, Integer.parseInt(normalMatcher.group(2)), Integer.parseInt(normalMatcher.group(3)), 0);
+
         TimePeriodInfo timePeriodInfo = new TimePeriodInfo(scoreTime, period);
-        
+
         if (normalMatcher.group(1) != null && normalMatcher.group(1).length() > 0)
             timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.OVERTIME);
-        
+
         serverInfo.setProgressInfo(timePeriodInfo);
     }
 

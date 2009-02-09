@@ -18,6 +18,8 @@
 
 package eu.spoonman.smasher.serverinfo.parser.timeinfo;
 
+import org.apache.log4j.Logger;
+
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.joda.time.Period;
@@ -36,12 +38,22 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  * 
  */
 public class QuakeLiveTimeInfoParser implements ServerInfoParser {
+    /**
+     * Logger for this class
+     */
+    private static final Logger log = Logger.getLogger(QuakeLiveTimeInfoParser.class);
     
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
+        if (log.isDebugEnabled()) {
+            log.debug("parseIntoServerInfo(ServerInfo) - start"); //$NON-NLS-1$
+        }
 
         String gameState = serverInfo.getNamedAttributes().get("g_gameState");
         String levelStartTime = serverInfo.getNamedAttributes().get("g_levelStartTime");
+        
+        log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_gameState", gameState));
+        log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_levelStartTime", levelStartTime));
         
         TimePeriodInfo timePeriodInfo = new TimePeriodInfo(gameState + levelStartTime);
 
@@ -65,5 +77,9 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
         Period period = new Period(start, now);
         
         timePeriodInfo.setPeriod(period);
+
+        if (log.isDebugEnabled()) {
+            log.debug("parseIntoServerInfo(ServerInfo) - end"); //$NON-NLS-1$
+        }
     }
 }
