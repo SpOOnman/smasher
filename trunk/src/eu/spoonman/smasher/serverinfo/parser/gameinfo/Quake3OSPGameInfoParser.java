@@ -45,8 +45,8 @@ public class Quake3OSPGameInfoParser implements ServerInfoParser {
         serverInfo.setGameInfo(gameInfo);
         
         String gametype = serverInfo.getNamedAttributes().get("g_gametype");
-
-        log.debug("Parsing gametype: " + gametype);
+        
+        log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_gametype", gametype));
 
         if (gametype == null)
             throw new AttributeNotFoundException("g_gametype");
