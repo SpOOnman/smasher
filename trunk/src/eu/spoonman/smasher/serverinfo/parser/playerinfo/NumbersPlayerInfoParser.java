@@ -18,10 +18,12 @@
 
 package eu.spoonman.smasher.serverinfo.parser.playerinfo;
 
-import org.apache.log4j.Logger;
-
+import java.util.EnumSet;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
+import eu.spoonman.smasher.serverinfo.PlayerFlags;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
@@ -45,17 +47,20 @@ public class NumbersPlayerInfoParser implements ServerInfoParser {
     private String attributeName;
     private int playerOffset;
     private TeamKey teamKey;
+    private EnumSet<PlayerFlags> playerFlags;
     private String delimitier;
     
     
     
     /**
+     * @param playerFlags 
      * 
      */
-    public NumbersPlayerInfoParser(String attributeName, int playerOffset, TeamKey teamKey, String delimitier) {
+    public NumbersPlayerInfoParser(String attributeName, int playerOffset, TeamKey teamKey, EnumSet<PlayerFlags> playerFlags, String delimitier) {
         this.attributeName = attributeName;
         this.playerOffset = playerOffset;
         this.teamKey = teamKey;
+        this.playerFlags = playerFlags;
         this.delimitier = delimitier;
     }
 
@@ -77,13 +82,14 @@ public class NumbersPlayerInfoParser implements ServerInfoParser {
             PlayerInfo playerInfo = serverInfo.getPlayerInfos().get(nr + playerOffset);
             
             if (playerInfo == null)
-                throw new ParserException("Cannot find player info number " + (nr - playerOffset) );
+                throw new ParserException("Cannot find player info number " + (nr + playerOffset) );
             
             if (log.isDebugEnabled()) {
-                log.debug(String.format("Setting teamKey %s for playerInfo %d (%s)", teamKey, nr, playerInfo.getName()));
+                log.debug(String.format("Setting teamKey %s, adding flags %s for playerInfo %d (%s)", teamKey, playerFlags, nr + playerOffset, playerInfo.getName()));
             }
             
             playerInfo.setTeamKey(teamKey);
+            playerInfo.getPlayerFlags().addAll(playerFlags);
         }
     }
 

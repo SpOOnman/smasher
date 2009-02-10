@@ -19,6 +19,7 @@
 package eu.spoonman.smasher.serverinfo.builder;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,6 +28,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import eu.spoonman.smasher.serverinfo.Mod;
+import eu.spoonman.smasher.serverinfo.PlayerFlags;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
 import eu.spoonman.smasher.serverinfo.Version;
@@ -63,8 +65,8 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
         list.add(new Quake3OSPGameInfoParser());
         list.add(new Quake3OSPTimeInfoParser());
         list.add(new Quake3OSPPlayerInfoParser());
-        list.add(new NumbersPlayerInfoParser("Players_Red", -1, TeamKey.RED_TEAM, " "));
-        list.add(new NumbersPlayerInfoParser("Players_Blue", -1, TeamKey.BLUE_TEAM, " "));
+        list.add(new NumbersPlayerInfoParser("Players_Red", -1, TeamKey.RED_TEAM, EnumSet.of(PlayerFlags.IN_PLAY), " "));
+        list.add(new NumbersPlayerInfoParser("Players_Blue", -1, TeamKey.BLUE_TEAM, EnumSet.of(PlayerFlags.IN_PLAY), " "));
         return list;
     }
     
