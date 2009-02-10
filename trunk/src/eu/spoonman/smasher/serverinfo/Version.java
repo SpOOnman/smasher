@@ -21,7 +21,7 @@ package eu.spoonman.smasher.serverinfo;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.joda.time.LocalDateTime;
+import org.joda.time.DateTime;
 
 /**
  * @author Tomasz Kalkosiński
@@ -42,7 +42,7 @@ public class Version {
     private String  codeName;
     private PlatformSystem system;
     private Platform platform;
-    private LocalDateTime buildTime;
+    private DateTime buildTime;
     
     
     public Version() {
@@ -191,14 +191,14 @@ public class Version {
     /**
      * @return the buildTime
      */
-    public LocalDateTime getBuildTime() {
+    public DateTime getBuildTime() {
         return buildTime;
     }
 
     /**
      * @param buildTime the buildTime to set
      */
-    public void setBuildTime(LocalDateTime buildTime) {
+    public void setBuildTime(DateTime buildTime) {
         this.buildTime = buildTime;
     }
     

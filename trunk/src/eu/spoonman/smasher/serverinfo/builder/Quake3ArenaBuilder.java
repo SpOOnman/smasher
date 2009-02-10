@@ -25,7 +25,6 @@ import java.util.Locale;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import eu.spoonman.smasher.serverinfo.Mod;
 import eu.spoonman.smasher.serverinfo.PlayerFlags;
@@ -43,7 +42,7 @@ import eu.spoonman.smasher.serverinfo.reader.QuakeEngineReader;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
 /**
- * @author spoonman
+ * @author Tomasz Kalkosiński
  *
  */
 public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
@@ -79,19 +78,28 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
     public Mod getMod(ServerInfo serverInfo) {
         String gamename = serverInfo.getNamedAttributes().get("gamename");
         
+        Mod mod = new Mod();
+        mod.setName(gamename);
+        
         if (gamename.equals("osp")) {
             //TODO
-            Mod mod = new Mod();
-            mod.setName("OSP");
             mod.setVersion(new Version(1, 3, null, null, "a", null));
             return mod;
         } else if (gamename.equals("cpma")) {
+            //gameversion
+            //gamedate
+            
+            Version version = Version.tryParse(serverInfo.getNamedAttributes().get("gameversion"));
+            if (version == null)
+                System.out.println("todo");
+            
             DateTimeFormatter localDateParser = DateTimeFormat.forPattern("MMM dd YYYY");
             localDateParser.withLocale(Locale.US);
-            System.out.println(localDateParser.parseDateTime("Apr 26 2008"));
+            version.setBuildTime(localDateParser.parseDateTime("Apr 26 2008"));
             
+            mod.setVersion(version);
         }
         
-        return null;
+        return mod;
     }
 }
