@@ -18,6 +18,8 @@
 
 package eu.spoonman.smasher.serverinfo.parser.playerinfo;
 
+import org.apache.log4j.Logger;
+
 import java.util.Scanner;
 
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
@@ -35,10 +37,17 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  */
 public class NumbersPlayerInfoParser implements ServerInfoParser {
     
+    /**
+     * Logger for this class
+     */
+    private static final Logger log = Logger.getLogger(NumbersPlayerInfoParser.class);
+    
     private String attributeName;
     private int playerOffset;
     private TeamKey teamKey;
     private String delimitier;
+    
+    
     
     /**
      * 
@@ -52,7 +61,12 @@ public class NumbersPlayerInfoParser implements ServerInfoParser {
 
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
+
         String value = serverInfo.getNamedAttributes().get(attributeName);
+        
+        if (log.isDebugEnabled()) {
+            log.debug(String.format(ServerInfoParser.fieldLogFormat, attributeName, value));
+        }
         
         if (value == null)
             throw new AttributeNotFoundException(attributeName);
@@ -60,10 +74,15 @@ public class NumbersPlayerInfoParser implements ServerInfoParser {
         Scanner scanner = new Scanner(value).useDelimiter(delimitier);
         while (scanner.hasNextInt()) {
             int nr = scanner.nextInt();
-            PlayerInfo playerInfo = serverInfo.getPlayerInfos().get(nr - playerOffset);
+            System.out.println(nr);
+            PlayerInfo playerInfo = serverInfo.getPlayerInfos().get(nr + playerOffset);
             
             if (playerInfo == null)
                 throw new ParserException("Cannot find player info number " + (nr - playerOffset) );
+            
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Setting teamKey %s for playerInfo %d (%s)", teamKey, nr, playerInfo.getName()));
+            }
             
             playerInfo.setTeamKey(teamKey);
         }
