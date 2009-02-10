@@ -74,7 +74,6 @@ public class NumbersPlayerInfoParser implements ServerInfoParser {
         Scanner scanner = new Scanner(value).useDelimiter(delimitier);
         while (scanner.hasNextInt()) {
             int nr = scanner.nextInt();
-            System.out.println(nr);
             PlayerInfo playerInfo = serverInfo.getPlayerInfos().get(nr + playerOffset);
             
             if (playerInfo == null)
