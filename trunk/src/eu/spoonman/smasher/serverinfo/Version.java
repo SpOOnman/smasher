@@ -18,6 +18,9 @@
 
 package eu.spoonman.smasher.serverinfo;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.joda.time.LocalDateTime;
 
 /**
@@ -25,6 +28,11 @@ import org.joda.time.LocalDateTime;
  *
  */
 public class Version {
+    
+    /**
+     * Pattern that should work for most versions: 4.2, 1.03a, 2.5.229 etc.
+     */
+    private static final Pattern genericVersionPattern = Pattern.compile("(\\d+)\\.?(\\d*)?\\.?(\\d*)?\\.?(\\d*)?\\.?(\\w*)?\\s.*");
     
     private Integer major;
     private Integer minor;
@@ -36,8 +44,10 @@ public class Version {
     private Platform platform;
     private LocalDateTime buildTime;
     
+    
     public Version() {
     }
+    
     
     public Version(Integer major, Integer minor, Integer build, Integer revision, String codeLetter, String codeName) {
         this();
@@ -47,6 +57,35 @@ public class Version {
         this.revision = revision;
         this.codeLetter = codeLetter;
         this.codeName = codeName;
+    }
+    
+    /**
+     * Try to parse most common version strings.
+     * @param versionString
+     */
+    public static Version tryParse(String versionString) {
+        
+        Matcher matcher = genericVersionPattern.matcher(versionString);
+        
+        if (!(matcher.matches()))
+            return null;
+        
+        Version version = new Version();
+        
+        if (matcher.group(1) != null)
+            version.setMajor(Integer.valueOf(matcher.group(1)));
+        if (matcher.group(2) != null)
+            version.setMinor(Integer.valueOf(matcher.group(2)));
+        if (matcher.group(3) != null)
+            version.setBuild(Integer.valueOf(matcher.group(3)));
+        if (matcher.group(4) != null)
+            version.setRevision(Integer.valueOf(matcher.group(4)));
+        
+        if (matcher.group(5) != null)
+            version.setCodeLetter(matcher.group(5));
+        
+        return version;
+        
     }
     /**
      * @return the major
