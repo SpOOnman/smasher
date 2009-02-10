@@ -26,15 +26,9 @@ import java.util.Map;
 public class ServerInfo {
 	
 	private ServerInfoStatus status;
-	
-    private String name;
-    private String map;
-    private String modification;
-    private String version;
-
-    private int playersCount;
-    private int ping;
-    private String gameName;
+    
+    private Mod game;
+    private Mod modification;
 	
 	private List<PlayerInfo> playerInfos;
     private Map<String, String> namedAttributes;
@@ -65,6 +59,11 @@ public class ServerInfo {
 		StringBuilder sb = new StringBuilder ();
         
         sb.append("status\t : " + this.status + "\n");
+        
+        sb.append(game);
+        sb.append("\n");
+        sb.append(modification);
+        sb.append("\n");
 		
 		for (Map.Entry<String, String> entry : this.namedAttributes.entrySet()) {
 			sb.append(entry.getKey() + "\t : " + entry.getValue() + "\n");
@@ -97,102 +96,14 @@ public class ServerInfo {
 	public void setStatus(ServerInfoStatus status) {
 		this.status = status;
 	}
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	/**
-	 * @return the map
-	 */
-	public String getMap() {
-		return map;
-	}
-	/**
-	 * @param map the map to set
-	 */
-	public void setMap(String map) {
-		this.map = map;
-	}
-	/**
-	 * @return the modification
-	 */
-	public String getModification() {
-		return modification;
-	}
-	/**
-	 * @param modification the modification to set
-	 */
-	public void setModification(String modification) {
-		this.modification = modification;
-	}
-	/**
-	 * @return the version
-	 */
-	public String getVersion() {
-		return version;
-	}
-	/**
-	 * @param version the version to set
-	 */
-	public void setVersion(String version) {
-		this.version = version;
-	}
-	/**
-	 * @return the playersCount
-	 */
-	public int getPlayersCount() {
-		return playersCount;
-	}
-	/**
-	 * @param playersCount the playersCount to set
-	 */
-	public void setPlayersCount(int playersCount) {
-		this.playersCount = playersCount;
-	}
-	/**
-	 * @return the ping
-	 */
-	public int getPing() {
-		return ping;
-	}
-	/**
-	 * @param ping the ping to set
-	 */
-	public void setPing(int ping) {
-		this.ping = ping;
-	}
-	/**
-	 * @return the gameName
-	 */
-	public String getGameName() {
-		return gameName;
-	}
-	/**
-	 * @param gameName the gameName to set
-	 */
-	public void setGameName(String gameName) {
-		this.gameName = gameName;
-	}
+	
 	/**
 	 * @return the playerInfos
 	 */
 	public List<PlayerInfo> getPlayerInfos() {
 		return playerInfos;
 	}
-	/**
-	 * @param playerInfos the playerInfos to set
-	 */
-	public void setPlayerInfos(ArrayList<PlayerInfo> playerInfos) {
-		this.playerInfos = playerInfos;
-	}
+	
 	/**
 	 * @return the namedAttributes
 	 */
@@ -234,4 +145,34 @@ public class ServerInfo {
     public void setGameInfo(GameInfo gameInfo) {
         this.gameInfo = gameInfo;
     }
+
+    /**
+     * @return the game
+     */
+    public Mod getGame() {
+        return game;
+    }
+
+    /**
+     * @param game the game to set
+     */
+    public void setGame(Mod game) {
+        this.game = game;
+    }
+
+    /**
+     * @return the modification
+     */
+    public Mod getModification() {
+        return modification;
+    }
+
+    /**
+     * @param modification the modification to set
+     */
+    public void setModification(Mod modification) {
+        this.modification = modification;
+    }
+    
+    
 }

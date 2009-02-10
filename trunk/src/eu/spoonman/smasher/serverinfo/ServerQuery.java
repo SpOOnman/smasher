@@ -111,6 +111,7 @@ public class ServerQuery {
             if (!alreadyBuilded)
                 buildParsers(serverInfo);
 
+            setGameAndMod(serverInfo);
             parseData(serverInfo);
 
             serverInfo.setStatus(ServerInfoStatus.OK);
@@ -124,6 +125,11 @@ public class ServerQuery {
 
     private void buildParsers(ServerInfo serverInfo) {
         this.parserList = builder.getParserList(serverInfo);
+    }
+    
+    private void setGameAndMod(ServerInfo serverInfo) {
+        serverInfo.setGame(builder.getMod(serverInfo));
+        serverInfo.setModification(builder.getMod(serverInfo));
     }
 
     private void parseData(ServerInfo serverInfo) {
