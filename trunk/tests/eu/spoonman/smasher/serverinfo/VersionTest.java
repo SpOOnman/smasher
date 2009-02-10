@@ -32,13 +32,36 @@ public class VersionTest {
      * Test method for {@link eu.spoonman.smasher.serverinfo.Version#tryParse(java.lang.String)}.
      */
     @Test
-    public void tryParseTest() {
+    public void tryParseTestOne() {
         Version version;
         
         version = Version.tryParse("1.2.3.4");
         
         assertNotNull(version);
         assertEquals(1, version.getMajor());
+        assertEquals(2, version.getMinor());
+        assertEquals(3, version.getBuild());
+        assertEquals(4, version.getRevision());
+        assertNull(version.getCodeLetter());
+        assertNull(version.getCodeName());
+    }
+    
+    /**
+     * Test method for {@link eu.spoonman.smasher.serverinfo.Version#tryParse(java.lang.String)}.
+     */
+    @Test
+    public void tryParseTestTwo() {
+        Version version;
+        
+        version = Version.tryParse("5.021a");
+        
+        assertNotNull(version);
+        assertEquals(5, version.getMajor());
+        assertEquals(21, version.getMinor());
+        assertNull(version.getBuild());
+        assertNull(version.getRevision());
+        assertEquals("a", version.getCodeLetter());
+        assertNull(version.getCodeName());
     }
 
 }

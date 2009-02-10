@@ -32,7 +32,7 @@ public class Version {
     /**
      * Pattern that should work for most versions: 4.2, 1.03a, 2.5.229 etc.
      */
-    private static final Pattern genericVersionPattern = Pattern.compile("(\\d+)\\.?(\\d*)?\\.?(\\d*)?\\.?(\\d*)?\\.?(\\w*)?\\s.*");
+    private static final Pattern genericVersionPattern = Pattern.compile("(\\d+)\\.?(\\d+)?\\.?(\\d+)?\\.?(\\d+)?\\.?(\\w+)?\\s?.*");
     
     private Integer major;
     private Integer minor;
