@@ -20,10 +20,13 @@ package eu.spoonman.smasher.serverinfo;
 
 import org.apache.log4j.Logger;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  * @author Tomasz Kalkosiński
@@ -39,6 +42,8 @@ public class Version {
      * Pattern that should work for most versions: 4.2, 1.03a, 2.5.229 etc.
      */
     private static final Pattern genericVersionPattern = Pattern.compile("(\\d+)\\.?(\\d+)?\\.?(\\d+)?\\.?(\\d+)?\\.?(\\w+)?\\s?.*");
+
+    private static DateTimeFormatter americanDateTimeFormatter;
     
     private String  name;
     private String  fullName;
@@ -112,6 +117,18 @@ public class Version {
         
         return version;
         
+    }
+    
+    /**
+     * @return popular american date time formatter MMM dd YYYY, e.g. Apr 26 2004.
+     */
+    public static DateTimeFormatter getAmericanDateTimeFormatter() {
+        if (americanDateTimeFormatter == null) {
+            americanDateTimeFormatter  = DateTimeFormat.forPattern("MMM dd YYYY");
+            americanDateTimeFormatter.withLocale(Locale.US);
+        }
+        
+        return americanDateTimeFormatter;
     }
     
     /**

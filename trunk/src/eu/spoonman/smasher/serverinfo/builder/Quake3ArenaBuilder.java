@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.joda.time.format.DateTimeFormat;
@@ -51,6 +53,9 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
      */
     private static final Logger log = Logger.getLogger(Quake3ArenaBuilder.class);
     
+    private static final Pattern versionPattern = Pattern
+        .compile("(\\w+)\\s(\\w+)\\s(\\w+)\\-(\\w+)\\s(\\w+)");
+    
     @Override
     public Header getHeader() {
         return new QuakeEngineHeader();
@@ -75,7 +80,26 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
     
     @Override
     public Version getGameVersion(ServerInfo serverInfo) {
-        return null;
+        //CNQ3 1.42 linux-i386 Apr 22 2008
+        Matcher matcher = versionPattern.matcher(serverInfo.getNamedAttributes().get("version"));
+        
+        if (!matcher.matches())
+            return null;
+        
+        Version version = Version.tryParse(matcher.group(2));
+        
+        if (version == null) {
+            if (log.isInfoEnabled()) {
+                log.info("Cannot parse version string. Creating new version."); //$NON-NLS-1$
+            }
+            version = new Version(null);
+        }
+        
+        version.setName(matcher.group(1));
+        version.setFullName("Quake 3 Arena");
+        version.setBuildTime(Version.getAmericanDateTimeFormatter().parseDateTime(matcher.group(5)));
+        
+        return version;
     }
     
     @Override
@@ -101,9 +125,7 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
             version.setName("cpma");
             version.setFullName("Challenge Pro Mode Arena");
             
-            DateTimeFormatter localDateParser = DateTimeFormat.forPattern("MMM dd YYYY");
-            localDateParser.withLocale(Locale.US);
-            version.setBuildTime(localDateParser.parseDateTime("Apr 26 2008"));
+            version.setBuildTime(Version.getAmericanDateTimeFormatter().parseDateTime(serverInfo.getNamedAttributes().get("gamedate")));
             
             return version;
         }
