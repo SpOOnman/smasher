@@ -10,7 +10,8 @@ import java.util.regex.Pattern;
 
 import org.joda.time.LocalDateTime;
 
-import eu.spoonman.smasher.serverinfo.Mod;
+import com.sun.org.apache.xpath.internal.operations.Mod;
+
 import eu.spoonman.smasher.serverinfo.Platform;
 import eu.spoonman.smasher.serverinfo.PlatformSystem;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
@@ -57,7 +58,7 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
         Matcher matcher = versionPattern.matcher(gamename);
 
         if (matcher.matches()) {
-            Version version = new Version(Integer.valueOf(matcher.group(1)), Integer.valueOf(matcher.group(2)), Integer.valueOf(matcher
+            Version version = new Version("QuakeLive", Integer.valueOf(matcher.group(1)), Integer.valueOf(matcher.group(2)), Integer.valueOf(matcher
                     .group(3)), Integer.valueOf(matcher.group(4)), null, null);
             
             PlatformSystem.valueOf(matcher.group(5));
@@ -69,22 +70,16 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
 
         return null;
     }
-
+    
+    /* (non-Javadoc)
+     * @see eu.spoonman.smasher.serverinfo.builder.Builder#getModVersion(eu.spoonman.smasher.serverinfo.ServerInfo)
+     */
     @Override
-    public Mod getMod(ServerInfo serverInfo) {
-        String gamename = serverInfo.getNamedAttributes().get("gamename");
-
-        if (gamename.equals("osp")) {
-            // TODO
-            Mod mod = new Mod();
-            mod.setName("OSP");
-            mod.setVersion(new Version(1, 3, null, null, "a", null));
-            return mod;
-        } else if (gamename.equals("cpma")) {
-
-        }
-
+    public Version getModVersion(ServerInfo serverInfo) {
+        // TODO Auto-generated method stub
         return null;
     }
+
+    
 
 }

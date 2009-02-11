@@ -52,7 +52,6 @@ public class Quake3OSPGameInfoParser implements ServerInfoParser {
             throw new AttributeNotFoundException("g_gametype");
 
 
-        gameInfo.setGame(Games.QUAKE3ARENA);
         gameInfo.setGameType(parseGametype(gametype));
 
     }

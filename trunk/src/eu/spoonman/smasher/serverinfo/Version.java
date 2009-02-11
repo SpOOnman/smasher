@@ -18,6 +18,8 @@
 
 package eu.spoonman.smasher.serverinfo;
 
+import org.apache.log4j.Logger;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,12 +30,18 @@ import org.joda.time.DateTime;
  *
  */
 public class Version {
+    /**
+     * Logger for this class
+     */
+    private static final Logger log = Logger.getLogger(Version.class);
     
     /**
      * Pattern that should work for most versions: 4.2, 1.03a, 2.5.229 etc.
      */
     private static final Pattern genericVersionPattern = Pattern.compile("(\\d+)\\.?(\\d+)?\\.?(\\d+)?\\.?(\\d+)?\\.?(\\w+)?\\s?.*");
     
+    private String  name;
+    private String  fullName;
     private Integer major;
     private Integer minor;
     private Integer build;
@@ -45,12 +53,13 @@ public class Version {
     private DateTime buildTime;
     
     
-    public Version() {
+    public Version(String name) {
+        this.name = name;
     }
     
     
-    public Version(Integer major, Integer minor, Integer build, Integer revision, String codeLetter, String codeName) {
-        this();
+    public Version(String name, Integer major, Integer minor, Integer build, Integer revision, String codeLetter, String codeName) {
+        this(name);
         this.major = major;
         this.minor = minor;
         this.build = build;
@@ -65,12 +74,16 @@ public class Version {
      */
     public static Version tryParse(String versionString) {
         
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Parsing version string '%s'", versionString));
+        }
+        
         Matcher matcher = genericVersionPattern.matcher(versionString);
         
         if (!(matcher.matches()))
             return null;
         
-        Version version = new Version();
+        Version version = new Version(null);
         
         if (matcher.group(1) != null)
             version.setMajor(Integer.valueOf(matcher.group(1)));
@@ -83,10 +96,42 @@ public class Version {
         
         if (matcher.group(5) != null)
             version.setCodeLetter(matcher.group(5));
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Version parsed to '%s'", version));
+        }
         
         return version;
         
     }
+    
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    /**
+     * @return the fullName
+     */
+    public String getFullName() {
+        return fullName;
+    }
+    /**
+     * @param fullName the fullName to set
+     */
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+
     /**
      * @return the major
      */

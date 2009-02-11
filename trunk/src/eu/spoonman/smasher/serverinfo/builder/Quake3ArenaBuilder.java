@@ -23,10 +23,10 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.log4j.Logger;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import eu.spoonman.smasher.serverinfo.Mod;
 import eu.spoonman.smasher.serverinfo.PlayerFlags;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
@@ -46,6 +46,10 @@ import eu.spoonman.smasher.serverinfo.reader.Reader;
  *
  */
 public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
+    /**
+     * Logger for this class
+     */
+    private static final Logger log = Logger.getLogger(Quake3ArenaBuilder.class);
     
     @Override
     public Header getHeader() {
@@ -75,31 +79,35 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
     }
     
     @Override
-    public Mod getMod(ServerInfo serverInfo) {
+    public Version getModVersion(ServerInfo serverInfo) {
         String gamename = serverInfo.getNamedAttributes().get("gamename");
-        
-        Mod mod = new Mod();
-        mod.setName(gamename);
         
         if (gamename.equals("osp")) {
             //TODO
-            mod.setVersion(new Version(1, 3, null, null, "a", null));
-            return mod;
+            //mod.setVersion(new Version(1, 3, null, null, "a", null));
+            return new Version("osp");
         } else if (gamename.equals("cpma")) {
-            //gameversion
-            //gamedate
             
             Version version = Version.tryParse(serverInfo.getNamedAttributes().get("gameversion"));
-            if (version == null)
-                System.out.println("todo");
+            
+            if (version == null) {
+                if (log.isInfoEnabled()) {
+                    log.info("Cannot parse version string. Creating new version."); //$NON-NLS-1$
+                }
+                version = new Version(null);
+            }
+            
+            
+            version.setName("cpma");
+            version.setFullName("Challenge Pro Mode Arena");
             
             DateTimeFormatter localDateParser = DateTimeFormat.forPattern("MMM dd YYYY");
             localDateParser.withLocale(Locale.US);
             version.setBuildTime(localDateParser.parseDateTime("Apr 26 2008"));
             
-            mod.setVersion(version);
+            return version;
         }
         
-        return mod;
+        return null;
     }
 }

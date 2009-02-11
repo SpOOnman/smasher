@@ -26,49 +26,10 @@ package eu.spoonman.smasher.serverinfo;
  */
 public class GameInfo {
     
-    private Games game;
-    private Version gameVersion;
-    private Mod mod;
-    
     private GameTypes gameType;
     private String rawGameType;
     
-    /**
-     * @return the game
-     */
-    public Games getGame() {
-        return game;
-    }
-    /**
-     * @param game the game to set
-     */
-    public void setGame(Games game) {
-        this.game = game;
-    }
-    /**
-     * @return the gameVersion
-     */
-    public Version getGameVersion() {
-        return gameVersion;
-    }
-    /**
-     * @param gameVersion the gameVersion to set
-     */
-    public void setGameVersion(Version gameVersion) {
-        this.gameVersion = gameVersion;
-    }
-    /**
-     * @return the mod
-     */
-    public Mod getMod() {
-        return mod;
-    }
-    /**
-     * @param mod the mod to set
-     */
-    public void setMod(Mod mod) {
-        this.mod = mod;
-    }
+    
     /**
      * @return the gameType
      */

@@ -27,8 +27,9 @@ public class ServerInfo {
 	
 	private ServerInfoStatus status;
     
-    private Mod game;
-    private Mod modification;
+	private Games game;
+    private Version gameVersion;
+    private Version modVersion;
 	
 	private List<PlayerInfo> playerInfos;
     private Map<String, String> namedAttributes;
@@ -62,7 +63,7 @@ public class ServerInfo {
         
         sb.append(game);
         sb.append("\n");
-        sb.append(modification);
+        sb.append(modVersion);
         sb.append("\n");
 		
 		for (Map.Entry<String, String> entry : this.namedAttributes.entrySet()) {
@@ -149,30 +150,42 @@ public class ServerInfo {
     /**
      * @return the game
      */
-    public Mod getGame() {
+    public Games getGame() {
         return game;
     }
 
     /**
      * @param game the game to set
      */
-    public void setGame(Mod game) {
+    public void setGame(Games game) {
         this.game = game;
     }
 
     /**
-     * @return the modification
+     * @return the gameVersion
      */
-    public Mod getModification() {
-        return modification;
+    public Version getGameVersion() {
+        return gameVersion;
     }
 
     /**
-     * @param modification the modification to set
+     * @param gameVersion the gameVersion to set
      */
-    public void setModification(Mod modification) {
-        this.modification = modification;
+    public void setGameVersion(Version gameVersion) {
+        this.gameVersion = gameVersion;
     }
-    
-    
+
+    /**
+     * @return the modVersion
+     */
+    public Version getModVersion() {
+        return modVersion;
+    }
+
+    /**
+     * @param modVersion the modVersion to set
+     */
+    public void setModVersion(Version modVersion) {
+        this.modVersion = modVersion;
+    }
 }

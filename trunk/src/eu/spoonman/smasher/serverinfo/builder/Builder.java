@@ -21,7 +21,6 @@ package eu.spoonman.smasher.serverinfo.builder;
 
 import java.util.List;
 
-import eu.spoonman.smasher.serverinfo.Mod;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.Version;
 import eu.spoonman.smasher.serverinfo.header.Header;
@@ -42,6 +41,6 @@ public interface Builder {
     
     public Version getGameVersion(ServerInfo serverInfo);
     
-    public Mod getMod(ServerInfo serverInfo);
+    public Version getModVersion(ServerInfo serverInfo);
 
 }

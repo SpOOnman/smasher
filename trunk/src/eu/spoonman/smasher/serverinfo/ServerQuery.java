@@ -54,6 +54,9 @@ public class ServerQuery {
     private Header header;
 
     private Builder builder;
+    
+    private Version gameVersion;
+    private Version modVersion;
 
     /**
      * Determines whether builder has already builded parsers. This should
@@ -128,8 +131,17 @@ public class ServerQuery {
     }
     
     private void setGameAndMod(ServerInfo serverInfo) {
-        serverInfo.setGame(builder.getMod(serverInfo));
-        serverInfo.setModification(builder.getMod(serverInfo));
+        //Parse game and mod versions only once.
+        //They don't change during play.
+        
+        if (gameVersion == null)
+            builder.getGameVersion(serverInfo);
+        
+        if (modVersion == null)
+            builder.getModVersion(serverInfo);
+        
+        serverInfo.setGameVersion(gameVersion);
+        serverInfo.setModVersion(modVersion);
     }
 
     private void parseData(ServerInfo serverInfo) {
