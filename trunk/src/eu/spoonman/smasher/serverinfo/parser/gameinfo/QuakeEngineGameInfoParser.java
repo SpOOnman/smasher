@@ -16,20 +16,27 @@
  * along with Smasher.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.spoonman.smasher.serverinfo.parser.serverstatusinfo;
+package eu.spoonman.smasher.serverinfo.parser.gameinfo;
 
+import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
-import eu.spoonman.smasher.serverinfo.ServerStatusInfo;
-import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
+import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 
 /**
  * @author Tomasz Kalkosiński
  *
  */
-public class QuakeEngineServerStatusInfoParser implements ServerInfoParser {
+public class QuakeEngineGameInfoParser implements ServerInfoParser {
     
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
+        
+        GameInfo gameInfo = new GameInfo();
+        
+        gameInfo.setPlayerMaxCount(Integer.valueOf(serverInfo.getNamedAttributes().get("sv_maxclients")));
+        gameInfo.setHostName(serverInfo.getNamedAttributes().get("sv_hostname"));
+        
+        serverInfo.setGameInfo(gameInfo);
     }
 }
