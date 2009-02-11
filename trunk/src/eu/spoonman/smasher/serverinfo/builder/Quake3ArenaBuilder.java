@@ -54,7 +54,7 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
     private static final Logger log = Logger.getLogger(Quake3ArenaBuilder.class);
     
     private static final Pattern versionPattern = Pattern
-        .compile("(\\w+)\\s(\\w+)\\s(\\w+)\\-(\\w+)\\s(\\w+)");
+        .compile("(\\w+)\\s([\\.\\w]+)\\s(\\w+)\\-(\\w+)\\s(.+)");
     
     @Override
     public Header getHeader() {
