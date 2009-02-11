@@ -135,10 +135,10 @@ public class ServerQuery {
         //They don't change during play.
         
         if (gameVersion == null)
-            builder.getGameVersion(serverInfo);
+            gameVersion = builder.getGameVersion(serverInfo);
         
         if (modVersion == null)
-            builder.getModVersion(serverInfo);
+            modVersion = builder.getModVersion(serverInfo);
         
         serverInfo.setGameVersion(gameVersion);
         serverInfo.setModVersion(modVersion);

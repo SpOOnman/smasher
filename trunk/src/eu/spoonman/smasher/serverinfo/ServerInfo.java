@@ -61,7 +61,7 @@ public class ServerInfo {
         
         sb.append("status\t : " + this.status + "\n");
         
-        sb.append(game);
+        sb.append(gameVersion);
         sb.append("\n");
         sb.append(modVersion);
         sb.append("\n");

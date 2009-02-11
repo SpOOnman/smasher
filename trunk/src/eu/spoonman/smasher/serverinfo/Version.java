@@ -68,6 +68,15 @@ public class Version {
         this.codeName = codeName;
     }
     
+    @Override
+    public String toString() {
+        return String.format("[Version: %s (%s), %d.%d.%d.%d%s (codename %s), %s, %s, %s",
+                name, fullName, major, minor, build, revision, codeLetter, codeName, system, platform, buildTime);
+    }
+    
+    
+    
+    
     /**
      * Try to parse most common version strings.
      * @param versionString
