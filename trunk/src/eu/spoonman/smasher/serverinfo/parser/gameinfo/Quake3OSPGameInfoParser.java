@@ -32,7 +32,7 @@ import eu.spoonman.smasher.serverinfo.parser.ParserException;
  * @author Tomasz Kalkosiński
  * 
  */
-public class Quake3OSPGameInfoParser implements ServerInfoParser {
+public class Quake3OSPGameInfoParser extends QuakeEngineGameInfoParser {
 
     /**
      * Logger for this class
@@ -41,18 +41,21 @@ public class Quake3OSPGameInfoParser implements ServerInfoParser {
 
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
-        GameInfo gameInfo = new GameInfo();
-        serverInfo.setGameInfo(gameInfo);
-        
+        GameInfo gameInfo = parseGameInfo(serverInfo);
+
         String gametype = serverInfo.getNamedAttributes().get("g_gametype");
-        
+
         log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_gametype", gametype));
 
         if (gametype == null)
             throw new AttributeNotFoundException("g_gametype");
 
-
         gameInfo.setGameType(parseGametype(gametype));
+        
+        //if it's CPMA set mode_current
+        gameInfo.setRawGameType(serverInfo.getNamedAttributes().get("mode_current"));
+
+        serverInfo.setGameInfo(gameInfo);
 
     }
 

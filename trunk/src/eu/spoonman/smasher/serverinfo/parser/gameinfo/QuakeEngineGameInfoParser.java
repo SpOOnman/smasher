@@ -25,18 +25,34 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 
 /**
  * @author Tomasz Kalkosiński
- *
+ * 
  */
 public class QuakeEngineGameInfoParser implements ServerInfoParser {
-    
+
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
-        
+
+        serverInfo.setGameInfo(parseGameInfo(serverInfo));
+    }
+
+    /**
+     * Typical Quake engine GameInfo parsing. If you need to change something -
+     * set returned result and alter it.
+     * 
+     * @param serverInfo
+     * @return
+     * @throws ParserException
+     */
+    protected GameInfo parseGameInfo(ServerInfo serverInfo) throws ParserException {
         GameInfo gameInfo = new GameInfo();
-        
+
         gameInfo.setPlayerMaxCount(Integer.valueOf(serverInfo.getNamedAttributes().get("sv_maxclients")));
         gameInfo.setHostName(serverInfo.getNamedAttributes().get("sv_hostname"));
+        gameInfo.setMap(serverInfo.getNamedAttributes().get("mapname"));
         
-        serverInfo.setGameInfo(gameInfo);
+        gameInfo.setPassworded(serverInfo.getNamedAttributes().get("g_needpass") != null && serverInfo.getNamedAttributes().get("g_needpass").equals("1"));
+
+        return gameInfo;
+
     }
 }
