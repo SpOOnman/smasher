@@ -29,6 +29,7 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 
 /**
+ * GameInfo parser for Quake 3 Arena OSP and CPMA mods.
  * @author Tomasz Kalkosiński
  * 
  */
@@ -39,6 +40,9 @@ public class Quake3OSPGameInfoParser extends QuakeEngineGameInfoParser {
      */
     private static final Logger log = Logger.getLogger(Quake3OSPGameInfoParser.class);
 
+    /**
+     * This method should be called after playerInfos has been parsed.
+     */
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
         GameInfo gameInfo = parseGameInfo(serverInfo);
@@ -54,6 +58,8 @@ public class Quake3OSPGameInfoParser extends QuakeEngineGameInfoParser {
         
         //if it's CPMA set mode_current
         gameInfo.setRawGameType(serverInfo.getNamedAttributes().get("mode_current"));
+        
+        gameInfo.setPlayerCount(serverInfo.getPlayerInfos().size());
 
         serverInfo.setGameInfo(gameInfo);
 

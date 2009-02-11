@@ -32,6 +32,7 @@ public class ServerInfo {
     private Version modVersion;
 	
 	private List<PlayerInfo> playerInfos;
+	private List<TeamInfo> teamInfos;
     private Map<String, String> namedAttributes;
     
     private ProgressInfo progressInfo;
@@ -43,8 +44,9 @@ public class ServerInfo {
     }
     
     public ServerInfo() {
-    	this.playerInfos = new ArrayList<PlayerInfo>();
-		this.namedAttributes = new LinkedHashMap<String, String>();
+    	playerInfos = new ArrayList<PlayerInfo>();
+    	teamInfos = new ArrayList<TeamInfo>();
+		namedAttributes = new LinkedHashMap<String, String>();
 	}
     
     
@@ -75,6 +77,12 @@ public class ServerInfo {
         
 		sb.append(progressInfo.toString());
 		sb.append("\n");
+		
+		for (TeamInfo ti : this.teamInfos) {
+            sb.append("\t");
+            sb.append(ti.toString());
+            sb.append("\n");
+        }
 		
 		for (PlayerInfo pi : this.playerInfos) {
 		    sb.append("\t");
@@ -131,6 +139,20 @@ public class ServerInfo {
      */
     public void setPlayerInfos(List<PlayerInfo> playerInfos) {
         this.playerInfos = playerInfos;
+    }
+    
+    /**
+     * @return the teamInfos
+     */
+    public List<TeamInfo> getTeamInfos() {
+        return teamInfos;
+    }
+
+    /**
+     * @param teamInfos the teamInfos to set
+     */
+    public void setTeamInfos(List<TeamInfo> teamInfos) {
+        this.teamInfos = teamInfos;
     }
 
     /**

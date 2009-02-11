@@ -39,6 +39,7 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.Quake3OSPGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.playerinfo.NumbersPlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.playerinfo.Quake3OSPPlayerInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.teaminfo.Quake3OSPTeamInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.Quake3OSPTimeInfoParser;
 import eu.spoonman.smasher.serverinfo.reader.QuakeEngineReader;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
@@ -70,11 +71,13 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
     @Override
     public List<ServerInfoParser> getParserList(ServerInfo serverInfo) {
         List<ServerInfoParser> list = new ArrayList<ServerInfoParser>();
-        list.add(new Quake3OSPGameInfoParser());
-        list.add(new Quake3OSPTimeInfoParser());
         list.add(new Quake3OSPPlayerInfoParser());
         list.add(new NumbersPlayerInfoParser("Players_Red", -1, TeamKey.RED_TEAM, EnumSet.of(PlayerFlags.IN_PLAY), " "));
         list.add(new NumbersPlayerInfoParser("Players_Blue", -1, TeamKey.BLUE_TEAM, EnumSet.of(PlayerFlags.IN_PLAY), " "));
+        list.add(new Quake3OSPTeamInfoParser("Score_Red", "Red", TeamKey.RED_TEAM));
+        list.add(new Quake3OSPTeamInfoParser("Score_Blue", "Blue", TeamKey.BLUE_TEAM));
+        list.add(new Quake3OSPTimeInfoParser());
+        list.add(new Quake3OSPGameInfoParser());
         return list;
     }
     

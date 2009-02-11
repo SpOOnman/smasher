@@ -35,6 +35,11 @@ public class TeamInfo {
         super();
         this.key = key;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("[TeamInfo: %s '%s', %d score]", key, name, score);
+    }
 
     /**
      * @return the key
