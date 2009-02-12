@@ -22,6 +22,9 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * General Quake engine based games header configuration.
+ * 
+ * Source of information:
+ * {@linkplain ftp://ftp.idsoftware.com/idstuff/quake3/docs/server.txt}
  * @author Tomasz Kalkosiński
  */
 public class QuakeEngineHeader implements Header{
