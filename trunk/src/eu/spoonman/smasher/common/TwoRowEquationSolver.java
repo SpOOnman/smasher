@@ -49,12 +49,7 @@ public class TwoRowEquationSolver {
     
     private ArrayList<TwoRowMatrix> solutions;
     
-    /**
-     * 
-     */
-    public TwoRowEquationSolver() {
-        solutions = new ArrayList<TwoRowMatrix>();
-    }
+    private int checkedCombinationCount = 0;
 
     /**
      * @param x
@@ -71,6 +66,10 @@ public class TwoRowEquationSolver {
     }
     
     public ArrayList<TwoRowMatrix> search() {
+        
+        solutions = new ArrayList<TwoRowMatrix>();
+        checkedCombinationCount = 0;
+        
         A = new TwoRowMatrix(X.size(), 0);
         
         K = new ArrayList<Integer>();
@@ -106,13 +105,16 @@ public class TwoRowEquationSolver {
         
         //Check scores
         scoreResult = A.multiply(X);
+        checkedCombinationCount++;
+        
+        logEquation("Checking combination", Priority.DEBUG);
         
         if (scoreResult.equals(K)) {
             solutions.add(new TwoRowMatrix(A));
-            logEquation("Good", Priority.DEBUG);
+            logEquation("Good combination found", Priority.DEBUG);
         } else {
             if (scoreResult.get(row) <= K.get(row) && column + 1 < X.size())
-                searchRecursive(column++);
+                searchRecursive(++column);
         }
     }
     
@@ -124,5 +126,23 @@ public class TwoRowEquationSolver {
         log.log(priority, String.format("%s * %sT = %d ? %d", A.getFirstRow(), X, scoreResult.get(0), K.get(0)));
         log.log(priority, String.format("%s * %sT = %d ? %d", A.getSecondRow(), X, scoreResult.get(1), K.get(1)));
         
+    }
+
+    /**
+     * @return the solutions
+     */
+    public ArrayList<TwoRowMatrix> getSolutions() {
+        return solutions;
+    }
+
+    /**
+     * @return the checkedCombinationCount
+     */
+    public int getCheckedCombinationCount() {
+        return checkedCombinationCount;
+    }
+    
+    public int getCombinationCount() {
+        return (int) Math.pow(2, X.size());
     }
 }
