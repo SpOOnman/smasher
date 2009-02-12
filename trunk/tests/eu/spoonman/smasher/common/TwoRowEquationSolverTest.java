@@ -22,11 +22,6 @@ public class TwoRowEquationSolverTest {
         ArrayList<TwoRowMatrix> arrayList = solver.search();
         
         assertEquals(1, arrayList.size());
-        
-        int checkedCount = solver.getCheckedCombinationCount();
-        int count = solver.getCombinationCount();
-        
-        System.out.println(String.format("Checked %d combinations out of %d possible: %d%%", checkedCount, count, (int) ((checkedCount * 100/count) )));
     }
 
 }

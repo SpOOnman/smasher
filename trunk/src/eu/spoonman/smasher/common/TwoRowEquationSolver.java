@@ -77,6 +77,12 @@ public class TwoRowEquationSolver {
         K.add(B.get(1) - (D == null ? 0 : D.get(1)));
         
         searchRecursive(0);
+        
+        if (log.isDebugEnabled()) {
+            int allPossible = (int) Math.pow(2, X.size());
+            log.debug(String.format("Checked %d combinations out of %d possible: %d%%", checkedCombinationCount, allPossible, (int) ((checkedCombinationCount * 100/allPossible))));
+        }
+        
         return solutions;
     }
     
@@ -133,16 +139,5 @@ public class TwoRowEquationSolver {
      */
     public ArrayList<TwoRowMatrix> getSolutions() {
         return solutions;
-    }
-
-    /**
-     * @return the checkedCombinationCount
-     */
-    public int getCheckedCombinationCount() {
-        return checkedCombinationCount;
-    }
-    
-    public int getCombinationCount() {
-        return (int) Math.pow(2, X.size());
     }
 }
