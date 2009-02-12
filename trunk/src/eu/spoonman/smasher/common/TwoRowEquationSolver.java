@@ -71,6 +71,13 @@ public class TwoRowEquationSolver {
     }
     
     public ArrayList<TwoRowMatrix> search() {
+        A = new TwoRowMatrix(X.size(), 0);
+        
+        K = new ArrayList<Integer>();
+        K.add(B.get(0) - (D == null ? 0 : D.get(0)));
+        K.add(B.get(1) - (D == null ? 0 : D.get(1)));
+        
+        searchRecursive(0);
         return solutions;
     }
     
@@ -98,7 +105,7 @@ public class TwoRowEquationSolver {
     private void searchRecursiveCheck(int column, int row) {
         
         //Check scores
-        scoreResult = A.multiply(B);
+        scoreResult = A.multiply(X);
         
         if (scoreResult.equals(K)) {
             solutions.add(new TwoRowMatrix(A));

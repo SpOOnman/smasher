@@ -47,6 +47,7 @@ public class TwoRowMatrix {
      * 
      */
     public TwoRowMatrix(int size, Integer value) {
+        this();
         for (int i = 0; i < size; i++) {
             firstRow.add(value);
             secondRow.add(value);
@@ -80,7 +81,7 @@ public class TwoRowMatrix {
         
         return result;
     }
-
+    
     /**
      * @return the firstRow
      */

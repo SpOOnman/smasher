@@ -1,0 +1,25 @@
+package eu.spoonman.smasher.common;
+
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
+import org.junit.Test;
+
+public class TwoRowEquationSolverTest {
+
+    @Test
+    public void testSearch() {
+        Integer[] players = { 19, 17, 11, 9, 2, 1 };
+        Integer[] score  = { 32, 27 };
+        ArrayList<Integer> playersScore = new ArrayList<Integer>(Arrays.asList(players));
+        ArrayList<Integer> scores = new ArrayList<Integer>(Arrays.asList(score));
+        
+        TwoRowEquationSolver solver = new TwoRowEquationSolver(playersScore, scores, null, null);
+        solver.search();
+    }
+
+}
