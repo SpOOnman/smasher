@@ -22,6 +22,20 @@ public class TwoRowEquationSolverTest {
         ArrayList<TwoRowMatrix> arrayList = solver.search();
         
         assertEquals(1, arrayList.size());
+        
+        assertEquals(1, arrayList.get(0).getFirstRow().get(0));
+        assertEquals(0, arrayList.get(0).getFirstRow().get(1));
+        assertEquals(1, arrayList.get(0).getFirstRow().get(2));
+        assertEquals(0, arrayList.get(0).getFirstRow().get(3));
+        assertEquals(1, arrayList.get(0).getFirstRow().get(4));
+        assertEquals(0, arrayList.get(0).getFirstRow().get(5));
+        
+        assertEquals(0, arrayList.get(0).getSecondRow().get(0));
+        assertEquals(1, arrayList.get(0).getSecondRow().get(1));
+        assertEquals(0, arrayList.get(0).getSecondRow().get(2));
+        assertEquals(1, arrayList.get(0).getSecondRow().get(3));
+        assertEquals(0, arrayList.get(0).getSecondRow().get(4));
+        assertEquals(1, arrayList.get(0).getSecondRow().get(5));
     }
 
 }
