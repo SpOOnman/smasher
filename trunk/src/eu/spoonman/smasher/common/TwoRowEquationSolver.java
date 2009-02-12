@@ -43,6 +43,8 @@ public class TwoRowEquationSolver {
     
     private ArrayList<Integer> K; // = B - D
     
+    private ArrayList<Integer> scoreResult;
+    
     private TwoRowMatrix templateMatrix;
     
     private ArrayList<TwoRowMatrix> solutions;
@@ -92,10 +94,11 @@ public class TwoRowEquationSolver {
 
     }
     
+    @SuppressWarnings("deprecation")
     private void searchRecursiveCheck(int column, int row) {
         
         //Check scores
-        ArrayList<Integer> scoreResult = A.multiply(B);
+        scoreResult = A.multiply(B);
         
         if (scoreResult.equals(K)) {
             solutions.add(new TwoRowMatrix(A));
@@ -111,8 +114,8 @@ public class TwoRowEquationSolver {
             return;
         
         log.log(priority, title);
-        log.log(priority, String.format("%s * %sT = %d", A.getFirstRow(), X, K.get(0)));
-        log.log(priority, String.format("%s * %sT = %d", A.getSecondRow(), X, K.get(1)));
+        log.log(priority, String.format("%s * %sT = %d ? %d", A.getFirstRow(), X, scoreResult.get(0), K.get(0)));
+        log.log(priority, String.format("%s * %sT = %d ? %d", A.getSecondRow(), X, scoreResult.get(1), K.get(1)));
         
     }
 }
