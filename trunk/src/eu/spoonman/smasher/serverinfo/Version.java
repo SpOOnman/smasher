@@ -87,9 +87,8 @@ public class Version {
      */
     public boolean tryParseVersion(String text) {
         
-        if (log.isDebugEnabled()) {
+        if (log.isDebugEnabled())
             log.debug(String.format("Parsing version string '%s'", text));
-        }
         
         Matcher matcher = genericVersionPattern.matcher(text);
         
@@ -110,9 +109,8 @@ public class Version {
         if (matcher.group(5) != null)
             setCodeLetter(matcher.group(5));
 
-        if (log.isDebugEnabled()) {
+        if (log.isDebugEnabled())
             log.debug(String.format("Version parsed to '%s'", version));
-        }
         
         return true;
     }
@@ -129,17 +127,15 @@ public class Version {
         if (log.isDebugEnabled())
             log.debug(String.format("Parsing american datetime string '%s'", text));
         
-        if (americanDateTimeFormatter == null) {
-            americanDateTimeFormatter = DateTimeFormat.forPattern("MMM d YYYY");
-            americanDateTimeFormatter.withLocale(Locale.US);
-        }
-        
         try {
             DateTimeFormatter formatter = getAmericanDateTimeFormatter();
             buildTime = formatter.parseDateTime(text);
             
+            if (log.isDebugEnabled())
+                log.debug(String.format("String '%s' parsed to '%s'", text, buildTime));
+            
         } catch (IllegalFormatException e) {
-            log.error(e);
+            log.error(String.format("Cannot parse american datetime string '%s'", text), e);
             return false;
         }
         

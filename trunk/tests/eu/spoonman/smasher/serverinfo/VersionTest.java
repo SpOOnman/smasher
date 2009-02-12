@@ -34,11 +34,10 @@ public class VersionTest {
      */
     @Test
     public void tryParseTestOne() {
-        Version version;
+        Version version = new Version(null);
         
-        version = Version.tryParse("1.2.3.4");
+        version.tryParseVersion("1.2.3.4");
         
-        assertNotNull(version);
         assertEquals(1, version.getMajor());
         assertEquals(2, version.getMinor());
         assertEquals(3, version.getBuild());
@@ -52,11 +51,10 @@ public class VersionTest {
      */
     @Test
     public void tryParseTestTwo() {
-        Version version;
+        Version version = new Version(null);
         
-        version = Version.tryParse("5.021a");
+        version.tryParseVersion("5.021a");
         
-        assertNotNull(version);
         assertEquals(5, version.getMajor());
         assertEquals(21, version.getMinor());
         assertNull(version.getBuild());
@@ -67,15 +65,24 @@ public class VersionTest {
     
     @Test
     public void americanFormatterTestOne() {
-        DateTime dateTime = Version.getAmericanDateTimeFormatter().parseDateTime("Apr 24 2006");
+        Version version = new Version(null);
+        version.tryParseAmericanDate("Apr 24 2006");
+        DateTime dateTime = version.getBuildTime();
         assertEquals(4, dateTime.getMonthOfYear());
         assertEquals(24, dateTime.getDayOfMonth());
         assertEquals(2006, dateTime.getYear());
         
-        dateTime = Version.getAmericanDateTimeFormatter().parseDateTime("Mar 8 2008");
+        version.tryParseAmericanDate("Mar 8 2008");
+        dateTime = version.getBuildTime();
         assertEquals(3, dateTime.getMonthOfYear());
         assertEquals(8, dateTime.getDayOfMonth());
         assertEquals(2008, dateTime.getYear());
+        
+        version.tryParseAmericanDate("Jan  1 2005");
+        dateTime = version.getBuildTime();
+        assertEquals(1, dateTime.getMonthOfYear());
+        assertEquals(1, dateTime.getDayOfMonth());
+        assertEquals(2005, dateTime.getYear());
     }
 
 }
