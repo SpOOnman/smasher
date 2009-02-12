@@ -35,7 +35,7 @@ public class ServerQueryManagerTest {
         
         InetAddress address = InetAddress.getByName("194.187.43.245");
 
-        serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, address, 27971);
+        serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, address, 27963);
 
         assertNotNull(serverQuery);
 

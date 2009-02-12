@@ -124,7 +124,7 @@ public class Version {
      */
     public static DateTimeFormatter getAmericanDateTimeFormatter() {
         if (americanDateTimeFormatter == null) {
-            americanDateTimeFormatter  = DateTimeFormat.forPattern("MMM dd YYYY");
+            americanDateTimeFormatter = DateTimeFormat.forPattern("MMM d YYYY");
             americanDateTimeFormatter.withLocale(Locale.US);
         }
         

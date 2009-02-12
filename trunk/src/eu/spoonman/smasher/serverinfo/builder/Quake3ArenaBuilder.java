@@ -100,7 +100,9 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
         
         version.setName(matcher.group(1));
         version.setFullName("Quake 3 Arena");
-        version.setBuildTime(Version.getAmericanDateTimeFormatter().parseDateTime(matcher.group(5)));
+        
+        //Sometimes it's 'Mar  8 2006' instead of 'Mar 8 2006'
+        version.setBuildTime(Version.getAmericanDateTimeFormatter().parseDateTime(matcher.group(5).replace("  ", " ")));
         
         return version;
     }

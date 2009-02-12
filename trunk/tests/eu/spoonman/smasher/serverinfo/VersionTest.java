@@ -20,6 +20,7 @@ package eu.spoonman.smasher.serverinfo;
 
 import static org.junit.Assert.*;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 /**
@@ -62,6 +63,19 @@ public class VersionTest {
         assertNull(version.getRevision());
         assertEquals("a", version.getCodeLetter());
         assertNull(version.getCodeName());
+    }
+    
+    @Test
+    public void americanFormatterTestOne() {
+        DateTime dateTime = Version.getAmericanDateTimeFormatter().parseDateTime("Apr 24 2006");
+        assertEquals(4, dateTime.getMonthOfYear());
+        assertEquals(24, dateTime.getDayOfMonth());
+        assertEquals(2006, dateTime.getYear());
+        
+        dateTime = Version.getAmericanDateTimeFormatter().parseDateTime("Mar 8 2008");
+        assertEquals(3, dateTime.getMonthOfYear());
+        assertEquals(8, dateTime.getDayOfMonth());
+        assertEquals(2008, dateTime.getYear());
     }
 
 }
