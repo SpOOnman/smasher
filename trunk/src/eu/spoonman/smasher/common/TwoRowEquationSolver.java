@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 /**
  * Two row equation solver.
- * A * X = B - D
+ * A * X = B - D = K
  * 
  * @author spoonman
  *
@@ -32,6 +32,8 @@ public class TwoRowEquationSolver {
     private TwoRowMatrix A;
     private ArrayList<Integer> B;
     private ArrayList<Integer> D;
+    
+    private ArrayList<Integer> K; // = B - D
     
     private TwoRowMatrix templateMatrix;
 
@@ -47,5 +49,39 @@ public class TwoRowEquationSolver {
         B = b;
         D = d;
         this.templateMatrix = templateMatrix;
+    }
+    
+    private void searchRecursive(int column) {
+        
+        //Try 1/0 flags in this step
+        A.getFirstRow().set(column, 1);
+        A.getSecondRow().set(column, 0);
+        
+        //Check if it succeeds and eventually search deeper
+        searchRecursiveCheck(column, 0);
+        
+        A.getFirstRow().set(column, 0);
+        A.getSecondRow().set(column, 1);
+        
+        searchRecursiveCheck(column, 1);
+        
+        //Clean up when going back.
+        A.getFirstRow().set(column, 0);
+        A.getSecondRow().set(column, 0);
+
+    }
+    
+    private void searchRecursiveCheck(int column, int row) {
+        
+        //Check scores
+        ArrayList<Integer> scoreResult = A.multiply(B);
+        
+        if (scoreResult.equals(K)) {
+            System.out.println("good");
+        } else {
+            if (scoreResult.get(row) <= K.get(row) && column + 1 < X.size())
+                searchRecursive(column++);
+        }
+        
     }
 }
