@@ -89,20 +89,10 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
         if (!matcher.matches())
             return null;
         
-        Version version = Version.tryParse(matcher.group(2));
-        
-        if (version == null) {
-            if (log.isInfoEnabled()) {
-                log.info("Cannot parse version string. Creating new version."); //$NON-NLS-1$
-            }
-            version = new Version(null);
-        }
-        
-        version.setName(matcher.group(1));
+        Version version = new Version(matcher.group(1));
         version.setFullName("Quake 3 Arena");
-        
-        //Sometimes it's 'Mar  8 2006' instead of 'Mar 8 2006'
-        version.setBuildTime(Version.getAmericanDateTimeFormatter().parseDateTime(matcher.group(5).replace("  ", " ")));
+        version.tryParseVersion(matcher.group(2));
+        version.tryParseAmericanDate(matcher.group(5));
         
         return version;
     }
@@ -117,20 +107,10 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
             return new Version("osp");
         } else if (gamename.equals("cpma")) {
             
-            Version version = Version.tryParse(serverInfo.getNamedAttributes().get("gameversion"));
-            
-            if (version == null) {
-                if (log.isInfoEnabled()) {
-                    log.info("Cannot parse version string. Creating new version."); //$NON-NLS-1$
-                }
-                version = new Version(null);
-            }
-            
-            
-            version.setName("cpma");
+            Version version = new Version("cpma");
             version.setFullName("Challenge Pro Mode Arena");
-            
-            version.setBuildTime(Version.getAmericanDateTimeFormatter().parseDateTime(serverInfo.getNamedAttributes().get("gamedate")));
+            version.tryParseVersion(serverInfo.getNamedAttributes().get("gameversion"));
+            version.tryParseAmericanDate(serverInfo.getNamedAttributes().get("gamedate"));
             
             return version;
         }

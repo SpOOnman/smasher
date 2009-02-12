@@ -20,6 +20,7 @@ package eu.spoonman.smasher.serverinfo;
 
 import org.apache.log4j.Logger;
 
+import java.util.IllegalFormatException;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,50 +80,78 @@ public class Version {
                 name, fullName, major, minor, build, revision, codeLetter, codeName, system, platform, buildTime);
     }
     
-    
-    
-    
     /**
      * Try to parse most common version strings.
-     * @param versionString
+     * @param text Common version string.
+     * @return true if operation succeeded
      */
-    public static Version tryParse(String versionString) {
+    public boolean tryParseVersion(String text) {
         
         if (log.isDebugEnabled()) {
-            log.debug(String.format("Parsing version string '%s'", versionString));
+            log.debug(String.format("Parsing version string '%s'", text));
         }
         
-        Matcher matcher = genericVersionPattern.matcher(versionString);
+        Matcher matcher = genericVersionPattern.matcher(text);
         
         if (!(matcher.matches()))
-            return null;
+            return false;
         
         Version version = new Version(null);
         
         if (matcher.group(1) != null)
-            version.setMajor(Integer.valueOf(matcher.group(1)));
+            setMajor(Integer.valueOf(matcher.group(1)));
         if (matcher.group(2) != null)
-            version.setMinor(Integer.valueOf(matcher.group(2)));
+            setMinor(Integer.valueOf(matcher.group(2)));
         if (matcher.group(3) != null)
-            version.setBuild(Integer.valueOf(matcher.group(3)));
+            setBuild(Integer.valueOf(matcher.group(3)));
         if (matcher.group(4) != null)
-            version.setRevision(Integer.valueOf(matcher.group(4)));
+            setRevision(Integer.valueOf(matcher.group(4)));
         
         if (matcher.group(5) != null)
-            version.setCodeLetter(matcher.group(5));
+            setCodeLetter(matcher.group(5));
 
         if (log.isDebugEnabled()) {
             log.debug(String.format("Version parsed to '%s'", version));
         }
         
-        return version;
+        return true;
+    }
+    
+    /**
+     * Try to parse text into version's date.
+     * @param text American format MMM d YYYY date string.
+     * @return true if operation succeeded
+     */
+    public boolean tryParseAmericanDate(String text) {
+        //In some cases it's necessary: 'Mar  8 2008' would fail.
+        text = text.replace("  ", " ");
+        
+        if (log.isDebugEnabled())
+            log.debug(String.format("Parsing american datetime string '%s'", text));
+        
+        if (americanDateTimeFormatter == null) {
+            americanDateTimeFormatter = DateTimeFormat.forPattern("MMM d YYYY");
+            americanDateTimeFormatter.withLocale(Locale.US);
+        }
+        
+        try {
+            DateTimeFormatter formatter = getAmericanDateTimeFormatter();
+            buildTime = formatter.parseDateTime(text);
+            
+        } catch (IllegalFormatException e) {
+            log.error(e);
+            return false;
+        }
+        
+        return true;
+        
         
     }
     
     /**
      * @return popular american date time formatter MMM dd YYYY, e.g. Apr 26 2004.
      */
-    public static DateTimeFormatter getAmericanDateTimeFormatter() {
+    private DateTimeFormatter getAmericanDateTimeFormatter() {
         if (americanDateTimeFormatter == null) {
             americanDateTimeFormatter = DateTimeFormat.forPattern("MMM d YYYY");
             americanDateTimeFormatter.withLocale(Locale.US);
@@ -156,7 +185,6 @@ public class Version {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-
 
     /**
      * @return the major
