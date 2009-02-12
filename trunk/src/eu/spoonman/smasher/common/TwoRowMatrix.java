@@ -36,6 +36,12 @@ public class TwoRowMatrix {
         firstRow = new ArrayList<Integer>();
         secondRow = new ArrayList<Integer>();
     }
+    
+    @SuppressWarnings("unchecked")
+    public TwoRowMatrix(TwoRowMatrix matrix) {
+        firstRow = (ArrayList<Integer>) matrix.getFirstRow().clone();
+        secondRow = (ArrayList<Integer>) matrix.getSecondRow().clone();
+    }
 
     /**
      * 
@@ -53,7 +59,7 @@ public class TwoRowMatrix {
      * @param vector
      * @return
      */
-    public TwoRowMatrix multiply(ArrayList<Integer> vector) {
+    public ArrayList<Integer> multiply(ArrayList<Integer> vector) {
         if (vector == null)
             throw new IllegalArgumentException("vector is null");
 
@@ -67,12 +73,12 @@ public class TwoRowMatrix {
             firstSum += firstRow.get(i) * vector.get(i);
             secondSum += secondRow.get(i) * vector.get(i);
         }
-
-        TwoRowMatrix twoRowMatrix = new TwoRowMatrix();
-        twoRowMatrix.getFirstRow().add(firstSum);
-        twoRowMatrix.getSecondRow().add(secondSum);
-
-        return twoRowMatrix;
+        
+        ArrayList<Integer> result = new ArrayList<Integer> ();
+        result.add(firstSum);
+        result.add(secondSum);
+        
+        return result;
     }
 
     /**

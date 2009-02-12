@@ -18,6 +18,9 @@
 
 package eu.spoonman.smasher.common;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
+
 import java.util.ArrayList;
 
 /**
@@ -28,6 +31,11 @@ import java.util.ArrayList;
  *
  */
 public class TwoRowEquationSolver {
+    /**
+     * Logger for this class
+     */
+    private static final Logger log = Logger.getLogger(TwoRowEquationSolver.class);
+
     private ArrayList<Integer> X;
     private TwoRowMatrix A;
     private ArrayList<Integer> B;
@@ -36,6 +44,15 @@ public class TwoRowEquationSolver {
     private ArrayList<Integer> K; // = B - D
     
     private TwoRowMatrix templateMatrix;
+    
+    private ArrayList<TwoRowMatrix> solutions;
+    
+    /**
+     * 
+     */
+    public TwoRowEquationSolver() {
+        solutions = new ArrayList<TwoRowMatrix>();
+    }
 
     /**
      * @param x
@@ -49,6 +66,10 @@ public class TwoRowEquationSolver {
         B = b;
         D = d;
         this.templateMatrix = templateMatrix;
+    }
+    
+    public ArrayList<TwoRowMatrix> search() {
+        return solutions;
     }
     
     private void searchRecursive(int column) {
@@ -77,11 +98,21 @@ public class TwoRowEquationSolver {
         ArrayList<Integer> scoreResult = A.multiply(B);
         
         if (scoreResult.equals(K)) {
-            System.out.println("good");
+            solutions.add(new TwoRowMatrix(A));
+            logEquation("Good", Priority.DEBUG);
         } else {
             if (scoreResult.get(row) <= K.get(row) && column + 1 < X.size())
                 searchRecursive(column++);
         }
+    }
+    
+    private void logEquation(String title, Priority priority) {
+        if (!(log.isEnabledFor(priority)))
+            return;
+        
+        log.log(priority, title);
+        log.log(priority, String.format("%s * %sT = %d", A.getFirstRow(), X, K.get(0)));
+        log.log(priority, String.format("%s * %sT = %d", A.getSecondRow(), X, K.get(1)));
         
     }
 }
