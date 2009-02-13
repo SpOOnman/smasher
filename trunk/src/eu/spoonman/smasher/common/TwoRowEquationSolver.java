@@ -18,6 +18,7 @@
 
 package eu.spoonman.smasher.common;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 
@@ -113,24 +114,21 @@ public class TwoRowEquationSolver {
         scoreResult = A.multiply(X);
         checkedCombinationCount++;
         
-        logEquation("Checking combination", Priority.DEBUG);
+        logEquation("Checking combination", Level.TRACE);
         
         if (scoreResult.equals(K)) {
             solutions.add(new TwoRowMatrix(A));
-            logEquation("Good combination found", Priority.DEBUG);
+            logEquation("Good combination found", Level.DEBUG);
         } else {
             if (scoreResult.get(row) <= K.get(row) && column + 1 < X.size())
                 searchRecursive(++column);
         }
     }
     
-    private void logEquation(String title, Priority priority) {
-        if (!(log.isEnabledFor(priority)))
-            return;
-        
-        log.log(priority, title);
-        log.log(priority, String.format("%s * %sT = %d ? %d", A.getFirstRow(), X, scoreResult.get(0), K.get(0)));
-        log.log(priority, String.format("%s * %sT = %d ? %d", A.getSecondRow(), X, scoreResult.get(1), K.get(1)));
+    private void logEquation(String title, Level level) {
+        log.log(level, title);
+        log.log(level, String.format("%s * %sT = %d ? %d", A.getFirstRow(), X, scoreResult.get(0), K.get(0)));
+        log.log(level, String.format("%s * %sT = %d ? %d", A.getSecondRow(), X, scoreResult.get(1), K.get(1)));
         
     }
 
