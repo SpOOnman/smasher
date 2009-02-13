@@ -68,14 +68,7 @@ public class TwoRowEquationSolver {
     
     public ArrayList<TwoRowMatrix> search() {
         
-        solutions = new ArrayList<TwoRowMatrix>();
-        checkedCombinationCount = 0;
-        
-        A = new TwoRowMatrix(X.size(), 0);
-        
-        K = new ArrayList<Integer>();
-        K.add(B.get(0) - (D == null ? 0 : D.get(0)));
-        K.add(B.get(1) - (D == null ? 0 : D.get(1)));
+        prepareSearch();
         
         searchRecursive(0);
         
@@ -85,6 +78,17 @@ public class TwoRowEquationSolver {
         }
         
         return solutions;
+    }
+
+    private void prepareSearch() {
+        solutions = new ArrayList<TwoRowMatrix>();
+        checkedCombinationCount = 0;
+        
+        A = new TwoRowMatrix(X.size(), 0);
+        
+        K = new ArrayList<Integer>();
+        K.add(B.get(0) - (D == null ? 0 : D.get(0)));
+        K.add(B.get(1) - (D == null ? 0 : D.get(1)));
     }
     
     private void searchRecursive(int column) {
