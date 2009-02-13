@@ -21,6 +21,7 @@ import eu.spoonman.smasher.serverinfo.header.QuakeEngineHeader;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.Quake3OSPGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.Quake3OSPTimeInfoParser;
+import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 import eu.spoonman.smasher.serverinfo.reader.QuakeLiveReader;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
@@ -48,6 +49,12 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
         List<ServerInfoParser> list = new ArrayList<ServerInfoParser>();
         list.add(new Quake3OSPGameInfoParser());
         list.add(new Quake3OSPTimeInfoParser());
+        return list;
+    }
+    
+    @Override
+    public List<ServerInfoPersister> getPersisterList(ServerInfo serverInfo) {
+        List<ServerInfoPersister> list = new ArrayList<ServerInfoPersister>();
         return list;
     }
 

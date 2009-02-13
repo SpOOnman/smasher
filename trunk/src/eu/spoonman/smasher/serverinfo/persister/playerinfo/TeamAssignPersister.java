@@ -16,34 +16,21 @@
  * along with Smasher.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.spoonman.smasher.serverinfo.builder;
-
-
-import java.util.List;
+package eu.spoonman.smasher.serverinfo.persister.playerinfo;
 
 import eu.spoonman.smasher.serverinfo.ServerInfo;
-import eu.spoonman.smasher.serverinfo.Version;
-import eu.spoonman.smasher.serverinfo.header.Header;
-import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
-import eu.spoonman.smasher.serverinfo.reader.Reader;
 
 /**
  * @author Tomasz Kalkosiński
  *
  */
-public interface Builder {
+public class TeamAssignPersister implements ServerInfoPersister {
     
-    public Header getHeader();
-    
-    public Reader getReader();
-    
-    public List<ServerInfoParser> getParserList(ServerInfo serverInfo);
-    
-    public List<ServerInfoPersister> getPersisterList(ServerInfo serverInfo);
-    
-    public Version getGameVersion(ServerInfo serverInfo);
-    
-    public Version getModVersion(ServerInfo serverInfo);
+    @Override
+    public void persist(ServerInfo serverInfo) {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

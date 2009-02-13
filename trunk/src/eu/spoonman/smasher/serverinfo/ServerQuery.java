@@ -31,6 +31,7 @@ import eu.spoonman.smasher.serverinfo.builder.Builder;
 import eu.spoonman.smasher.serverinfo.header.Header;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
+import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
 /**
@@ -48,6 +49,7 @@ public class ServerQuery {
     private final int timeout = 3000;
 
     private List<ServerInfoParser> parserList;
+    private List<ServerInfoPersister> persisterList;
 
     private Reader reader;
 
@@ -127,7 +129,11 @@ public class ServerQuery {
     }
 
     private void buildParsers(ServerInfo serverInfo) {
-        this.parserList = builder.getParserList(serverInfo);
+        parserList = builder.getParserList(serverInfo);
+    }
+    
+    private void buildPersisers(ServerInfo serverInfo) {
+        persisterList = builder.getPersisterList(serverInfo);
     }
     
     private void setGameAndMod(ServerInfo serverInfo) {

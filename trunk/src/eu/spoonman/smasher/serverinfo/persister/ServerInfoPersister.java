@@ -16,34 +16,19 @@
  * along with Smasher.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.spoonman.smasher.serverinfo.builder;
-
-
-import java.util.List;
+package eu.spoonman.smasher.serverinfo.persister;
 
 import eu.spoonman.smasher.serverinfo.ServerInfo;
-import eu.spoonman.smasher.serverinfo.Version;
-import eu.spoonman.smasher.serverinfo.header.Header;
-import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
-import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
-import eu.spoonman.smasher.serverinfo.reader.Reader;
 
 /**
+ * Persister is a special class that simulates stateful parser.
+ * It usually runs after all parsers complete and uses information from previous iteration to improve serverinfo.
+ *  
  * @author Tomasz Kalkosiński
  *
  */
-public interface Builder {
+public interface ServerInfoPersister {
     
-    public Header getHeader();
-    
-    public Reader getReader();
-    
-    public List<ServerInfoParser> getParserList(ServerInfo serverInfo);
-    
-    public List<ServerInfoPersister> getPersisterList(ServerInfo serverInfo);
-    
-    public Version getGameVersion(ServerInfo serverInfo);
-    
-    public Version getModVersion(ServerInfo serverInfo);
+    public void persist(ServerInfo serverInfo);
 
 }
