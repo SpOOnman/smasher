@@ -37,5 +37,48 @@ public class TwoRowEquationSolverTest {
         assertEquals(0, arrayList.get(0).getSecondRow().get(4));
         assertEquals(1, arrayList.get(0).getSecondRow().get(5));
     }
+    
+    @Test
+    public void testSearchTwo() {
+        //was               { 19, 17, 11,  9, 2, 1 }   
+        Integer[] players = { 19, 17, 10, 10, 2, 1 };
+        //was              { 32, 27 }
+        Integer[] score  = { 31, 28 };
+        ArrayList<Integer> playersScore = new ArrayList<Integer>(Arrays.asList(players));
+        ArrayList<Integer> scores = new ArrayList<Integer>(Arrays.asList(score));
+        
+        TwoRowEquationSolver solver = new TwoRowEquationSolver(playersScore, scores, null, null);
+        ArrayList<TwoRowMatrix> arrayList = solver.search();
+        
+        assertEquals(2, arrayList.size());
+        
+        assertEquals(1, arrayList.get(0).getFirstRow().get(0));
+        assertEquals(0, arrayList.get(0).getFirstRow().get(1));
+        assertEquals(1, arrayList.get(0).getFirstRow().get(2));
+        assertEquals(0, arrayList.get(0).getFirstRow().get(3));
+        assertEquals(1, arrayList.get(0).getFirstRow().get(4));
+        assertEquals(0, arrayList.get(0).getFirstRow().get(5));
+        
+        assertEquals(0, arrayList.get(0).getSecondRow().get(0));
+        assertEquals(1, arrayList.get(0).getSecondRow().get(1));
+        assertEquals(0, arrayList.get(0).getSecondRow().get(2));
+        assertEquals(1, arrayList.get(0).getSecondRow().get(3));
+        assertEquals(0, arrayList.get(0).getSecondRow().get(4));
+        assertEquals(1, arrayList.get(0).getSecondRow().get(5));
+        
+        assertEquals(1, arrayList.get(1).getFirstRow().get(0));
+        assertEquals(0, arrayList.get(1).getFirstRow().get(1));
+        assertEquals(0, arrayList.get(1).getFirstRow().get(2));
+        assertEquals(1, arrayList.get(1).getFirstRow().get(3));
+        assertEquals(1, arrayList.get(1).getFirstRow().get(4));
+        assertEquals(0, arrayList.get(1).getFirstRow().get(5));
+        
+        assertEquals(0, arrayList.get(1).getSecondRow().get(0));
+        assertEquals(1, arrayList.get(1).getSecondRow().get(1));
+        assertEquals(1, arrayList.get(1).getSecondRow().get(2));
+        assertEquals(0, arrayList.get(1).getSecondRow().get(3));
+        assertEquals(0, arrayList.get(1).getSecondRow().get(4));
+        assertEquals(1, arrayList.get(1).getSecondRow().get(5));
+    }
 
 }
