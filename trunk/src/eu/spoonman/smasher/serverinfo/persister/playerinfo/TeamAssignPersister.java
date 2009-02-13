@@ -18,19 +18,80 @@
 
 package eu.spoonman.smasher.serverinfo.persister.playerinfo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+
+import eu.spoonman.smasher.common.TwoRowMatrix;
+import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 
 /**
+ * Persister that uses TwoRowEquations to assign players to teams.
+ * 
  * @author Tomasz Kalkosiński
  *
  */
 public class TeamAssignPersister implements ServerInfoPersister {
     
+    private TwoRowMatrix previousOverlapMatrix;
+    
     @Override
     public void persist(ServerInfo serverInfo) {
         // TODO Auto-generated method stub
         
+    }
+    
+    private ArrayList<Integer> prepareMatrixB(ServerInfo serverInfo) {
+        ArrayList<Integer> scores = new ArrayList<Integer>();
+        return scores;
+    }
+    
+    /**
+     * Get player scores vector.
+     * 
+     * @param serverInfo
+     * @return
+     */
+    private ArrayList<Integer> prepareMatrixX(ServerInfo serverInfo) {
+        List<PlayerInfo> players = getPlayers(serverInfo);
+        ArrayList<Integer> playerScores = new ArrayList<Integer>();
+        
+        for (PlayerInfo playerInfo : players)
+            playerScores.add(playerInfo.getScore());
+        
+        return playerScores;
+    }
+    
+    /**
+     * Gets all players which score is different than 0 sorted descending by score.
+     * 
+     * @param serverInfo
+     * @return
+     */
+    private List<PlayerInfo> getPlayers(ServerInfo serverInfo) {
+        List<PlayerInfo> copy = new ArrayList<PlayerInfo>();
+        Collections.copy(copy, serverInfo.getPlayerInfos());
+        
+        //Remove all players with score 0
+        for (Iterator<PlayerInfo> iterator = copy.iterator(); iterator.hasNext();) {
+            if (iterator.next().getScore() == 0)
+                iterator.remove();
+        }
+        
+        //Sort by score descending
+        Collections.sort(copy, new Comparator<PlayerInfo> (
+                ){
+                    @Override
+                    public int compare(PlayerInfo o1, PlayerInfo o2) {
+                        return o1.getScore() - o2.getScore();
+                    }
+                });
+        
+        return copy;
     }
 
 }
