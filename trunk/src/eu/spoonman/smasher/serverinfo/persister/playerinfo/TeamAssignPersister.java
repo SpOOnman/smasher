@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import eu.spoonman.smasher.common.TwoRowEquationSolver;
 import eu.spoonman.smasher.common.TwoRowMatrix;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
@@ -39,9 +40,18 @@ public class TeamAssignPersister implements ServerInfoPersister {
     
     private TwoRowMatrix previousOverlapMatrix;
     
+    /**
+     * Descending sorted players with score different than 0
+     */
+    private ArrayList<PlayerInfo> sortedPlayers;
+    
     @Override
     public void persist(ServerInfo serverInfo) {
-        // TODO Auto-generated method stub
+        ArrayList<Integer> X = prepareMatrixX(serverInfo);
+        ArrayList<Integer> B = prepareMatrixB(serverInfo);
+        
+        TwoRowEquationSolver solver = new TwoRowEquationSolver(X, B, null, previousOverlapMatrix);
+        ArrayList<TwoRowMatrix> list = solver.search();
         
     }
     
@@ -57,10 +67,10 @@ public class TeamAssignPersister implements ServerInfoPersister {
      * @return
      */
     private ArrayList<Integer> prepareMatrixX(ServerInfo serverInfo) {
-        List<PlayerInfo> players = getPlayers(serverInfo);
+        sortedPlayers = getPlayers(serverInfo);
         ArrayList<Integer> playerScores = new ArrayList<Integer>();
         
-        for (PlayerInfo playerInfo : players)
+        for (PlayerInfo playerInfo : sortedPlayers)
             playerScores.add(playerInfo.getScore());
         
         return playerScores;
@@ -72,8 +82,8 @@ public class TeamAssignPersister implements ServerInfoPersister {
      * @param serverInfo
      * @return
      */
-    private List<PlayerInfo> getPlayers(ServerInfo serverInfo) {
-        List<PlayerInfo> copy = new ArrayList<PlayerInfo>();
+    private ArrayList<PlayerInfo> getPlayers(ServerInfo serverInfo) {
+        ArrayList<PlayerInfo> copy = new ArrayList<PlayerInfo>();
         Collections.copy(copy, serverInfo.getPlayerInfos());
         
         //Remove all players with score 0
@@ -93,5 +103,7 @@ public class TeamAssignPersister implements ServerInfoPersister {
         
         return copy;
     }
+    
+    private TwoRowEquationSolver 
 
 }
