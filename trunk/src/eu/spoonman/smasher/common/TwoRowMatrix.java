@@ -36,7 +36,7 @@ public class TwoRowMatrix {
         firstRow = new ArrayList<Integer>();
         secondRow = new ArrayList<Integer>();
     }
-    
+
     @SuppressWarnings("unchecked")
     public TwoRowMatrix(TwoRowMatrix matrix) {
         firstRow = (ArrayList<Integer>) matrix.getFirstRow().clone();
@@ -52,6 +52,21 @@ public class TwoRowMatrix {
             firstRow.add(value);
             secondRow.add(value);
         }
+    }
+
+    /**
+     * Overlaps matrix with given matrix. Logical AND is executed on every
+     * element.
+     * 
+     * @param matrix
+     */
+    public void overlap(TwoRowMatrix matrix) {
+        if (matrix.getFirstRow().size() != firstRow.size() || matrix.getSecondRow().size() != secondRow.size())
+            throw new IllegalArgumentException("matrix demensions do not match");
+
+        for (int r = 0; r < 2; r++)
+            for (int i = 0; i < getRow(r).size(); i++)
+                getRow(r).set(i, getRow(r).get(i) == 1 && matrix.getRow(r).get(i) == 1 ? 1 : 0);
     }
 
     /**
@@ -74,14 +89,14 @@ public class TwoRowMatrix {
             firstSum += firstRow.get(i) * vector.get(i);
             secondSum += secondRow.get(i) * vector.get(i);
         }
-        
-        ArrayList<Integer> result = new ArrayList<Integer> ();
+
+        ArrayList<Integer> result = new ArrayList<Integer>();
         result.add(firstSum);
         result.add(secondSum);
-        
+
         return result;
     }
-    
+
     /**
      * @return the firstRow
      */
