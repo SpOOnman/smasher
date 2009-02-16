@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.TeamInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
 
 public class TeamAssignPersisterTest {
@@ -23,6 +24,9 @@ public class TeamAssignPersisterTest {
         serverInfo.getPlayerInfos().add(new PlayerInfo ("a", 0, 70));
         serverInfo.getPlayerInfos().add(new PlayerInfo ("Tre", 7, 80));
         serverInfo.getPlayerInfos().add(new PlayerInfo ("M-c/B0R0", 2, 90));
+        
+        serverInfo.getTeamInfos().put(TeamKey.RED_TEAM, new TeamInfo(TeamKey.RED_TEAM, null, 23));
+        serverInfo.getTeamInfos().put(TeamKey.BLUE_TEAM, new TeamInfo(TeamKey.BLUE_TEAM, null, 3));
         
         return serverInfo;
     }

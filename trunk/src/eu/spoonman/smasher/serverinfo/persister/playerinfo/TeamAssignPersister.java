@@ -112,12 +112,17 @@ public class TeamAssignPersister implements ServerInfoPersister {
             matrix.overlap(twoRowMatrix);
         }
         
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Created overlap matrix out of %d results:\n%s\n%s", matrices.size(), matrix.getFirstRow(), matrix.getSecondRow()));
+        }
+        
         return matrix;
     }
     
     private ArrayList<Integer> prepareMatrixB(ServerInfo serverInfo) {
         ArrayList<Integer> scores = new ArrayList<Integer>();
-        //TODO
+        scores.add(serverInfo.getTeamInfos().get(TeamKey.RED_TEAM).getScore());
+        scores.add(serverInfo.getTeamInfos().get(TeamKey.BLUE_TEAM).getScore());
         return scores;
     }
     
@@ -155,9 +160,29 @@ public class TeamAssignPersister implements ServerInfoPersister {
         //Sort by score descending
         Collections.sort(copy, new Comparator<PlayerInfo> (
                 ){
+            
+                    /**
+                     * Put negative numbers in front of positive!
+                     * @param o1
+                     * @param o2
+                     * @return
+                     */
                     @Override
                     public int compare(PlayerInfo o1, PlayerInfo o2) {
-                        return o1.getScore() - o2.getScore();
+                        
+                        int s1 = o1.getScore();
+                        int s2 = o2.getScore();
+                        
+                        if (s1 >= 0 && s2 >= 0)
+                            return s2 - s1;
+                        
+                        if (s1 < 0 && s2 < 0)
+                            return s1 - s2;
+                        
+                        if (s1 < 0)
+                            return -1;
+                        
+                        return 1;
                     }
                 });
         

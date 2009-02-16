@@ -30,6 +30,17 @@ public class TeamInfo {
     
     /**
      * @param key
+     * @param name
+     * @param score
+     */
+    public TeamInfo(TeamKey key, String name, int score) {
+        this(key);
+        this.name = name;
+        this.score = score;
+    }
+
+    /**
+     * @param key
      */
     public TeamInfo(TeamKey key) {
         super();
