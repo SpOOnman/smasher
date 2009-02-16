@@ -18,6 +18,7 @@
 
 package eu.spoonman.smasher.serverinfo.persister.playerinfo;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -108,6 +109,10 @@ public class TeamAssignPersister implements ServerInfoPersister {
     private TwoRowMatrix overlapMatrices(int size, ArrayList<TwoRowMatrix> matrices) {
         //Create matrix full of 1s
         TwoRowMatrix matrix = new TwoRowMatrix(size, 1);
+        
+        if (matrices.isEmpty())
+            solver.logEquation("There were no solutions found. Input data is inappropiate.", Level.WARN);
+        
         for (TwoRowMatrix twoRowMatrix : matrices) {
             matrix.overlap(twoRowMatrix);
         }

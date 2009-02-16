@@ -60,7 +60,7 @@ public class TeamAssignPersisterTest {
         persister.persist(serverInfo);
         
         ServerInfo serverInfo2 = getServerInfo();
-        serverInfo2.getPlayerInfos().get(4).setScore(1);
+        serverInfo2.getPlayerInfos().get(3).setScore(1);
         serverInfo2.getTeamInfos().get(TeamKey.RED_TEAM).setScore(23);
         serverInfo2.getTeamInfos().get(TeamKey.BLUE_TEAM).setScore(5);
         

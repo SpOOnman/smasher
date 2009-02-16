@@ -135,7 +135,7 @@ public class TwoRowEquationSolver {
         }
     }
     
-    private void logEquation(String title, Level level) {
+    public void logEquation(String title, Level level) {
         log.log(level, title);
         log.log(level, String.format("%s * %sT = %d ? %d", A.getFirstRow(), X, scoreResult.get(0), K.get(0)));
         log.log(level, String.format("%s * %sT = %d ? %d", A.getSecondRow(), X, scoreResult.get(1), K.get(1)));
