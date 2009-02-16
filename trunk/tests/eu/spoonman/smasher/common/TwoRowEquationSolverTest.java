@@ -19,7 +19,7 @@ public class TwoRowEquationSolverTest {
         ArrayList<Integer> scores = new ArrayList<Integer>(Arrays.asList(score));
         
         TwoRowEquationSolver solver = new TwoRowEquationSolver(playersScore, scores, null, null);
-        ArrayList<TwoRowMatrix> arrayList = solver.search();
+        ArrayList<TwoRowMatrix> arrayList = solver.solve();
         
         assertEquals(1, arrayList.size());
         
@@ -48,7 +48,7 @@ public class TwoRowEquationSolverTest {
         ArrayList<Integer> scores = new ArrayList<Integer>(Arrays.asList(score));
         
         TwoRowEquationSolver solver = new TwoRowEquationSolver(playersScore, scores, null, null);
-        ArrayList<TwoRowMatrix> arrayList = solver.search();
+        ArrayList<TwoRowMatrix> arrayList = solver.solve();
         
         assertEquals(2, arrayList.size());
         

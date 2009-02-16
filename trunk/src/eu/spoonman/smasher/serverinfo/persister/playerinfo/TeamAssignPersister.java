@@ -71,7 +71,7 @@ public class TeamAssignPersister implements ServerInfoPersister {
         solver.setTemplateMatrix(overlapMatrix);
         
         //Get all solutions
-        ArrayList<TwoRowMatrix> list = solver.search();
+        ArrayList<TwoRowMatrix> list = solver.solve();
         
         //TODO: zero solutions
         

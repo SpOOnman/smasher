@@ -72,7 +72,7 @@ public class TwoRowEquationSolver {
         this.templateMatrix = templateMatrix;
     }
     
-    public ArrayList<TwoRowMatrix> search() {
+    public ArrayList<TwoRowMatrix> solve() {
         
         prepareSearch();
         
