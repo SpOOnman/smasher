@@ -70,6 +70,8 @@ public class TeamAssignPersister implements ServerInfoPersister {
     public void persist(ServerInfo serverInfo) {
         ArrayList<Integer> X = prepareMatrixX(serverInfo);
         ArrayList<Integer> B = prepareMatrixB(serverInfo);
+        //TODO: out of pairs.
+        //TwoRowMatrix overlap = prepareOverlapMatrix();
         
         solver.setX(X);
         solver.setB(B);
