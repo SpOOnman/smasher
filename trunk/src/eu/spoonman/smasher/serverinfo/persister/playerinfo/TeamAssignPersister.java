@@ -21,6 +21,8 @@ package eu.spoonman.smasher.serverinfo.persister.playerinfo;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import sun.net.www.content.audio.x_aiff;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,6 +39,10 @@ import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
  * Persister that uses TwoRowEquations to assign players to teams.
  * 
  * @author Tomasz Kalkosiński
+ *
+ */
+/**
+ * @author spoonman
  *
  */
 public class TeamAssignPersister implements ServerInfoPersister {
@@ -74,6 +80,12 @@ public class TeamAssignPersister implements ServerInfoPersister {
         ArrayList<TwoRowMatrix> list = solver.solve();
         
         //TODO: zero solutions
+        
+        //Remove all matrices that doesn't match old overlap matrix
+        for (Iterator<TwoRowMatrix> iterator = list.iterator(); iterator.hasNext();) {
+            if (!(matchesTemplateMatrix(iterator.next())))
+                iterator.remove();
+        }
         
         //Create overlap matrix;
         overlapMatrix = overlapMatrices(X.size(), list);
@@ -145,6 +157,26 @@ public class TeamAssignPersister implements ServerInfoPersister {
             playerScores.add(playerInfo.getScore());
         
         return playerScores;
+    }
+    
+    /**
+     * Checks if actual solution matches template matrix.
+     * Match means that for every element equals to 1 in template matrix - exact element in solution matrix must be equal to 1 too.
+     * @return
+     */
+    private boolean matchesTemplateMatrix (TwoRowMatrix matrix) {
+        //If there is no overlap matrix every solution is acceptable.
+        if (overlapMatrix == null)
+            return true;
+        
+        //Check each element
+        for (int i = 0 ; i < 2 ; i++)
+            for (int j = 0 ; j < sortedPlayers.size() ; j ++){
+                if (overlapMatrix.getRow(i).get(j) == 1 && matrix.getRow(i).get(j) != 1)
+                    return false;
+            }
+        
+        return true;
     }
     
     /**
