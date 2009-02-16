@@ -18,16 +18,18 @@
 
 package eu.spoonman.smasher.serverinfo.persister.playerinfo;
 
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 
 import eu.spoonman.smasher.common.TwoRowEquationSolver;
 import eu.spoonman.smasher.common.TwoRowMatrix;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.TeamKey;
 import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 
 /**
@@ -37,8 +39,12 @@ import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
  *
  */
 public class TeamAssignPersister implements ServerInfoPersister {
+    /**
+     * Logger for this class
+     */
+    private static final Logger log = Logger.getLogger(TeamAssignPersister.class);
     
-    private TwoRowMatrix previousOverlapMatrix;
+    private TwoRowMatrix overlapMatrix;
     private TwoRowEquationSolver solver;
     
     /**
@@ -61,10 +67,52 @@ public class TeamAssignPersister implements ServerInfoPersister {
         solver.setX(X);
         solver.setB(B);
         solver.setD(null);
-        solver.setTemplateMatrix(previousOverlapMatrix);
+        solver.setTemplateMatrix(overlapMatrix);
         
+        //Get all solutions
         ArrayList<TwoRowMatrix> list = solver.search();
         
+        //TODO: zero solutions
+        
+        //Create overlap matrix;
+        overlapMatrix = overlapMatrices(X.size(), list);
+        
+        //Assign players to teams
+        assignPlayers();
+    }
+    
+    private void assignPlayers() {
+        
+        if (overlapMatrix == null) {
+            if (log.isDebugEnabled())
+                log.debug("Overlap matrix is null. No assigns will be taken.");
+            return;
+        }
+        
+        for (int i = 0 ; i < overlapMatrix.getFirstRow().size() ; i++) {
+            int red = overlapMatrix.getFirstRow().get(i);
+            int blue = overlapMatrix.getSecondRow().get(i);
+            
+            if (red == 0 && blue == 0)
+                continue;
+            
+            if (red == 1)
+                sortedPlayers.get(i).setTeamKey(TeamKey.RED_TEAM);
+            else
+                sortedPlayers.get(i).setTeamKey(TeamKey.BLUE_TEAM);
+        }
+        
+        
+    }
+    
+    private TwoRowMatrix overlapMatrices(int size, ArrayList<TwoRowMatrix> matrices) {
+        //Create matrix full of 1s
+        TwoRowMatrix matrix = new TwoRowMatrix(size, 1);
+        for (TwoRowMatrix twoRowMatrix : matrices) {
+            matrix.overlap(twoRowMatrix);
+        }
+        
+        return matrix;
     }
     
     private ArrayList<Integer> prepareMatrixB(ServerInfo serverInfo) {
