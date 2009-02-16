@@ -49,5 +49,33 @@ public class TeamAssignPersisterTest {
         assertNull(serverInfo.getPlayerInfos().get(8).getTeamKey());
         
     }
+    
+    //Same as above example but player with -1 score gains to have 1 score in next iteration.
+    @Test
+    public void testPersistTwo() {
+        
+        ServerInfo serverInfo = getServerInfo();
+        
+        TeamAssignPersister persister = new TeamAssignPersister();
+        persister.persist(serverInfo);
+        
+        ServerInfo serverInfo2 = getServerInfo();
+        serverInfo2.getPlayerInfos().get(4).setScore(1);
+        serverInfo2.getTeamInfos().get(TeamKey.RED_TEAM).setScore(23);
+        serverInfo2.getTeamInfos().get(TeamKey.BLUE_TEAM).setScore(5);
+        
+        persister.persist(serverInfo2);
+        
+        assertNull(serverInfo2.getPlayerInfos().get(0).getTeamKey());
+        assertNull(serverInfo2.getPlayerInfos().get(1).getTeamKey());
+        assertEquals(TeamKey.RED_TEAM, serverInfo2.getPlayerInfos().get(2).getTeamKey());
+        assertEquals(TeamKey.BLUE_TEAM, serverInfo2.getPlayerInfos().get(3).getTeamKey());
+        assertNull(serverInfo2.getPlayerInfos().get(4).getTeamKey());
+        assertEquals(TeamKey.RED_TEAM, serverInfo2.getPlayerInfos().get(5).getTeamKey());
+        assertNull(serverInfo2.getPlayerInfos().get(6).getTeamKey());
+        assertEquals(TeamKey.RED_TEAM, serverInfo2.getPlayerInfos().get(7).getTeamKey());
+        assertNull(serverInfo2.getPlayerInfos().get(8).getTeamKey());
+        
+    }
 
 }
