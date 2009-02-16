@@ -117,6 +117,7 @@ public class TeamAssignPersister implements ServerInfoPersister {
     
     private ArrayList<Integer> prepareMatrixB(ServerInfo serverInfo) {
         ArrayList<Integer> scores = new ArrayList<Integer>();
+        //TODO
         return scores;
     }
     
@@ -143,8 +144,7 @@ public class TeamAssignPersister implements ServerInfoPersister {
      * @return
      */
     private ArrayList<PlayerInfo> getPlayers(ServerInfo serverInfo) {
-        ArrayList<PlayerInfo> copy = new ArrayList<PlayerInfo>();
-        Collections.copy(copy, serverInfo.getPlayerInfos());
+        ArrayList<PlayerInfo> copy = new ArrayList<PlayerInfo>(serverInfo.getPlayerInfos());
         
         //Remove all players with score 0
         for (Iterator<PlayerInfo> iterator = copy.iterator(); iterator.hasNext();) {

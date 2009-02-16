@@ -67,7 +67,7 @@ public class Quake3OSPTeamInfoParser implements ServerInfoParser {
         teamInfo.setName(teamName);
         teamInfo.setScore(Integer.parseInt(value));
         
-        serverInfo.getTeamInfos().add(teamInfo);
+        serverInfo.getTeamInfos().put(teamKey, teamInfo);
     }
 
 }
