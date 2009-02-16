@@ -51,6 +51,12 @@ public class TwoRowEquationSolver {
     private ArrayList<TwoRowMatrix> solutions;
     
     private int checkedCombinationCount = 0;
+    
+    /**
+     * 
+     */
+    public TwoRowEquationSolver() {
+    }
 
     /**
      * @param x
@@ -142,4 +148,76 @@ public class TwoRowEquationSolver {
     public ArrayList<TwoRowMatrix> getSolutions() {
         return solutions;
     }
+
+    /**
+     * @return the x
+     */
+    public ArrayList<Integer> getX() {
+        return X;
+    }
+
+    /**
+     * @param x the x to set
+     */
+    public void setX(ArrayList<Integer> x) {
+        X = x;
+    }
+
+    /**
+     * @return the a
+     */
+    public TwoRowMatrix getA() {
+        return A;
+    }
+
+    /**
+     * @param a the a to set
+     */
+    public void setA(TwoRowMatrix a) {
+        A = a;
+    }
+
+    /**
+     * @return the b
+     */
+    public ArrayList<Integer> getB() {
+        return B;
+    }
+
+    /**
+     * @param b the b to set
+     */
+    public void setB(ArrayList<Integer> b) {
+        B = b;
+    }
+
+    /**
+     * @return the d
+     */
+    public ArrayList<Integer> getD() {
+        return D;
+    }
+
+    /**
+     * @param d the d to set
+     */
+    public void setD(ArrayList<Integer> d) {
+        D = d;
+    }
+
+    /**
+     * @return the templateMatrix
+     */
+    public TwoRowMatrix getTemplateMatrix() {
+        return templateMatrix;
+    }
+
+    /**
+     * @param templateMatrix the templateMatrix to set
+     */
+    public void setTemplateMatrix(TwoRowMatrix templateMatrix) {
+        this.templateMatrix = templateMatrix;
+    }
+    
+    
 }

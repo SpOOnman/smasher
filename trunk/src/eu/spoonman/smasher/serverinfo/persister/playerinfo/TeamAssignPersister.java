@@ -39,18 +39,30 @@ import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 public class TeamAssignPersister implements ServerInfoPersister {
     
     private TwoRowMatrix previousOverlapMatrix;
+    private TwoRowEquationSolver solver;
     
     /**
      * Descending sorted players with score different than 0
      */
     private ArrayList<PlayerInfo> sortedPlayers;
     
+    /**
+     * 
+     */
+    public TeamAssignPersister() {
+        solver = new TwoRowEquationSolver();
+    }
+    
     @Override
     public void persist(ServerInfo serverInfo) {
         ArrayList<Integer> X = prepareMatrixX(serverInfo);
         ArrayList<Integer> B = prepareMatrixB(serverInfo);
         
-        TwoRowEquationSolver solver = new TwoRowEquationSolver(X, B, null, previousOverlapMatrix);
+        solver.setX(X);
+        solver.setB(B);
+        solver.setD(null);
+        solver.setTemplateMatrix(previousOverlapMatrix);
+        
         ArrayList<TwoRowMatrix> list = solver.search();
         
     }
@@ -104,6 +116,4 @@ public class TeamAssignPersister implements ServerInfoPersister {
         return copy;
     }
     
-    private TwoRowEquationSolver 
-
 }
