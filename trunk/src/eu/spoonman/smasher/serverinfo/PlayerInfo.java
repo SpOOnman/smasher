@@ -39,6 +39,18 @@ public class PlayerInfo
         playerFlags = EnumSet.noneOf(PlayerFlags.class);
     }
     
+    /**
+     * @param name
+     * @param score
+     * @param ping
+     */
+    public PlayerInfo(String name, int score, int ping) {
+        this();
+        this.name = name;
+        this.score = score;
+        this.ping = ping;
+    }
+
     @Override
     public String toString() {
         return String.format("[PlayerInfo: %s, P: %d ms, S: %d, T: %s, (%s)]", name, ping, score, teamKey, playerFlags);
