@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="smasher.makejar" default="makejar" basedir=".">
+	<property name="appname" value="smasher-serverinfo" />
+	<property name="dist" value="dist" />
+	<property name="version" value="1.0" />
+
+	<target name="makejar">
+		<mkdir dir="${dist}" />
+		<delete file="${dist}/${appname}.jar" />
+		<jar destfile="${dist}/${appname}-${version}.jar" basedir="bin">
+		</jar>
+	</target>
+
+</project>
