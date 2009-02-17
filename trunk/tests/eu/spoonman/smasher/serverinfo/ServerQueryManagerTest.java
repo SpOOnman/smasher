@@ -21,7 +21,6 @@ package eu.spoonman.smasher.serverinfo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -52,7 +51,6 @@ public class ServerQueryManagerTest {
         
         for (Games game : Games.values()) {
             try {
-                @SuppressWarnings("unused")
                 ServerQuery serverQuery = ServerQueryManager.createServerQuery(game, localhost, 20000);
                 assertNotNull(serverQuery);
             } catch (Exception e) {

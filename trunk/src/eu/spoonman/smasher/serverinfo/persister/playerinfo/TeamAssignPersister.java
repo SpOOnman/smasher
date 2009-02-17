@@ -18,15 +18,13 @@
 
 package eu.spoonman.smasher.serverinfo.persister.playerinfo;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
-import sun.net.www.content.audio.x_aiff;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import eu.spoonman.smasher.common.TwoRowEquationSolver;
 import eu.spoonman.smasher.common.TwoRowMatrix;

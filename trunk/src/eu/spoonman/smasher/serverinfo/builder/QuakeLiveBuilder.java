@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 
 import org.joda.time.LocalDateTime;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
-
 import eu.spoonman.smasher.serverinfo.Platform;
 import eu.spoonman.smasher.serverinfo.PlatformSystem;
 import eu.spoonman.smasher.serverinfo.ServerInfo;

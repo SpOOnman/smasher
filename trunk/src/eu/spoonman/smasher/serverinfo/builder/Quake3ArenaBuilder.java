@@ -21,13 +21,10 @@ package eu.spoonman.smasher.serverinfo.builder;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import eu.spoonman.smasher.serverinfo.PlayerFlags;
 import eu.spoonman.smasher.serverinfo.ServerInfo;

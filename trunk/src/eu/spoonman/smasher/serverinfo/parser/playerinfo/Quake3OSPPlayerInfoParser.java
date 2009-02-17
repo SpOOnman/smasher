@@ -18,8 +18,6 @@
 
 package eu.spoonman.smasher.serverinfo.parser.playerinfo;
 
-import java.util.Iterator;
-
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;

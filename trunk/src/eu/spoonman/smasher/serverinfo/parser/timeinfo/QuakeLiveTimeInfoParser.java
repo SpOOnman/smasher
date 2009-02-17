@@ -19,14 +19,12 @@
 package eu.spoonman.smasher.serverinfo.parser.timeinfo;
 
 import org.apache.log4j.Logger;
-
 import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 import org.joda.time.Period;
 
-import eu.spoonman.smasher.serverinfo.TimePeriodInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfoFlags;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.TimePeriodInfo;
 import eu.spoonman.smasher.serverinfo.parser.AttributeNotFoundException;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;

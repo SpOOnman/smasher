@@ -18,11 +18,10 @@
 
 package eu.spoonman.smasher.common;
 
+import java.util.ArrayList;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
-
-import java.util.ArrayList;
 
 /**
  * Two row equation solver.
@@ -80,7 +79,7 @@ public class TwoRowEquationSolver {
         
         if (log.isDebugEnabled()) {
             int allPossible = (int) Math.pow(2, X.size());
-            log.debug(String.format("Checked %d combinations out of %d possible: %d%%", checkedCombinationCount, allPossible, (int) ((checkedCombinationCount * 100/allPossible))));
+            log.debug(String.format("Checked %d combinations out of %d possible: %d%%", checkedCombinationCount, allPossible, ((checkedCombinationCount * 100/allPossible))));
         }
         
         return solutions;
@@ -117,7 +116,6 @@ public class TwoRowEquationSolver {
 
     }
     
-    @SuppressWarnings("deprecation")
     private void searchRecursiveCheck(int column, int row) {
         
         //Check scores

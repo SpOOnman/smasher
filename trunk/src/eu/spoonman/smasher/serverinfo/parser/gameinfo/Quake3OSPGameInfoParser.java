@@ -22,11 +22,10 @@ import org.apache.log4j.Logger;
 
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.GameTypes;
-import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.parser.AttributeNotFoundException;
-import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
+import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 
 /**
  * GameInfo parser for Quake 3 Arena OSP and CPMA mods.
