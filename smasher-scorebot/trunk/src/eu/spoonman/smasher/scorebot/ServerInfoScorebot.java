@@ -35,6 +35,7 @@ import eu.spoonman.smasher.serverinfo.ServerQueryManager;
 public class ServerInfoScorebot extends Scorebot {
 	
 	private final int interval = 800; //ms
+	private int count = 0;
 	
 	private ServerQuery serverQuery;
 	private ServerInfo previousServerInfo;
@@ -55,7 +56,7 @@ public class ServerInfoScorebot extends Scorebot {
 				internalStart();
 			}
 			
-		});
+		}).run();
 	}
 	
 	protected void internalStart() {
@@ -65,6 +66,8 @@ public class ServerInfoScorebot extends Scorebot {
 		difference();
 		
 		previousServerInfo = currentServerInfo;
+		
+		count++;
 		
 	}
 	
