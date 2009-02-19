@@ -21,59 +21,102 @@ package eu.spoonman.smasher.scorebot;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.Logger;
+
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.Games;
+import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.ServerQuery;
 import eu.spoonman.smasher.serverinfo.ServerQueryManager;
 
 /**
  * @author Tomasz Kalkosiński
- *
+ * 
  */
 public class ServerInfoScorebot extends Scorebot {
-	
-	private final int interval = 800; //ms
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger log = Logger.getLogger(ServerInfoScorebot.class);
+
+	private final int interval = 800; // ms
 	private int count = 0;
-	
+
 	private ServerQuery serverQuery;
 	private ServerInfo previousServerInfo;
 	private ServerInfo currentServerInfo;
-	
+
 	@Override
 	public void start() {
 		try {
-			serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, Inet4Address.getByName("194.187.43.245"), 27971);
+			serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, Inet4Address
+					.getByName("194.187.43.245"), 27971);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
-		new Thread(new Runnable(){
-		
+
+		new Thread(new Runnable() {
+
 			@Override
 			public void run() {
 				internalStart();
 			}
-			
+
 		}).run();
 	}
-	
+
 	protected void internalStart() {
-		
+
 		currentServerInfo = serverQuery.query();
-		
+
 		difference();
-		
+
 		previousServerInfo = currentServerInfo;
-		
+
 		count++;
+
+	}
+	
+	private void differenceGameInfo() {
+		GameInfo prevGameInfo = previousServerInfo == null ? null : previousServerInfo.getGameInfo();
+
+		if (prevGameInfo == null && currentServerInfo.getGameInfo() != null) {
+			gameInfoChange.notifyAll(new Pair<GameInfo, GameInfo>(null, currentServerInfo.getGameInfo()));
+			return;
+		}
+
+		if (!(prevGameInfo.equals(currentServerInfo.getGameInfo())))
+			gameInfoChange.notifyAll(new Pair<GameInfo, GameInfo>(previousServerInfo.getGameInfo(),
+					currentServerInfo.getGameInfo()));
+	}
+	
+	private void differenceProgressInfo() {
+		ProgressInfo prevProgressInfo = previousServerInfo == null ? null : previousServerInfo.getProgressInfo();
+		
+		if (prevProgressInfo == null && currentServerInfo.getProgressInfo() != null) {
+			progressInfoChange.notifyAll(new Pair<ProgressInfo, ProgressInfo>(null, currentServerInfo.getProgressInfo()));
+			return;
+		}
+		
+		if (!(prevProgressInfo.equals(currentServerInfo.getProgressInfo())))
+			progressInfoChange.notifyAll(new Pair<ProgressInfo, ProgressInfo>(previousServerInfo.getProgressInfo(),
+					currentServerInfo.getProgressInfo()));
+	}
+	
+	private void differencePlayerInfos() {
 		
 	}
 	
+	
+
 	private void difference() {
-		if (previousServerInfo == null && currentServerInfo != null && currentServerInfo.getGameInfo() != null)
-			gameInfoChange.notifyAll(new Pair<GameInfo, GameInfo>(null, currentServerInfo.getGameInfo()));
+		assert (previousServerInfo != null || count == 0);
+		assert (currentServerInfo != null);
+		
+		differenceGameInfo();
+		differenceProgressInfo();
 	}
 
 }

@@ -20,11 +20,13 @@ package eu.spoonman.smasher.scorebot;
 
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
+import eu.spoonman.smasher.serverinfo.ProgressInfo;
 
 public abstract class Scorebot {
 	
-	protected GameDelegate<PlayerInfo> playerInfoChange;
 	protected GameDelegate<GameInfo> gameInfoChange;
+	protected GameDelegate<ProgressInfo> progressInfoChange;
+	protected GameDelegate<PlayerInfo> playerInfoChange;
 	
 	public void start() {
 		
@@ -36,19 +38,18 @@ public abstract class Scorebot {
 		
 	}
 
-	/**
-	 * @return the playerInfoChange
-	 */
+	public GameDelegate<GameInfo> getGameInfoChange() {
+		return gameInfoChange;
+	}
+	
+	public GameDelegate<ProgressInfo> getProgressInfoChange() {
+		return progressInfoChange;
+	}
+
 	public GameDelegate<PlayerInfo> getPlayerInfoChange() {
 		return playerInfoChange;
 	}
 
-	/**
-	 * @return the gameInfoChange
-	 */
-	public GameDelegate<GameInfo> getGameInfoChange() {
-		return gameInfoChange;
-	}
 	
 	
 	
