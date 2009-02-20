@@ -68,9 +68,9 @@ public class LCSTest {
 		
 		List<Pair<String,String>> pairs = getLCSPairs(getList(), right);
 		TestHelper.printPairs(pairs);
-		assertEquals(right.size(), pairs.size());
+		assertEquals(right.size() + 1, pairs.size());
 		assertEquals("Dave", pairs.get(3).getFirst());
-		assertEquals("Armadillo", pairs.get(3).getSecond());
+		assertEquals("Armadillo", pairs.get(4).getSecond());
 		
 	}
 	
