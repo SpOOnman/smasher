@@ -50,7 +50,7 @@ public class LCS<T> {
 	}
 	
 	private void createLCSMatrix() {
-		lcsMatrix = new int[left.size()][right.size()];
+		lcsMatrix = new int[left.size() + 1][right.size() + 1];
 		
 		for (int i = 0; i <= left.size(); i++)
             lcsMatrix [i][0] = 0;
@@ -77,7 +77,7 @@ public class LCS<T> {
         {
             if (i > 0 && j > 0 && comparator.compare(left.get(i - 1), right.get(j - 1)) == 0)
             {
-            	pairs.add(new Pair<T, T>(left.get(i - 1), right.get(j - 1)));
+            	pairs.add(0, new Pair<T, T>(left.get(i - 1), right.get(j - 1)));
                 i--;
                 j--;
             }
@@ -86,13 +86,13 @@ public class LCS<T> {
                 if (j > 0 && (i == 0 || lcsMatrix [i][j-1] >= lcsMatrix [i-1][j]))
                 {
                     //New object on the right
-                	pairs.add(new Pair<T, T>(null, right.get(j - 1)));
+                	pairs.add(0, new Pair<T, T>(null, right.get(j - 1)));
                     j--;
                 }
                 else if (i > 0 && (j == 0 || lcsMatrix [i][j-1] < lcsMatrix [i-1][j]))
                 {
                     //New object on the left
-                	pairs.add(new Pair<T, T>(left.get(i - 1), null));
+                	pairs.add(0, new Pair<T, T>(left.get(i - 1), null));
                     i--;
                 }
             }
