@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import eu.spoonman.smasher.scorebot.TestHelper;
+
 public class LCSTest {
 
 	private List<String> getList() {
@@ -35,13 +37,6 @@ public class LCSTest {
 		
 	}
 	
-	private void printPairs(List<Pair<String,String>> pairs) {
-		for (Pair<String,String> pair : pairs) {
-			System.out.println(String.format("Left %s right %s", pair.getFirst(), pair.getSecond()));
-		}
-		
-	}
-
 	@Test
 	public void testGetLCSPairs() {
 		List<Pair<String,String>> pairs = getLCSPairs(getList(), getList());
@@ -72,7 +67,7 @@ public class LCSTest {
 		right.set(3, "Armadillo");
 		
 		List<Pair<String,String>> pairs = getLCSPairs(getList(), right);
-		printPairs(pairs);
+		TestHelper.printPairs(pairs);
 		assertEquals(right.size(), pairs.size());
 		assertEquals("Dave", pairs.get(3).getFirst());
 		assertEquals("Armadillo", pairs.get(3).getSecond());

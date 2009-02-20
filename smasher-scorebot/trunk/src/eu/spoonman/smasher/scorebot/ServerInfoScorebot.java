@@ -20,12 +20,17 @@ package eu.spoonman.smasher.scorebot;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import eu.spoonman.smasher.common.LCS;
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.Games;
+import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.ServerQuery;
@@ -106,7 +111,44 @@ public class ServerInfoScorebot extends Scorebot {
 	}
 	
 	private void differencePlayerInfos() {
+		LCS<PlayerInfo> lcs = new LCS<PlayerInfo>(previousServerInfo.getPlayerInfos(), currentServerInfo.getPlayerInfos(), new Comparator<PlayerInfo>() {
 		
+			@Override
+			public int compare(PlayerInfo o1, PlayerInfo o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		
+		List<Pair<PlayerInfo,PlayerInfo>> pairs = lcs.getLCSPairs();
+		reviseLCSPlayerPairs(pairs);
+		
+		/*for (Pair<PlayerInfo, PlayerInfo> pair : pairs) {
+			differencePlayerInfo(pair);
+		}*/
+	}
+	
+	/**
+	 * Check if player changed name, connect or disconnect based on LCS pairs.
+	 * 
+	 */
+	void reviseLCSPlayerPairs(List<Pair<PlayerInfo,PlayerInfo>> pairs) {
+		
+		Pair<PlayerInfo, PlayerInfo> prevPair = null;
+		
+		for (Iterator<Pair<PlayerInfo, PlayerInfo>> iterator = pairs.iterator(); iterator.hasNext(); ) {
+			Pair<PlayerInfo, PlayerInfo> pair = iterator.next();
+			
+			//This is the case when player renames.
+			//Other case are old disconnected or new connected - leave them as it is.
+			if (pair.getFirst() == null) {
+				if (prevPair != null && prevPair.getSecond() == null) {
+					prevPair.setSecond(pair.getSecond());
+					iterator.remove();
+				}
+			}
+			
+			prevPair = pair;
+		}
 	}
 	
 	
