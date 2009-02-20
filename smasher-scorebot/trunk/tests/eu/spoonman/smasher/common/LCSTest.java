@@ -1,5 +1,7 @@
 package eu.spoonman.smasher.common;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -19,21 +21,30 @@ public class LCSTest {
 		return list;
 
 	}
-
-	@Test
-	public void testGetLCSPairs() {
-		LCS<String> lcs = new LCS<String>(getList(), getList(), new Comparator<String>() {
-		
+	
+	private List<Pair<String,String>> getLCSPairs(List<String> left, List<String> right) {
+		LCS<String> lcs = new LCS<String>(left, right, new Comparator<String>() {
+			
 			@Override
 			public int compare(String o1, String o2) {
 				return o1.compareTo(o2);
 			}
 		});
 		
-		List<Pair<String,String>> pairs = lcs.getLCSPairs();
+		return lcs.getLCSPairs();
+		
+	}
+
+	@Test
+	public void testGetLCSPairs() {
+		List<Pair<String,String>> pairs = getLCSPairs(getList(), getList());
 		
 		for (Pair<String,String> pair : pairs) {
-			System.out.println(String.format("Left %s right %s", pair.getFirst(), pair.getSecond()));
+			assertEquals(pair.getFirst(), pair.getSecond());
+			//System.out.println(String.format("Left %s right %s", pair.getFirst(), pair.getSecond()));
 		}
+		
+		//Assert good order
+		assertEquals(pairs.get(0).getFirst(), "Ann");
 	}
 }
