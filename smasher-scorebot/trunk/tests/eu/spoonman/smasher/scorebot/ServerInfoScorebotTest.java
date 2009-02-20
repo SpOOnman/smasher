@@ -1,5 +1,7 @@
 package eu.spoonman.smasher.scorebot;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -14,14 +16,15 @@ public class ServerInfoScorebotTest {
 	public void testReviseLCSPlayerPairs() {
 		List<Pair<PlayerInfo,PlayerInfo>> playerInfoPairs = TestHelper.getPlayerInfoPairs();
 		
-		playerInfoPairs.get(3).getSecond().setName(null);
-		playerInfoPairs.get(4).getFirst().setName(null);
+		playerInfoPairs.get(3).setSecond(null);
+		playerInfoPairs.get(4).setFirst(null);
 		
 		ServerInfoScorebot serverInfoScorebot = new ServerInfoScorebot();
 		serverInfoScorebot.reviseLCSPlayerPairs(playerInfoPairs);
 		
-		TestHelper.printPairs(playerInfoPairs);
-	
+		assertEquals(5, playerInfoPairs.size());
+		assertEquals("Dave", playerInfoPairs.get(3).getFirst().getName());
+		assertEquals("Eve", playerInfoPairs.get(3).getSecond().getName());
 	}
 
 }
