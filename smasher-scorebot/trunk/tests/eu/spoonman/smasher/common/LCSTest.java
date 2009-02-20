@@ -66,6 +66,19 @@ public class LCSTest {
 		testGetLCSPairsMissingLeft(5);
 	}
 	
+	@Test
+	public void testGetLCSPairsRename() {
+		List<String> right = getList();
+		right.set(3, "Armadillo");
+		
+		List<Pair<String,String>> pairs = getLCSPairs(getList(), right);
+		printPairs(pairs);
+		assertEquals(right.size(), pairs.size());
+		assertEquals("Dave", pairs.get(3).getFirst());
+		assertEquals("Armadillo", pairs.get(3).getSecond());
+		
+	}
+	
 	public void testGetLCSPairsMissingRight(int index) {
 		List<String> right = getList();
 		right.remove(index);
