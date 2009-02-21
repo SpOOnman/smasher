@@ -49,6 +49,75 @@ public class GameInfo {
     }
     
     
+    
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((gameType == null) ? 0 : gameType.hashCode());
+        result = prime * result + ((hostName == null) ? 0 : hostName.hashCode());
+        result = prime * result + (isPassworded ? 1231 : 1237);
+        result = prime * result + ((map == null) ? 0 : map.hashCode());
+        result = prime * result + ping;
+        result = prime * result + playerCount;
+        result = prime * result + playerMaxCount;
+        result = prime * result + ((rawGameType == null) ? 0 : rawGameType.hashCode());
+        return result;
+    }
+
+
+
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof GameInfo))
+            return false;
+        GameInfo other = (GameInfo) obj;
+        if (gameType == null) {
+            if (other.gameType != null)
+                return false;
+        } else if (!gameType.equals(other.gameType))
+            return false;
+        if (hostName == null) {
+            if (other.hostName != null)
+                return false;
+        } else if (!hostName.equals(other.hostName))
+            return false;
+        if (isPassworded != other.isPassworded)
+            return false;
+        if (map == null) {
+            if (other.map != null)
+                return false;
+        } else if (!map.equals(other.map))
+            return false;
+        if (ping != other.ping)
+            return false;
+        if (playerCount != other.playerCount)
+            return false;
+        if (playerMaxCount != other.playerMaxCount)
+            return false;
+        if (rawGameType == null) {
+            if (other.rawGameType != null)
+                return false;
+        } else if (!rawGameType.equals(other.rawGameType))
+            return false;
+        return true;
+    }
+
+
+
+
     /**
      * @return the gameType
      */
