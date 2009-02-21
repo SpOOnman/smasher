@@ -28,15 +28,9 @@ public abstract class Scorebot {
 	protected GameDelegate<ProgressInfo> progressInfoChange;
 	protected GameDelegate<PlayerInfo> playerInfoChange;
 	
-	public void start() {
-		
-		playerInfoChange.notifyAll(null);
-		
-	}
+	public abstract void start();
 	
-	public void stop() {
-		
-	}
+	public abstract void stop();
 
 	public GameDelegate<GameInfo> getGameInfoChange() {
 		return gameInfoChange;
@@ -49,8 +43,4 @@ public abstract class Scorebot {
 	public GameDelegate<PlayerInfo> getPlayerInfoChange() {
 		return playerInfoChange;
 	}
-
-	
-	
-	
 }

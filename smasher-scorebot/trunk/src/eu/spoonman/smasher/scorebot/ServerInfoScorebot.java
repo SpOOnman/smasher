@@ -46,8 +46,10 @@ public class ServerInfoScorebot extends Scorebot {
 	 */
 	private static final Logger log = Logger.getLogger(ServerInfoScorebot.class);
 
-	private final int interval = 800; // ms
+	private final long interval = 800; // ms
 	private int count = 0;
+
+	private Boolean running = false;
 
 	private ServerQuery serverQuery;
 	private ServerInfo previousServerInfo;
@@ -58,6 +60,7 @@ public class ServerInfoScorebot extends Scorebot {
 		try {
 			serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, Inet4Address
 					.getByName("194.187.43.245"), 27971);
+
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -70,20 +73,47 @@ public class ServerInfoScorebot extends Scorebot {
 			}
 
 		}).run();
+
+		setRunning(true);
+	}
+
+	@Override
+	public void stop() {
+		setRunning(false);
+	}
+
+	private void setRunning(boolean bool) {
+		synchronized (running) {
+			running = bool;
+		}
+	}
+
+	private boolean isRunning() {
+		synchronized (running) {
+			return running;
+		}
 	}
 
 	protected void internalStart() {
 
-		currentServerInfo = serverQuery.query();
+		while (isRunning()) {
 
-		difference();
+			currentServerInfo = serverQuery.query();
 
-		previousServerInfo = currentServerInfo;
+			difference();
 
-		count++;
+			previousServerInfo = currentServerInfo;
 
+			count++;
+			
+			try {
+				wait(interval);
+			} catch (InterruptedException e) {
+				log.error("Scorebot thread unexpectedly interrupted.", e);
+			}
+		}
 	}
-	
+
 	private void differenceGameInfo() {
 		GameInfo prevGameInfo = previousServerInfo == null ? null : previousServerInfo.getGameInfo();
 
@@ -96,67 +126,75 @@ public class ServerInfoScorebot extends Scorebot {
 			gameInfoChange.notifyAll(new Pair<GameInfo, GameInfo>(previousServerInfo.getGameInfo(),
 					currentServerInfo.getGameInfo()));
 	}
-	
+
 	private void differenceProgressInfo() {
-		ProgressInfo prevProgressInfo = previousServerInfo == null ? null : previousServerInfo.getProgressInfo();
-		
+		ProgressInfo prevProgressInfo = previousServerInfo == null ? null : previousServerInfo
+				.getProgressInfo();
+
 		if (prevProgressInfo == null && currentServerInfo.getProgressInfo() != null) {
-			progressInfoChange.notifyAll(new Pair<ProgressInfo, ProgressInfo>(null, currentServerInfo.getProgressInfo()));
+			progressInfoChange.notifyAll(new Pair<ProgressInfo, ProgressInfo>(null, currentServerInfo
+					.getProgressInfo()));
 			return;
 		}
-		
+
 		if (!(prevProgressInfo.equals(currentServerInfo.getProgressInfo())))
-			progressInfoChange.notifyAll(new Pair<ProgressInfo, ProgressInfo>(previousServerInfo.getProgressInfo(),
-					currentServerInfo.getProgressInfo()));
+			progressInfoChange.notifyAll(new Pair<ProgressInfo, ProgressInfo>(previousServerInfo
+					.getProgressInfo(), currentServerInfo.getProgressInfo()));
 	}
-	
+
 	private void differencePlayerInfos() {
-		LCS<PlayerInfo> lcs = new LCS<PlayerInfo>(previousServerInfo.getPlayerInfos(), currentServerInfo.getPlayerInfos(), new Comparator<PlayerInfo>() {
-		
+		LCS<PlayerInfo> lcs = new LCS<PlayerInfo>(previousServerInfo.getPlayerInfos(), currentServerInfo
+				.getPlayerInfos(), new Comparator<PlayerInfo>() {
+
 			@Override
 			public int compare(PlayerInfo o1, PlayerInfo o2) {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});
-		
-		List<Pair<PlayerInfo,PlayerInfo>> pairs = lcs.getLCSPairs();
+
+		List<Pair<PlayerInfo, PlayerInfo>> pairs = lcs.getLCSPairs();
 		reviseLCSPlayerPairs(pairs);
-		
-		/*for (Pair<PlayerInfo, PlayerInfo> pair : pairs) {
+
+		for (Pair<PlayerInfo, PlayerInfo> pair : pairs) {
 			differencePlayerInfo(pair);
-		}*/
+		}
 	}
-	
+
+	private void differencePlayerInfo(Pair<PlayerInfo, PlayerInfo> pair) {
+		if ((pair.getFirst() == null && pair.getSecond() != null)
+				|| (pair.getFirst() != null && pair.getSecond() == null)
+				|| !(pair.getFirst().equals(pair.getSecond())))
+			playerInfoChange.notifyAll(pair);
+	}
+
 	/**
 	 * Check if player changed name, connect or disconnect based on LCS pairs.
 	 * 
 	 */
-	void reviseLCSPlayerPairs(List<Pair<PlayerInfo,PlayerInfo>> pairs) {
-		
+	void reviseLCSPlayerPairs(List<Pair<PlayerInfo, PlayerInfo>> pairs) {
+
 		Pair<PlayerInfo, PlayerInfo> prevPair = null;
-		
-		for (Iterator<Pair<PlayerInfo, PlayerInfo>> iterator = pairs.iterator(); iterator.hasNext(); ) {
+
+		for (Iterator<Pair<PlayerInfo, PlayerInfo>> iterator = pairs.iterator(); iterator.hasNext();) {
 			Pair<PlayerInfo, PlayerInfo> pair = iterator.next();
-			
-			//This is the case when player renames.
-			//Other case are old disconnected or new connected - leave them as it is.
+
+			// This is the case when player renames.
+			// Other case are old disconnected or new connected - leave them as it is.
 			if (pair.getFirst() == null) {
 				if (prevPair != null && prevPair.getSecond() == null) {
 					prevPair.setSecond(pair.getSecond());
 					iterator.remove();
 				}
 			}
-			
+
 			prevPair = pair;
 		}
 	}
-	
-	
 
 	private void difference() {
 		assert (previousServerInfo != null || count == 0);
 		assert (currentServerInfo != null);
-		
+
 		differenceGameInfo();
 		differenceProgressInfo();
 	}
