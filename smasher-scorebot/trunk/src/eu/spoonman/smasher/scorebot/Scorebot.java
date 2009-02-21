@@ -28,6 +28,12 @@ public abstract class Scorebot {
 	protected GameDelegate<ProgressInfo> progressInfoChange;
 	protected GameDelegate<PlayerInfo> playerInfoChange;
 	
+	public Scorebot() {
+		gameInfoChange = new GameDelegate<GameInfo>();
+		progressInfoChange = new GameDelegate<ProgressInfo>();
+		playerInfoChange = new GameDelegate<PlayerInfo>();
+	}
+	
 	public abstract void start();
 	
 	public abstract void stop();

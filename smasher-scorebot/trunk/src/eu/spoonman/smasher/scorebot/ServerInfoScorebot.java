@@ -59,7 +59,7 @@ public class ServerInfoScorebot extends Scorebot {
 	public void start() {
 		try {
 			serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, Inet4Address
-					.getByName("194.187.43.245"), 27971);
+					.getByName("194.187.43.245"), 27953);
 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -69,6 +69,7 @@ public class ServerInfoScorebot extends Scorebot {
 
 			@Override
 			public void run() {
+				log.debug("Starting new thread.");
 				internalStart();
 			}
 
@@ -99,6 +100,7 @@ public class ServerInfoScorebot extends Scorebot {
 		while (isRunning()) {
 
 			currentServerInfo = serverQuery.query();
+			log.info(currentServerInfo);
 
 			difference();
 
