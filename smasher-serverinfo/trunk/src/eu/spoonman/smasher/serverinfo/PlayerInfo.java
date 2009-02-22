@@ -56,6 +56,69 @@ public class PlayerInfo
         return String.format("[PlayerInfo: %s, P: %d ms, S: %d, T: %s, (%s)]", name, ping, score, teamKey, playerFlags);
     }
     
+    
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((namedAttributes == null) ? 0 : namedAttributes.hashCode());
+        result = prime * result + ping;
+        result = prime * result + ((playerFlags == null) ? 0 : playerFlags.hashCode());
+        result = prime * result + ((rawAttributes == null) ? 0 : rawAttributes.hashCode());
+        result = prime * result + score;
+        result = prime * result + ((teamKey == null) ? 0 : teamKey.hashCode());
+        return result;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof PlayerInfo))
+            return false;
+        PlayerInfo other = (PlayerInfo) obj;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (namedAttributes == null) {
+            if (other.namedAttributes != null)
+                return false;
+        } else if (!namedAttributes.equals(other.namedAttributes))
+            return false;
+        if (ping != other.ping)
+            return false;
+        if (playerFlags == null) {
+            if (other.playerFlags != null)
+                return false;
+        } else if (!playerFlags.equals(other.playerFlags))
+            return false;
+        if (rawAttributes == null) {
+            if (other.rawAttributes != null)
+                return false;
+        } else if (!rawAttributes.equals(other.rawAttributes))
+            return false;
+        if (score != other.score)
+            return false;
+        if (teamKey == null) {
+            if (other.teamKey != null)
+                return false;
+        } else if (!teamKey.equals(other.teamKey))
+            return false;
+        return true;
+    }
+
     /**
 	 * @return the name
 	 */
