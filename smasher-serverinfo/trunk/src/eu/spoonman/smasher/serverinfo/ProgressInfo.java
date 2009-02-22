@@ -57,6 +57,38 @@ public class ProgressInfo {
         this.progressInfoFlags.add(progressInfoFlags);
     }
 
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((progressInfoFlags == null) ? 0 : progressInfoFlags.hashCode());
+        result = prime * result + ((rawText == null) ? 0 : rawText.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof ProgressInfo))
+            return false;
+        ProgressInfo other = (ProgressInfo) obj;
+        if (progressInfoFlags == null) {
+            if (other.progressInfoFlags != null)
+                return false;
+        } else if (!progressInfoFlags.equals(other.progressInfoFlags))
+            return false;
+        if (rawText == null) {
+            if (other.rawText != null)
+                return false;
+        } else if (!rawText.equals(other.rawText))
+            return false;
+        return true;
+    }
+
     /**
      * @return the rawText
      */

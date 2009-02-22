@@ -36,6 +36,37 @@ public class RoundInfo extends ProgressInfo {
         this.roundNumber = roundNumber;
         this.roundLimit = roundLimit;
     }
+    
+    
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + roundLimit;
+        result = prime * result + roundNumber;
+        return result;
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (!(obj instanceof RoundInfo))
+            return false;
+        RoundInfo other = (RoundInfo) obj;
+        if (roundLimit != other.roundLimit)
+            return false;
+        if (roundNumber != other.roundNumber)
+            return false;
+        return true;
+    }
+
+
 
     /**
      * @return the roundNumber

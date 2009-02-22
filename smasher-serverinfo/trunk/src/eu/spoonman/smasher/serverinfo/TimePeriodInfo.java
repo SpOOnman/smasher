@@ -51,6 +51,35 @@ public class TimePeriodInfo extends ProgressInfo {
     public String toString() {
         return String.format("[TimePeriodInfo: %s, (%s)]", period, this.getProgressInfoFlags().toString());
     }
+    
+    
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((period == null) ? 0 : period.hashCode());
+        return result;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (!(obj instanceof TimePeriodInfo))
+            return false;
+        TimePeriodInfo other = (TimePeriodInfo) obj;
+        if (period == null) {
+            if (other.period != null)
+                return false;
+        } else if (!period.equals(other.period))
+            return false;
+        return true;
+    }
+
 
     /**
      * @return the period
