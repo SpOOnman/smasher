@@ -20,6 +20,7 @@ package eu.spoonman.smasher.scorebot;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -66,7 +67,7 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 
 		setRunning(true);
-		
+
 		new Thread(new Runnable() {
 
 			@Override
@@ -108,7 +109,7 @@ public class ServerInfoScorebot extends Scorebot {
 			previousServerInfo = currentServerInfo;
 
 			count++;
-			
+
 			try {
 				wait(interval);
 			} catch (InterruptedException e) {
@@ -146,14 +147,17 @@ public class ServerInfoScorebot extends Scorebot {
 	}
 
 	private void differencePlayerInfos() {
-		LCS<PlayerInfo> lcs = new LCS<PlayerInfo>(previousServerInfo.getPlayerInfos(), currentServerInfo
-				.getPlayerInfos(), new Comparator<PlayerInfo>() {
+		List<PlayerInfo> left = previousServerInfo == null ? new ArrayList<PlayerInfo>() : previousServerInfo
+				.getPlayerInfos();
+		
+		LCS<PlayerInfo> lcs = new LCS<PlayerInfo>(left, currentServerInfo.getPlayerInfos(),
+				new Comparator<PlayerInfo>() {
 
-			@Override
-			public int compare(PlayerInfo o1, PlayerInfo o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
+					@Override
+					public int compare(PlayerInfo o1, PlayerInfo o2) {
+						return o1.getName().compareTo(o2.getName());
+					}
+				});
 
 		List<Pair<PlayerInfo, PlayerInfo>> pairs = lcs.getLCSPairs();
 		reviseLCSPlayerPairs(pairs);
@@ -200,6 +204,7 @@ public class ServerInfoScorebot extends Scorebot {
 
 		differenceGameInfo();
 		differenceProgressInfo();
+		differencePlayerInfos();
 	}
 
 }
