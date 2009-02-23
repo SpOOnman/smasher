@@ -33,8 +33,8 @@ public class Quake3OSPPlayerInfoParser implements ServerInfoParser {
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
         for (PlayerInfo playerInfo : serverInfo.getPlayerInfos()) {
             playerInfo.setName(playerInfo.getRawAttributes().get(2));
-            playerInfo.setScore(Integer.parseInt(playerInfo.getRawAttributes().get(1)));
-            playerInfo.setPing(Integer.parseInt(playerInfo.getRawAttributes().get(0)));
+            playerInfo.setScore(Integer.parseInt(playerInfo.getRawAttributes().get(0)));
+            playerInfo.setPing(Integer.parseInt(playerInfo.getRawAttributes().get(1)));
         }
             
     }
