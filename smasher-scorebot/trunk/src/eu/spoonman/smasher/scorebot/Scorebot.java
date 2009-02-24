@@ -21,6 +21,7 @@ package eu.spoonman.smasher.scorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
+import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 public abstract class Scorebot {
 	
@@ -28,10 +29,29 @@ public abstract class Scorebot {
 	protected GameDelegate<ProgressInfo> progressInfoChange;
 	protected GameDelegate<PlayerInfo> playerInfoChange;
 	
+	protected GameDelegate<PlayerInfo> playerConnectedEvent;
+	protected GameDelegate<PlayerInfo> playerDisconnectedEvent;
+	protected GameDelegate<PlayerInfo> playerNameChangedEvent;
+	protected GameDelegate<PlayerInfo> playerScoreChangedEvent;
+	protected GameDelegate<PlayerInfo> playerPingChangedEvent;
+	
+	protected GameDelegate<TeamInfo> teamNameChangedEvent;
+	protected GameDelegate<TeamInfo> teamScoreChangedEvent;
+	
 	public Scorebot() {
 		gameInfoChange = new GameDelegate<GameInfo>();
 		progressInfoChange = new GameDelegate<ProgressInfo>();
 		playerInfoChange = new GameDelegate<PlayerInfo>();
+		
+		playerConnectedEvent = new GameDelegate<PlayerInfo>();
+		playerDisconnectedEvent = new GameDelegate<PlayerInfo>();
+		playerNameChangedEvent = new GameDelegate<PlayerInfo>();
+		playerScoreChangedEvent = new GameDelegate<PlayerInfo>();
+		playerPingChangedEvent = new GameDelegate<PlayerInfo>();
+		
+		teamNameChangedEvent = new GameDelegate<TeamInfo>();
+		teamScoreChangedEvent = new GameDelegate<TeamInfo>();
+		
 	}
 	
 	public abstract void start();
@@ -48,5 +68,33 @@ public abstract class Scorebot {
 
 	public GameDelegate<PlayerInfo> getPlayerInfoChange() {
 		return playerInfoChange;
+	}
+
+	public GameDelegate<PlayerInfo> getPlayerConnectedEvent() {
+		return playerConnectedEvent;
+	}
+
+	public GameDelegate<PlayerInfo> getPlayerDisconnectedEvent() {
+		return playerDisconnectedEvent;
+	}
+
+	public GameDelegate<PlayerInfo> getPlayerNameChangedEvent() {
+		return playerNameChangedEvent;
+	}
+
+	public GameDelegate<PlayerInfo> getPlayerScoreChangedEvent() {
+		return playerScoreChangedEvent;
+	}
+
+	public GameDelegate<PlayerInfo> getPlayerPingChangedEvent() {
+		return playerPingChangedEvent;
+	}
+
+	public GameDelegate<TeamInfo> getTeamNameChangedEvent() {
+		return teamNameChangedEvent;
+	}
+
+	public GameDelegate<TeamInfo> getTeamScoreChangedEvent() {
+		return teamScoreChangedEvent;
 	}
 }
