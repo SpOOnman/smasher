@@ -168,10 +168,25 @@ public class ServerInfoScorebot extends Scorebot {
 	}
 
 	private void differencePlayerInfo(Pair<PlayerInfo, PlayerInfo> pair) {
-		if ((pair.getFirst() == null && pair.getSecond() != null)
-				|| (pair.getFirst() != null && pair.getSecond() == null)
-				|| !(pair.getFirst().equals(pair.getSecond())))
-			playerInfoChange.notifyAll(pair);
+		
+		if (pair.getFirst() == null && pair.getSecond() != null) {
+			playerConnectedEvent.notifyAll(pair);
+			return;
+		}
+		
+		if (pair.getFirst() != null && pair.getSecond() == null) {
+			playerDisconnectedEvent.notifyAll(pair);
+			return;
+		}
+		
+		if (!(pair.getFirst().getName().equals(pair.getSecond().getName())))
+			playerNameChangedEvent.notifyAll(pair);
+		
+		if (pair.getFirst().getScore() != pair.getSecond().getScore())
+			playerScoreChangedEvent.notifyAll(pair);
+		
+		if (pair.getFirst().getPing() != pair.getSecond().getPing())
+			playerPingChangedEvent.notifyAll(pair);
 	}
 
 	/**
