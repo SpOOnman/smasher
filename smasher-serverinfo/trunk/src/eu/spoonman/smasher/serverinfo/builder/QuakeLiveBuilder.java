@@ -18,7 +18,9 @@ import eu.spoonman.smasher.serverinfo.header.Header;
 import eu.spoonman.smasher.serverinfo.header.QuakeEngineHeader;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.Quake3OSPGameInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.playerinfo.QuakeLivePlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.Quake3OSPTimeInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.timeinfo.QuakeLiveTimeInfoParser;
 import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 import eu.spoonman.smasher.serverinfo.reader.QuakeLiveReader;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
@@ -45,8 +47,8 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
     @Override
     public List<ServerInfoParser> getParserList(ServerInfo serverInfo) {
         List<ServerInfoParser> list = new ArrayList<ServerInfoParser>();
-        list.add(new Quake3OSPGameInfoParser());
-        list.add(new Quake3OSPTimeInfoParser());
+        list.add(new QuakeLiveTimeInfoParser());
+        list.add(new QuakeLivePlayerInfoParser());
         return list;
     }
     
@@ -66,9 +68,9 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
             Version version = new Version("QuakeLive", Integer.valueOf(matcher.group(1)), Integer.valueOf(matcher.group(2)), Integer.valueOf(matcher
                     .group(3)), Integer.valueOf(matcher.group(4)), null, null);
             
-            PlatformSystem.valueOf(matcher.group(5));
-            Platform.valueOf(matcher.group(6));
-            new LocalDateTime(matcher.group(7));
+            //PlatformSystem.valueOf(matcher.group(5));
+            //Platform.valueOf(matcher.group(6));
+            //new LocalDateTime(matcher.group(7));
             
             return version;
         }
