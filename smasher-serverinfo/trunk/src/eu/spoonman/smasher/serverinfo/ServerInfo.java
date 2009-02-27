@@ -72,21 +72,21 @@ public class ServerInfo {
 			sb.append(entry.getKey() + "\t : " + entry.getValue() + "\n");
 		}
         
-        sb.append(gameInfo.toString());
+        sb.append(gameInfo);
         sb.append("\n");
         
-		sb.append(progressInfo.toString());
+		sb.append(progressInfo);
 		sb.append("\n");
 		
 		for (Map.Entry<TeamKey, TeamInfo> ti : teamInfos.entrySet()) {
             sb.append("\t");
-            sb.append(ti.getValue().toString());
+            sb.append(ti.getValue());
             sb.append("\n");
         }
 		
 		for (PlayerInfo pi : this.playerInfos) {
 		    sb.append("\t");
-			sb.append(pi.toString());
+			sb.append(pi);
 			sb.append("\n");
 		}
 		
