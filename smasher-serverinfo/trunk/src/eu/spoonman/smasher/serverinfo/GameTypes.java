@@ -25,6 +25,7 @@ package eu.spoonman.smasher.serverinfo;
 public enum GameTypes {
     
     UNKNOWN,
+    FREE_FOR_ALL,
     DUEL,
     TEAM_DEATHMATCH,
     CAPTURE_THE_FLAG,
