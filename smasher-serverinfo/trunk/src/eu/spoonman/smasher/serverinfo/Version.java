@@ -134,7 +134,7 @@ public class Version {
             if (log.isDebugEnabled())
                 log.debug(String.format("String '%s' parsed to '%s'", text, buildTime));
             
-        } catch (IllegalFormatException e) {
+        } catch (IllegalArgumentException e) {
             log.error(String.format("Cannot parse american datetime string '%s'", text), e);
             return false;
         }
@@ -149,7 +149,7 @@ public class Version {
      */
     private DateTimeFormatter getAmericanDateTimeFormatter() {
         if (americanDateTimeFormatter == null) {
-            americanDateTimeFormatter = DateTimeFormat.forPattern("MMM d YYYY");
+            americanDateTimeFormatter = DateTimeFormat.forPattern("MMM d YYYY HH:mm:SS");
             americanDateTimeFormatter.withLocale(Locale.US);
         }
         

@@ -33,7 +33,7 @@ import eu.spoonman.smasher.serverinfo.reader.Reader;
 public class QuakeLiveBuilder extends BuilderFactory implements Builder {
 
     private static final Pattern versionPattern = Pattern
-            .compile("QuakeLive\\s+(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)\\s(\\w+)\\-(\\w+)\\s(.*)");
+            .compile("(\\w+)\\s+([\\.\\w]+)\\s(\\w+)\\-(\\w+)\\s(.+)");
 
     @Override
     public Header getHeader() {
@@ -67,12 +67,11 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
         Matcher matcher = versionPattern.matcher(gamename);
 
         if (matcher.matches()) {
-            Version version = new Version("QuakeLive", Integer.valueOf(matcher.group(1)), Integer.valueOf(matcher.group(2)), Integer.valueOf(matcher
-                    .group(3)), Integer.valueOf(matcher.group(4)), null, null);
             
-            //PlatformSystem.valueOf(matcher.group(5));
-            //Platform.valueOf(matcher.group(6));
-            //new LocalDateTime(matcher.group(7));
+            Version version = new Version(matcher.group(1));
+            version.setFullName("QuakeLive");
+            version.tryParseVersion(matcher.group(2));
+            version.tryParseAmericanDate(matcher.group(5));
             
             return version;
         }
