@@ -71,7 +71,7 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
             Version version = new Version(matcher.group(1));
             version.setFullName("QuakeLive");
             version.tryParseVersion(matcher.group(2));
-            version.tryParseAmericanDate(matcher.group(5));
+            version.tryParseAmericanDateTime(matcher.group(5));
             
             return version;
         }

@@ -84,7 +84,7 @@ public class VersionTest {
         assertEquals(1, dateTime.getDayOfMonth());
         assertEquals(2005, dateTime.getYear());
         
-        version.tryParseAmericanDate("Feb 4 2009 21:24:26");
+        version.tryParseAmericanDateTime("Feb 4 2009 21:24:26");
         dateTime = version.getBuildTime();
         assertEquals(2, dateTime.getMonthOfYear());
         assertEquals(4, dateTime.getDayOfMonth());

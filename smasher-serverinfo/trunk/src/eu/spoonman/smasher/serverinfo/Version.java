@@ -18,13 +18,11 @@
 
 package eu.spoonman.smasher.serverinfo;
 
-import org.apache.log4j.Logger;
-
-import java.util.IllegalFormatException;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -45,6 +43,7 @@ public class Version {
     private static final Pattern genericVersionPattern = Pattern.compile("(\\d+)\\.?(\\d+)?\\.?(\\d+)?\\.?(\\d+)?\\.?(\\w+)?\\s?.*");
 
     private static DateTimeFormatter americanDateTimeFormatter;
+    private static DateTimeFormatter americanDateFormatter;
     
     private String  name;
     private String  fullName;
@@ -113,12 +112,20 @@ public class Version {
         return true;
     }
     
+    public boolean tryParseAmericanDateTime(String text) {
+        return tryParseAmerican(getAmericanDateTimeFormatter(), text);
+    }
+    
+    public boolean tryParseAmericanDate(String text) {
+        return tryParseAmerican(getAmericanDateFormatter(), text);
+    }
+    
     /**
      * Try to parse text into version's date.
      * @param text American format MMM d YYYY date string.
      * @return true if operation succeeded
      */
-    public boolean tryParseAmericanDate(String text) {
+    private boolean tryParseAmerican(DateTimeFormatter formatter, String text) {
         //In some cases it's necessary: 'Mar  8 2008' would fail.
         text = text.replace("  ", " ");
         
@@ -126,7 +133,6 @@ public class Version {
             log.debug(String.format("Parsing american datetime string '%s'", text));
         
         try {
-            DateTimeFormatter formatter = getAmericanDateTimeFormatter();
             buildTime = formatter.parseDateTime(text);
             
             if (log.isDebugEnabled())
@@ -138,16 +144,26 @@ public class Version {
         }
         
         return true;
-        
-        
     }
     
     /**
      * @return popular american date time formatter MMM dd YYYY, e.g. Apr 26 2004.
      */
+    private DateTimeFormatter getAmericanDateFormatter() {
+        if (americanDateFormatter == null) {
+            americanDateFormatter = DateTimeFormat.forPattern("MMM d YYYY");
+            americanDateFormatter.withLocale(Locale.US);
+        }
+        
+        return americanDateFormatter;
+    }
+    
+    /**
+     * @return popular american date time formatter MMM dd YYYY, e.g. Apr 26 2004 12:24:22.
+     */
     private DateTimeFormatter getAmericanDateTimeFormatter() {
         if (americanDateTimeFormatter == null) {
-            americanDateTimeFormatter = DateTimeFormat.forPattern("MMM d YYYY HH:mm:SS");
+            americanDateTimeFormatter = DateTimeFormat.forPattern("MMM d YYYY HH:mm:ss");
             americanDateTimeFormatter.withLocale(Locale.US);
         }
         
