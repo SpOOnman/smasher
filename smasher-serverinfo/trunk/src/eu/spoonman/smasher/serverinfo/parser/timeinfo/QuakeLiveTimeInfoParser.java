@@ -43,15 +43,14 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
     
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
-        if (log.isDebugEnabled()) {
-            log.debug("parseIntoServerInfo(ServerInfo) - start"); //$NON-NLS-1$
-        }
 
         String gameState = serverInfo.getNamedAttributes().get("g_gameState");
         String levelStartTime = serverInfo.getNamedAttributes().get("g_levelStartTime");
         
+        if (log.isDebugEnabled()) {
         log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_gameState", gameState));
         log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_levelStartTime", levelStartTime));
+        }
         
         TimePeriodInfo timePeriodInfo = new TimePeriodInfo(gameState + levelStartTime);
 
@@ -75,9 +74,7 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
         Period period = new Period(start, now);
         
         timePeriodInfo.setPeriod(period);
-
-        if (log.isDebugEnabled()) {
-            log.debug("parseIntoServerInfo(ServerInfo) - end"); //$NON-NLS-1$
-        }
+        
+        serverInfo.setProgressInfo(timePeriodInfo);
     }
 }
