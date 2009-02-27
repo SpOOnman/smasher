@@ -95,8 +95,6 @@ public class Version {
         if (!(matcher.matches()))
             return false;
         
-        Version version = new Version(null);
-        
         if (matcher.group(1) != null)
             setMajor(Integer.valueOf(matcher.group(1)));
         if (matcher.group(2) != null)
@@ -110,7 +108,7 @@ public class Version {
             setCodeLetter(matcher.group(5));
 
         if (log.isDebugEnabled())
-            log.debug(String.format("Version parsed to '%s'", version));
+            log.debug(String.format("Version parsed to '%s'", this));
         
         return true;
     }
