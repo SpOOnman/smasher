@@ -18,6 +18,8 @@
 
 package eu.spoonman.smasher.serverinfo.parser.playerinfo;
 
+import org.apache.log4j.Logger;
+
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
@@ -29,9 +31,18 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  */
 public class Quake3OSPPlayerInfoParser implements ServerInfoParser {
     
+    /**
+     * Logger for this class
+     */
+    private static final Logger log = Logger.getLogger(Quake3OSPPlayerInfoParser.class);
+    
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
         for (PlayerInfo playerInfo : serverInfo.getPlayerInfos()) {
+            
+            if (log.isDebugEnabled())
+                log.debug(String.format(ServerInfoParser.fieldLogFormat, "fields", playerInfo.getRawAttributes()));
+            
             playerInfo.setName(playerInfo.getRawAttributes().get(2));
             playerInfo.setScore(Integer.parseInt(playerInfo.getRawAttributes().get(0)));
             playerInfo.setPing(Integer.parseInt(playerInfo.getRawAttributes().get(1)));
