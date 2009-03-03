@@ -31,7 +31,7 @@ import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
 import eu.spoonman.smasher.serverinfo.Version;
 import eu.spoonman.smasher.serverinfo.header.Header;
-import eu.spoonman.smasher.serverinfo.header.QuakeEngineHeader;
+import eu.spoonman.smasher.serverinfo.header.Quake3EngineHeader;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.Quake3OSPGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.playerinfo.NumbersPlayerInfoParser;
@@ -57,7 +57,7 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
     
     @Override
     public Header getHeader() {
-        return new QuakeEngineHeader();
+        return new Quake3EngineHeader();
     }
     
     @Override

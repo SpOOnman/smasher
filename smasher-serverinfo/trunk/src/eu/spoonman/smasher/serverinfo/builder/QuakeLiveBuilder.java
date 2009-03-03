@@ -8,26 +8,20 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.joda.time.LocalDateTime;
-
-import eu.spoonman.smasher.serverinfo.Platform;
-import eu.spoonman.smasher.serverinfo.PlatformSystem;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.Version;
 import eu.spoonman.smasher.serverinfo.header.Header;
-import eu.spoonman.smasher.serverinfo.header.QuakeEngineHeader;
+import eu.spoonman.smasher.serverinfo.header.Quake3EngineHeader;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
-import eu.spoonman.smasher.serverinfo.parser.gameinfo.Quake3OSPGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.QuakeLiveGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.playerinfo.QuakeLivePlayerInfoParser;
-import eu.spoonman.smasher.serverinfo.parser.timeinfo.Quake3OSPTimeInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.QuakeLiveTimeInfoParser;
 import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 import eu.spoonman.smasher.serverinfo.reader.QuakeLiveReader;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
 /**
- * @author spoonman
+ * @author Tomasz Kalkosiński
  * 
  */
 public class QuakeLiveBuilder extends BuilderFactory implements Builder {
@@ -37,7 +31,7 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
 
     @Override
     public Header getHeader() {
-        return new QuakeEngineHeader();
+        return new Quake3EngineHeader();
     }
 
     @Override
