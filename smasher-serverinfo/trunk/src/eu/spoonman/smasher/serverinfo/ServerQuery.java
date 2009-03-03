@@ -96,6 +96,21 @@ public class ServerQuery {
 
         return query(data);
     }
+    
+    /**
+     * Query suitable for catching byte[] for tests.
+     * @return
+     * @throws IOException
+     */
+    byte[] queryBytes() throws IOException {
+        
+        byte[] data = null;
+    
+        DatagramPacket packet = this.queryServer();
+        data = packet.getData();
+        
+        return data;
+    }
 
     /**
      * Query suitable for tests.
