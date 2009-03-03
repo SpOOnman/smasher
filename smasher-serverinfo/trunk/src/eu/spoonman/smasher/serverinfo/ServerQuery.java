@@ -85,7 +85,7 @@ public class ServerQuery {
 
         try {
             DatagramPacket packet = this.queryServer();
-            data = packet.getData();
+            data = Arrays.copyOf(packet.getData(), packet.getLength());
         } catch (UnknownHostException e) {
             return new ServerInfo(ServerInfoStatus.UNKNOWN_HOST);
         } catch (SocketTimeoutException e) {
@@ -109,7 +109,7 @@ public class ServerQuery {
         DatagramPacket packet = this.queryServer();
         data = packet.getData();
         
-        return data;
+        return Arrays.copyOf(data, packet.getLength());
     }
 
     /**
