@@ -32,9 +32,9 @@ public class ServerQueryManagerTest {
     public void testCreateServerQuery() throws UnknownHostException {
         ServerQuery serverQuery = null;
         
-        InetAddress address = InetAddress.getByName("194.187.43.245");
+        InetAddress address = InetAddress.getByName("85.25.86.234");
 
-        serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, address, 27963);
+        serverQuery = ServerQueryManager.createServerQuery(Games.QUAKELIVE, address, 27011);
 
         assertNotNull(serverQuery);
 
