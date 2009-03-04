@@ -18,11 +18,7 @@
 
 package eu.spoonman.smasher.serverinfo;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.junit.Test;
 
