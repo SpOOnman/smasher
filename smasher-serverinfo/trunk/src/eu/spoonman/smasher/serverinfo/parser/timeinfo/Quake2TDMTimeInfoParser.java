@@ -79,7 +79,8 @@ public class Quake2TDMTimeInfoParser implements ServerInfoParser {
         }
         
         TimePeriodInfo periodInfo = new TimePeriodInfo(scoreTime);
-        periodInfo.setPeriod(new Period(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3))));
+        periodInfo.setPeriod(new Period(0, Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)), 0));
+        periodInfo.setProgressInfoFlags(EnumSet.of(ProgressInfoFlags.IN_PLAY));
         serverInfo.setProgressInfo(periodInfo);
     }
 
