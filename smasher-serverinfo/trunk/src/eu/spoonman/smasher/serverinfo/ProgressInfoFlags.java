@@ -33,6 +33,11 @@ public enum ProgressInfoFlags {
     OVERTIME,
     SUDDEN_DEATH,
     
+    TIMELIMIT,
+    FRAGLIMIT,
+    CAPLIMIT,
+    ROUNDLIMIT,
+    
     TIMEOUT,
     TIMEOUT_RED,
     TIMEOUT_BLUE,
