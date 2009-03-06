@@ -18,46 +18,7 @@
 
 package eu.spoonman.smasher.serverinfo;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import org.junit.Test;
 
 public class ServerQueryManagerTest {
-
-    @Test
-    public void testCreateServerQuery() throws UnknownHostException {
-        ServerQuery serverQuery = null;
-        
-        InetAddress address = InetAddress.getByName("85.25.86.234");
-
-        serverQuery = ServerQueryManager.createServerQuery(Games.QUAKELIVE, address, 27011);
-
-        assertNotNull(serverQuery);
-
-        ServerInfo serverInfo = serverQuery.query();
-        System.out.println(serverInfo);
-
-        assertNotNull(serverInfo);
-    }
-
-    @Test
-    public void creationTest() throws UnknownHostException {
-        
-        InetAddress localhost = InetAddress.getByName("127.0.0.1");
-        
-        for (Games game : Games.values()) {
-            try {
-                ServerQuery serverQuery = ServerQueryManager.createServerQuery(game, localhost, 20000);
-                assertNotNull(serverQuery);
-            } catch (Exception e) {
-                e.printStackTrace();
-                fail(game.toString());
-            }
-        }
-    }
 
 }
