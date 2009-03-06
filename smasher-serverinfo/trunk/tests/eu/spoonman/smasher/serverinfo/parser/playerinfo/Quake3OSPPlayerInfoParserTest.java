@@ -52,8 +52,8 @@ public class Quake3OSPPlayerInfoParserTest {
         quake3OSPPlayerInfoParser.parseIntoServerInfo(serverInfo);
         
         assertEquals("MyName", serverInfo.getPlayerInfos().get(0).getName());
-        assertEquals(50, serverInfo.getPlayerInfos().get(0).getPing());
-        assertEquals(10, serverInfo.getPlayerInfos().get(0).getScore());
+        assertEquals(10, serverInfo.getPlayerInfos().get(0).getPing());
+        assertEquals(50, serverInfo.getPlayerInfos().get(0).getScore());
     }
 
 }
