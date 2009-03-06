@@ -28,11 +28,43 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  * 
  */
 public class QuakeEngineGameInfoParser implements ServerInfoParser {
+    
+    public static final String KeyMaxClients = "sv_maxclients";
+    public static final String KeyHostname   = "sv_hostname";
+    public static final String KeyMapname    = "mapname";
+    public static final String KeyNeedPass   = "g_needpass";
+    
+    protected final String maxClients;
+    protected final String hostname;
+    protected final String mapname;
+    protected final String needpass;
+    
 
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
 
         serverInfo.setGameInfo(parseGameInfo(serverInfo));
+    }
+    
+    /**
+     * 
+     */
+    public QuakeEngineGameInfoParser() {
+        this(KeyMaxClients, KeyHostname, KeyMapname, KeyNeedPass);
+    }
+    
+    /**
+     * @param maxClients
+     * @param hostname
+     * @param mapname
+     * @param needpass
+     */
+    public QuakeEngineGameInfoParser(String maxClients, String hostname, String mapname, String needpass) {
+        super();
+        this.maxClients = maxClients;
+        this.hostname = hostname;
+        this.mapname = mapname;
+        this.needpass = needpass;
     }
 
     /**
@@ -46,11 +78,11 @@ public class QuakeEngineGameInfoParser implements ServerInfoParser {
     protected GameInfo parseGameInfo(ServerInfo serverInfo) throws ParserException {
         GameInfo gameInfo = new GameInfo();
 
-        gameInfo.setPlayerMaxCount(Integer.valueOf(serverInfo.getNamedAttributes().get("sv_maxclients")));
-        gameInfo.setHostName(serverInfo.getNamedAttributes().get("sv_hostname"));
-        gameInfo.setMap(serverInfo.getNamedAttributes().get("mapname"));
+        gameInfo.setPlayerMaxCount(Integer.valueOf(serverInfo.getNamedAttributes().get(maxClients)));
+        gameInfo.setHostName(serverInfo.getNamedAttributes().get(hostname));
+        gameInfo.setMap(serverInfo.getNamedAttributes().get(mapname));
         
-        gameInfo.setPassworded(serverInfo.getNamedAttributes().get("g_needpass") != null && serverInfo.getNamedAttributes().get("g_needpass").equals("1"));
+        gameInfo.setPassworded(serverInfo.getNamedAttributes().get(needpass) != null && serverInfo.getNamedAttributes().get(needpass).equals("1"));
 
         return gameInfo;
 

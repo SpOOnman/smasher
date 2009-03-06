@@ -26,6 +26,7 @@ package eu.spoonman.smasher.serverinfo;
  */
 public enum Games {
 
+    QUAKE2,
     QUAKE3ARENA,
     QUAKELIVE;
 }

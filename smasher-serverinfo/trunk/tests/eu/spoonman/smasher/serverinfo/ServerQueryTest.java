@@ -58,8 +58,19 @@ public class ServerQueryTest {
         
         //System.out.println(serverInfo);
     }
+    
+    public final String Q2TDMResponseOne = "\u00ff\u00ff\u00ff\u00ffprint\n\\Q2Admin\\1.17.44\\mapname\\q2dm1\\anticheat\\2\\#Time_Left\\8:20\\#Score_B\\5\\#Score_A\\1\\domination\\0\\needpass\\0\\maxspectators\\4\\gamedate\\Apr 19 2005\\gamename\\Quake2 TeamPlay DM v0.9.1\\fastweapons\\0\\instagib\\0\\allow_hud\\1\\allow_bfg\\1\\allow_gibs\\1\\allow_powerups\\1\\hostname\\ASTER TDM #2\\cheats\\0\\timelimit\\10\\fraglimit\\0\\dmflags\\1072\\deathmatch\\1\\version\\R1Q2 b7864 i386 Oct  1 2008 Linux\\gamedir\\tdm\\game\\tdm\\maxclients\\12\n0 20 \"Cider\"\n1 16 \"keFir\"\n0 28 \"Player\"\n4 44 \"Ag3_\"\n1 14 \"aL)Minus\"\n";
+    
+    @Test
+    public void testQ2TDM() throws UnsupportedEncodingException {
+
+        ServerQuery serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE2, null, 0);
+        ServerInfo serverInfo = serverQuery.query(Q2TDMResponseOne.getBytes("ISO8859-1"));
+
+        System.out.println(serverInfo);
+    }
+    
     // QW: \u00ff\u00ff\u00ff\u00ffn\\fraglimit\\0\\watervis\\0\\*version\\MVDSV 0.20.05-CVS\\*z_ext\\75\\maxspectators\\8\\teamplay\\2\\hostname\\Aster KTX 27500\\timelimit\\20\\deathmatch\\1\\maxclients\\8\\*gamedir\\qw\\fpd\\206\\pm_ktjump\\1\\maxfps\\77\\*admin\\spoonman@op.pl\\location\\Warsaw, Poland\\*progs\\47106\\xmod\\1.33\\xbuild\\00231\\map\\dm3\\status\\Standby\n\u0000
-    // Q2: \u00ff\u00ff\u00ff\u00ffprint\n\\Q2Admin\\1.17.44\\mapname\\q2dm1\\anticheat\\2\\#Time_Left\\8:20\\#Score_B\\5\\#Score_A\\1\\domination\\0\\needpass\\0\\maxspectators\\4\\gamedate\\Apr 19 2005\\gamename\\Quake2 TeamPlay DM v0.9.1\\fastweapons\\0\\instagib\\0\\allow_hud\\1\\allow_bfg\\1\\allow_gibs\\1\\allow_powerups\\1\\hostname\\ASTER TDM #2\\cheats\\0\\timelimit\\10\\fraglimit\\0\\dmflags\\1072\\deathmatch\\1\\version\\R1Q2 b7864 i386 Oct  1 2008 Linux\\gamedir\\tdm\\game\\tdm\\maxclients\\12\n0 20 \"Cider\"\n1 16 \"keFir\"\n0 28 \"Player\"\n4 44 \"Ag3_\"\n1 14 \"aL)Minus\"\n
     
     
     

@@ -35,6 +35,8 @@ public class BuilderFactory {
     public static Builder createBuilder(Games game) {
 
         switch (game) {
+        case QUAKE2:
+            return new Quake2Builder();
         case QUAKE3ARENA:
             return new Quake3ArenaBuilder();
         case QUAKELIVE:
