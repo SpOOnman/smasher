@@ -97,7 +97,7 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 	}
 
-	protected synchronized void internalStart() {
+	protected void internalStart() {
 
 		while (isRunning()) {
 
