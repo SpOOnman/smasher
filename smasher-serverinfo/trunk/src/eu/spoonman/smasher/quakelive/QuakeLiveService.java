@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,8 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.AndFilter;
@@ -189,9 +192,18 @@ public class QuakeLiveService {
 
     public void xmppLogin(String user, String xaid) throws XMPPException {
         XMPPConnection connection = new XMPPConnection(QUAKELIVE_XMPP_SERVER);
+        connection.connect();
         connection.login(user, xaid, QUAKELIVE_XMPP_RESOURCE);
         
         log.debug("Logged in as " + user);
+        
+        Roster roster = connection.getRoster();
+        Collection<RosterEntry> entries = roster.getEntries();
+         
+        log.info("" + entries.size() + " friends:");
+        for(RosterEntry r:entries) {
+            log.info(String.format("RoosterEntry: %s, %s, %s, %s ", r.getName(), r.getType().toString(), r.getUser(), r.getStatus()));
+        }
 
         PacketFilter filter = new AndFilter(new PacketTypeFilter(Message.class));
 
