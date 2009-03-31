@@ -27,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,29 +51,51 @@ public class QuakeLiveService {
     private final static String QUAKELIVE_PASS = "";
     private final static String QUAKELIVE_PARAMETERS = "u=%s&p=%s&r=0";
     
-    private List<String> cookies = null;
+    private List<String> cookies = new ArrayList<String>();
     
-    private String httpQuery(String urlString, String parameters, boolean useCookies) throws LoginException, IOException {
+    private String getCookies() {
+        StringBuilder sb = new StringBuilder();
+        for (String cookie : cookies) {
+            String[] split = cookie.split("; ");
+            for (String splitted : split) {
+                if (splitted.startsWith("path") || splitted.startsWith("HttpOnly") || splitted.startsWith("expires"))
+                    continue;
+                
+                sb.append(splitted);
+                sb.append("; ");
+            }
+        }
+        
+        return sb.toString();
+        
+    }
+    
+    private String httpQuery(String method, String urlString, String parameters, boolean useCookies) throws LoginException, IOException {
         try {
             
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            connection.setRequestProperty("Content-Length", new Integer(parameters.length()).toString());
-            if (useCookies)
-                connection.addRequestProperty("Cookie", cookies.toString().substring(1, cookies.toString().length() - 2));
+            connection.setRequestMethod(method);
+            connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
             
-            connection.setDoOutput(true);
-            connection.setReadTimeout(10000);
+            if (parameters != null) {
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+                connection.setRequestProperty("Content-Length", new Integer(parameters.length()).toString());
             
-            System.out.println(connection.getHeaderFields());
- 
-            OutputStream dataOut = connection.getOutputStream();
-            dataOut.write(parameters.getBytes());
-            dataOut.flush();
-            dataOut.close();
+                connection.setDoOutput(true);
+                connection.setReadTimeout(10000);
+            
+                OutputStream dataOut = connection.getOutputStream();
+                dataOut.write(parameters.getBytes());
+                dataOut.flush();
+                dataOut.close();
+            }
+            
+            if (useCookies) {
+                connection.setRequestProperty("Cookie", getCookies());
+                connection.connect();
+            }
             
             Object responseMessage = connection.getResponseMessage();
             Map<String, List<String>> headerFields = connection.getHeaderFields();
@@ -85,6 +108,7 @@ public class QuakeLiveService {
                 sb.append(line);
             String content = sb.toString();
 
+            log.debug(String.format("Header: %s", headerFields));
             log.debug(String.format("Response %s: %s", responseMessage, content));
             
             return content;
@@ -102,9 +126,9 @@ public class QuakeLiveService {
         try {
             
             String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
-            String content = httpQuery(QUAKELIVE_URL_LOGIN_STRING, parameters, false);
+            String content = httpQuery("POST", QUAKELIVE_URL_LOGIN_STRING, parameters, false);
             
-            load(username, password, cookies);
+            load();
             
         } catch (MalformedURLException e) {
             log.error("URL", e);
@@ -114,11 +138,12 @@ public class QuakeLiveService {
 
     }
     
-    public void load(String username, String password, List<String> cookies) throws IOException, LoginException {
+    public void load() throws IOException, LoginException {
         try {
             
-            String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
-            String content = httpQuery(QUAKELIVE_URL_LOAD_STRING, parameters, true);
+            String content = httpQuery("POST", QUAKELIVE_URL_LOAD_STRING, null, true);
+            
+            //"SESSION":"75f4c0f5a1b0706b1d2ffe5a57803f57","USERNAME":"QScorebot","XAID":"2c3705b73658aeefc2363fc2e7181b4b8efc81e6","STATUS":"ACTIVE","USERID":"2943560","INFO":{"PLAYER_EMAIL":"tomasz2k@poczta.onet.pl","EULA_DATE":"27-MAR-09","JOIN_DATE":"27-MAR-09","FIRSTNAME":"Maggie","IGNORED_NOTICES":"","PLAYER_CLAN":"","COUNTRY_ABBREV":"PL","BROWSER_FILTER":""},"CVARS":{"headmodel":"ranger\/default","model":"ranger\/default","name":"QScorebot","r_inBrowserMode":"9","team_headmodel":"ranger\/default","team_model":"ranger\/default","web_botskill":"easy","web_configVersion":"4"},"BINDS":{"+":"sizeup","-":"sizedown","0x00":"+zoom","1":"weapon 1","2":"weapon 2","3":"weapon 3","4":"weapon 4","5":"","6":"weapon 6","7":"","8":"weapon 8","9":"weapon 9","=":"sizeup","CTRL":"+movedown","F1":"vote yes","F11":"screenshot","F2":"vote no","F3":"readyup","MOUSE1":"+attack","MOUSE2":"+moveup","MOUSE3":"+button2","MWHEELDOWN":"weapprev","MWHEELUP":"weapnext","PAUSE":"pause","SHIFT":"weapon 5","SPACE":"weapon 6","TAB":"+scores","_":"sizedown","a":"weapon 7","alt":"+speed","c":"weapon 2","d":"+back","e":"+forward","f":"+moveright","g":"weapon 8","h":"+chat","q":"","r":"","s":"+moveleft","t":"messagemode","w":"weapon 4","y":"messagemode2","z":"weapon 3"},"QUEUED":"0","NEW_PLAYER":true}
             
 
 //            Object parsed = JSONValue.parse(responseMessage);
