@@ -18,22 +18,21 @@
 
 package eu.spoonman.smasher.quakelive;
 
-import org.apache.log4j.Logger;
-
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
-import javax.management.RuntimeErrorException;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLServerSocketFactory;
 import javax.security.auth.login.LoginException;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
+import org.apache.log4j.Logger;
 
 /**
  * @author Tomasz Kalkosiński QuakeLive Service to retrieve information.
@@ -45,26 +44,100 @@ public class QuakeLiveService {
      */
     private static final Logger log = Logger.getLogger(QuakeLiveService.class);
 
-    private final String QUAKELIVE_URL_STRING = "http://www.quakelive.com";
-
-    public void Login(String username, String password) throws LoginException, IOException {
+    private final static String QUAKELIVE_URL_LOGIN_STRING = "http://www.quakelive.com/user/login";
+    private final static String QUAKELIVE_URL_LOAD_STRING = "http://www.quakelive.com/user/load";
+    private final static String QUAKELIVE_USER = "tomasz2k@poczta.onet.pl";
+    private final static String QUAKELIVE_PASS = "";
+    private final static String QUAKELIVE_PARAMETERS = "u=%s&p=%s&r=0";
+    
+    private List<String> cookies = null;
+    
+    private String httpQuery(String urlString, String parameters, boolean useCookies) throws LoginException, IOException {
         try {
-            URL url = new URL(QUAKELIVE_URL_STRING);
+            
+            URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("username", username);
-            connection.setRequestProperty("pass", password);
-            String responseMessage = connection.getResponseMessage();
+            
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            connection.setRequestProperty("Content-Length", new Integer(parameters.length()).toString());
+            if (useCookies)
+                connection.addRequestProperty("Cookie", cookies.toString().substring(1, cookies.toString().length() - 2));
+            
+            connection.setDoOutput(true);
+            connection.setReadTimeout(10000);
+            
+            System.out.println(connection.getHeaderFields());
+ 
+            OutputStream dataOut = connection.getOutputStream();
+            dataOut.write(parameters.getBytes());
+            dataOut.flush();
+            dataOut.close();
+            
+            Object responseMessage = connection.getResponseMessage();
+            Map<String, List<String>> headerFields = connection.getHeaderFields();
+            cookies = headerFields.get("Set-Cookie");
+            
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null)
+                sb.append(line);
+            String content = sb.toString();
 
-            log.debug(String.format("Response from QuakeLive: '{0}'.", responseMessage));
+            log.debug(String.format("Response %s: %s", responseMessage, content));
+            
+            return content;
+        } catch (MalformedURLException e) {
+            log.error("URL", e);
+        } catch (ProtocolException e) {
+            log.error("Protocol", e);
+        }
+        
+        return null;
+        
+    }
 
-            Object parsed = JSONValue.parse(responseMessage);
+    public void login(String username, String password) throws LoginException, IOException {
+        try {
+            
+            String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
+            String content = httpQuery(QUAKELIVE_URL_LOGIN_STRING, parameters, false);
+            
+            load(username, password, cookies);
+            
         } catch (MalformedURLException e) {
             log.error("URL", e);
         } catch (ProtocolException e) {
             log.error("Protocol", e);
         }
 
+    }
+    
+    public void load(String username, String password, List<String> cookies) throws IOException, LoginException {
+        try {
+            
+            String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
+            String content = httpQuery(QUAKELIVE_URL_LOAD_STRING, parameters, true);
+            
+
+//            Object parsed = JSONValue.parse(responseMessage);
+//            
+//            if (parsed == null)
+//                throw new IOException("Cannot parse QuakeLive response to JSON.");
+//            
+//            JSONObject json = (JSONObject)parsed;
+        } catch (MalformedURLException e) {
+            log.error("URL", e);
+        } catch (ProtocolException e) {
+            log.error("Protocol", e);
+        }
+    }
+    
+    public static void main(String[] args) throws LoginException, IOException {
+        QuakeLiveService qls = new QuakeLiveService();
+        qls.login(QUAKELIVE_USER, QUAKELIVE_PASS);
+        
     }
 
 }
