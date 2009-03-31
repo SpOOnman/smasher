@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
+import eu.spoonman.smasher.serverinfo.ProgressInfo;
+import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.ServerInfoStatus;
 
 public class TestHelper {
 	
@@ -13,6 +17,16 @@ public class TestHelper {
 			System.out.println(pair);
 		}
 		
+	}
+	
+	public static GameInfo getGameInfo() {
+		GameInfo gameInfo = new GameInfo();
+		return gameInfo;
+	}
+	
+	public static ProgressInfo getProgressInfo() {
+		ProgressInfo progresInfo = new ProgressInfo("UNKNOWN PROGRESS INFO");
+		return progresInfo;
 	}
 	
 	public static List<PlayerInfo> getPlayerInfos() {
@@ -39,5 +53,15 @@ public class TestHelper {
 		playerInfos.add(new Pair<PlayerInfo, PlayerInfo>(new PlayerInfo( "Frank", 1, 60), new PlayerInfo( "Frank", 1, 60)));
 		
 		return playerInfos;
+	}
+	
+	public static ServerInfo getServerInfo() {
+		ServerInfo serverInfo = new ServerInfo(ServerInfoStatus.OK);
+		
+		serverInfo.setGameInfo(getGameInfo());
+		serverInfo.setProgressInfo(getProgressInfo());
+		serverInfo.setPlayerInfos(getPlayerInfos());
+		
+		return serverInfo;
 	}
 }
