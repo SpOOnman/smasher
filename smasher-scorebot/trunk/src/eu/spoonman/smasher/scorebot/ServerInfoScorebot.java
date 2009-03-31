@@ -213,13 +213,36 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 	}
 
-	private void difference() {
+	void difference() {
 		assert (previousServerInfo != null || count == 0);
 		assert (currentServerInfo != null);
+		
+		differenceStartEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
 
 		differenceGameInfo();
 		differenceProgressInfo();
 		differencePlayerInfos();
+		
+		differenceStopEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
 	}
+
+	//Needed for tests
+	ServerInfo getPreviousServerInfo() {
+		return previousServerInfo;
+	}
+
+	void setPreviousServerInfo(ServerInfo previousServerInfo) {
+		this.previousServerInfo = previousServerInfo;
+	}
+
+	ServerInfo getCurrentServerInfo() {
+		return currentServerInfo;
+	}
+
+	void setCurrentServerInfo(ServerInfo currentServerInfo) {
+		this.currentServerInfo = currentServerInfo;
+	}
+	
+	
 
 }

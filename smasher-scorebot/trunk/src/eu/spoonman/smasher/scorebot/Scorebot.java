@@ -25,6 +25,9 @@ import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 public abstract class Scorebot {
 	
+	protected GameDelegate<Scorebot> differenceStartEvent;
+	protected GameDelegate<Scorebot> differenceStopEvent;
+	
 	protected GameDelegate<GameInfo> gameInfoChange;
 	protected GameDelegate<ProgressInfo> progressInfoChange;
 	protected GameDelegate<PlayerInfo> playerInfoChange;
@@ -39,6 +42,10 @@ public abstract class Scorebot {
 	protected GameDelegate<TeamInfo> teamScoreChangedEvent;
 	
 	public Scorebot() {
+		
+		differenceStartEvent = new GameDelegate<Scorebot>();
+		differenceStopEvent = new GameDelegate<Scorebot>();
+		
 		gameInfoChange = new GameDelegate<GameInfo>();
 		progressInfoChange = new GameDelegate<ProgressInfo>();
 		playerInfoChange = new GameDelegate<PlayerInfo>();
