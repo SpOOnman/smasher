@@ -18,8 +18,12 @@
 
 package eu.spoonman.smasher.quakelive;
 
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 import javax.management.RuntimeErrorException;
@@ -27,24 +31,40 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.security.auth.login.LoginException;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+
 /**
- * @author Tomasz Kalkosiński
- * QuakeLive Service to retrieve information.
+ * @author Tomasz Kalkosiński QuakeLive Service to retrieve information.
  */
 public class QuakeLiveService {
-    
+
+    /**
+     * Logger for this class
+     */
+    private static final Logger log = Logger.getLogger(QuakeLiveService.class);
+
     private final String QUAKELIVE_URL_STRING = "http://www.quakelive.com";
-    
-    public void Login (String username, String password) throws LoginException {
-        URL url = new URL(QUAKELIVE_URL_STRING);
-        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("username", username);
-        connection.setRequestProperty("pass", password);
-        
-        String responseMessage = connection.getResponseMessage();
-        
-        JSONObject json = new JSONObject(responseMessage);
+
+    public void Login(String username, String password) throws LoginException, IOException {
+        try {
+            URL url = new URL(QUAKELIVE_URL_STRING);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("username", username);
+            connection.setRequestProperty("pass", password);
+            String responseMessage = connection.getResponseMessage();
+
+            log.debug(String.format("Response from QuakeLive: '{0}'.", responseMessage));
+
+            Object parsed = JSONValue.parse(responseMessage);
+        } catch (MalformedURLException e) {
+            log.error("URL", e);
+        } catch (ProtocolException e) {
+            log.error("Protocol", e);
+        }
+
     }
 
 }
