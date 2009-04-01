@@ -48,7 +48,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 /**
- * @author Tomasz Kalkosiński QuakeLive Service to retrieve information.
+ * @author Tomasz Kalkosiński
+ * QuakeLive Service to retrieve information. It emulates internet browser to get match and players information.
  */
 public class QuakeLiveService {
 
@@ -61,18 +62,19 @@ public class QuakeLiveService {
     private final static String QUAKELIVE_URL_LOAD_STRING = "http://www.quakelive.com/user/load";
 
     private final static String QUAKELIVE_XMPP_SERVER = "xmpp.quakelive.com";
-    private final static int QUAKELIVE_XMPP_PORT = 5222;
     private final static String QUAKELIVE_XMPP_RESOURCE = "quakelive";
+    private final static String QUAKELIVE_XMPP_USERNAME = "USERNAME";
+    private final static String QUAKELIVE_XMPP_XAID = "XAID";
 
     private final static String QUAKELIVE_USER = "tomasz2k@poczta.onet.pl";
     private final static String QUAKELIVE_PASS = "";
     private final static String QUAKELIVE_PARAMETERS = "u=%s&p=%s&r=0";
 
-    private List<String> cookies = new ArrayList<String>();
+    private String cookies = null;
 
-    private String getCookies() {
+    private void setCookies(List<String> cookieList) {
         StringBuilder sb = new StringBuilder();
-        for (String cookie : cookies) {
+        for (String cookie : cookieList) {
             String[] split = cookie.split("; ");
             for (String splitted : split) {
                 if (splitted.startsWith("path") || splitted.startsWith("HttpOnly") || splitted.startsWith("expires"))
@@ -82,12 +84,11 @@ public class QuakeLiveService {
                 sb.append("; ");
             }
         }
-
-        return sb.toString();
-
+        
+        this.cookies = sb.toString();
     }
 
-    private String httpQuery(String method, String urlString, String parameters, boolean useCookies) throws LoginException, IOException {
+    private String httpQuery(String method, String urlString, String parameters) throws LoginException, IOException {
         try {
 
             URL url = new URL(urlString);
@@ -96,7 +97,8 @@ public class QuakeLiveService {
             connection.setRequestMethod(method);
             connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 
-            if (parameters != null) {
+            //Send out parameters if given
+            if (parameters != null && parameters.length() > 0) {
                 connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
                 connection.setRequestProperty("Content-Length", new Integer(parameters.length()).toString());
 
@@ -109,14 +111,17 @@ public class QuakeLiveService {
                 dataOut.close();
             }
 
-            if (useCookies) {
-                connection.setRequestProperty("Cookie", getCookies());
+            //Use cookies if they are set.
+            if (cookies != null && cookies.length() > 0) {
+                connection.setRequestProperty("Cookie", this.cookies);
                 connection.connect();
             }
 
             Object responseMessage = connection.getResponseMessage();
             Map<String, List<String>> headerFields = connection.getHeaderFields();
-            cookies = headerFields.get("Set-Cookie");
+            List<String> cookieList = headerFields.get("Set-Cookie");
+            if (cookieList != null && cookieList.size() > 0)
+                setCookies(cookieList);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder sb = new StringBuilder();
@@ -143,7 +148,7 @@ public class QuakeLiveService {
         try {
 
             String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
-            String content = httpQuery("POST", QUAKELIVE_URL_LOGIN_STRING, parameters, false);
+            String content = httpQuery("POST", QUAKELIVE_URL_LOGIN_STRING, parameters);
 
             load();
 
@@ -158,31 +163,24 @@ public class QuakeLiveService {
     public void load() throws IOException, LoginException, XMPPException {
         try {
 
-            String content = httpQuery("POST", QUAKELIVE_URL_LOAD_STRING, null, true);
+            String content = httpQuery("POST", QUAKELIVE_URL_LOAD_STRING, null);
 
-            // "SESSION":"75f4c0f5a1b0706b1d2ffe5a57803f57","USERNAME":"QScorebot","XAID":"2c3705b73658aeefc2363fc2e7181b4b8efc81e6","STATUS":"ACTIVE","USERID":"2943560","INFO":{"PLAYER_EMAIL":"tomasz2k@poczta.onet.pl","EULA_DATE":"27-MAR-09","JOIN_DATE":"27-MAR-09","FIRSTNAME":"Maggie","IGNORED_NOTICES":"","PLAYER_CLAN":"","COUNTRY_ABBREV":"PL","BROWSER_FILTER":""},"CVARS":{"headmodel":"ranger\/default","model":"ranger\/default","name":"QScorebot","r_inBrowserMode":"9","team_headmodel":"ranger\/default","team_model":"ranger\/default","web_botskill":"easy","web_configVersion":"4"},"BINDS":{"+":"sizeup","-":"sizedown","0x00":"+zoom","1":"weapon
-            // 1","2":"weapon 2","3":"weapon 3","4":"weapon
-            // 4","5":"","6":"weapon 6","7":"","8":"weapon 8","9":"weapon
-            // 9","=":"sizeup","CTRL":"+movedown","F1":"vote
-            // yes","F11":"screenshot","F2":"vote
-            // no","F3":"readyup","MOUSE1":"+attack","MOUSE2":"+moveup","MOUSE3":"+button2","MWHEELDOWN":"weapprev","MWHEELUP":"weapnext","PAUSE":"pause","SHIFT":"weapon
-            // 5","SPACE":"weapon 6","TAB":"+scores","_":"sizedown","a":"weapon
-            // 7","alt":"+speed","c":"weapon
-            // 2","d":"+back","e":"+forward","f":"+moveright","g":"weapon
-            // 8","h":"+chat","q":"","r":"","s":"+moveleft","t":"messagemode","w":"weapon
-            // 4","y":"messagemode2","z":"weapon
-            // 3"},"QUEUED":"0","NEW_PLAYER":true}
-
-             Object parsed = JSONValue.parse(content);
+            Object parsed = JSONValue.parse(content);
                         
-             if (parsed == null)
-             throw new
-             IOException("Cannot parse QuakeLive response to JSON.");
+            if (parsed == null)
+                 throw new IOException("Cannot parse QuakeLive response to JSON.");
                         
+             //"SESSION":"75f4c0f5a1b0706b1d2ffe5a57803f57","USERNAME":"QScorebot","XAID":"2c3705b73658aeefc2363fc2e7181b4b8efc81e6","STATUS":"ACTIVE","USERID":"2943560","INFO":{"PLAYER_EMAIL":"tomasz2k@poczta.onet.pl","EULA_DATE":"27-MAR-09","JOIN_DATE":"27-MAR-09","FIRSTNAME":"Maggie","IGNORED_NOTICES":"","PLAYER_CLAN":"","COUNTRY_ABBREV":"PL","BROWSER_FILTER":""},"CVARS":{"headmodel":"ranger\/default","model":"ranger\/default","name":"QScorebot","r_inBrowserMode":"9","team_headmodel":"ranger\/default","team_model":"ranger\/default","web_botskill":"easy","web_configVersion":"4"},"BINDS":{"+":"sizeup","-":"sizedown","0x00":"+zoom","1":"weapon 1","2":"weapon 2","3":"weapon 3","4":"weapon 4","5":"","6":"weapon 6","7":"","8":"weapon 8","9":"weapon 9","=":"sizeup","CTRL":"+movedown","F1":"vote yes","F11":"screenshot","F2":"vote no","F3":"readyup","MOUSE1":"+attack","MOUSE2":"+moveup","MOUSE3":"+button2","MWHEELDOWN":"weapprev","MWHEELUP":"weapnext","PAUSE":"pause","SHIFT":"weapon 5","SPACE":"weapon 6","TAB":"+scores","_":"sizedown","a":"weapon 7","alt":"+speed","c":"weapon 2","d":"+back","e":"+forward","f":"+moveright","g":"weapon 8","h":"+chat","q":"","r":"","s":"+moveleft","t":"messagemode","w":"weapon 4","y":"messagemode2","z":"weapon 3"},"QUEUED":"0","NEW_PLAYER":true
              JSONObject json = (JSONObject)parsed;
              
-             xmppLogin(json.get("USERNAME").toString(), json.get("XAID").toString());
-            //"SESSION":"75f4c0f5a1b0706b1d2ffe5a57803f57","USERNAME":"QScorebot","XAID":"2c3705b73658aeefc2363fc2e7181b4b8efc81e6","STATUS":"ACTIVE","USERID":"2943560","INFO":{"PLAYER_EMAIL":"tomasz2k@poczta.onet.pl","EULA_DATE":"27-MAR-09","JOIN_DATE":"27-MAR-09","FIRSTNAME":"Maggie","IGNORED_NOTICES":"","PLAYER_CLAN":"","COUNTRY_ABBREV":"PL","BROWSER_FILTER":""},"CVARS":{"headmodel":"ranger\/default","model":"ranger\/default","name":"QScorebot","r_inBrowserMode":"9","team_headmodel":"ranger\/default","team_model":"ranger\/default","web_botskill":"easy","web_configVersion":"4"},"BINDS":{"+":"sizeup","-":"sizedown","0x00":"+zoom","1":"weapon 1","2":"weapon 2","3":"weapon 3","4":"weapon 4","5":"","6":"weapon 6","7":"","8":"weapon 8","9":"weapon 9","=":"sizeup","CTRL":"+movedown","F1":"vote yes","F11":"screenshot","F2":"vote no","F3":"readyup","MOUSE1":"+attack","MOUSE2":"+moveup","MOUSE3":"+button2","MWHEELDOWN":"weapprev","MWHEELUP":"weapnext","PAUSE":"pause","SHIFT":"weapon 5","SPACE":"weapon 6","TAB":"+scores","_":"sizedown","a":"weapon 7","alt":"+speed","c":"weapon 2","d":"+back","e":"+forward","f":"+moveright","g":"weapon 8","h":"+chat","q":"","r":"","s":"+moveleft","t":"messagemode","w":"weapon 4","y":"messagemode2","z":"weapon 3"},"QUEUED":"0","NEW_PLAYER":true
+             Object username = json.get(QUAKELIVE_XMPP_USERNAME);
+             Object xaid = json.get(QUAKELIVE_XMPP_XAID);
+             
+             if (username == null || xaid == null)
+                 throw new LoginException(String.format("Cannot login to XMPP - field %s or %s not found in response.", QUAKELIVE_XMPP_USERNAME, QUAKELIVE_XMPP_XAID));
+             
+             xmppLogin(username.toString(), xaid.toString());
+             
         } catch (MalformedURLException e) {
             log.error("URL", e);
         } catch (ProtocolException e) {
@@ -191,6 +189,7 @@ public class QuakeLiveService {
     }
 
     public void xmppLogin(String user, String xaid) throws XMPPException {
+        XMPPConnection.DEBUG_ENABLED = true;
         XMPPConnection connection = new XMPPConnection(QUAKELIVE_XMPP_SERVER);
         connection.connect();
         connection.login(user, xaid, QUAKELIVE_XMPP_RESOURCE);
