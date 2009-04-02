@@ -18,22 +18,29 @@
 
 package eu.spoonman.smasher.serverinfo.reader;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 
 /**
- * Reader to read from bytes array to serverinfo.
- * 
  * @author Tomasz Kalkosiński
- * 
+ *
  */
-public interface Reader {
+public class JSONReader implements Reader {
 
-    /**
-     * Parse server data into serverinfo field map and players map.
-     * 
-     * @param serverInfo
-     * @param bytes
-     */
-    public void readData(ServerInfo serverInfo, byte[] bytes) throws ReaderException;
+    @Override
+    public void readData(ServerInfo serverInfo, byte[] bytes) throws ReaderException {
+        
+        String data = new String(bytes);
+        
+        Object object = JSONValue.parse(data);
+        
+        if (object == null)
+            throw new ReaderException("Cannot read JSON response.");
+        
+        serverInfo.setJson((JSONObject)object);
+    }
+    
 
 }

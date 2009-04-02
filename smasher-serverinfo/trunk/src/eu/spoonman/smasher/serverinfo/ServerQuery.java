@@ -33,6 +33,7 @@ import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
+import eu.spoonman.smasher.serverinfo.reader.ReaderException;
 
 /**
  * Main class for querying server with all logic to read and parse. After first
@@ -137,6 +138,8 @@ public class ServerQuery {
             serverInfo.setStatus(ServerInfoStatus.OK);
 
         } catch (NotValidResponseException e) {
+            serverInfo.setStatus(ServerInfoStatus.NOT_VALID_RESPONSE);
+        } catch (ReaderException e) {
             serverInfo.setStatus(ServerInfoStatus.NOT_VALID_RESPONSE);
         }
 

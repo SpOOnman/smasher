@@ -69,6 +69,8 @@ public class QuakeLiveService {
     private final static String QUAKELIVE_USER = "tomasz2k@poczta.onet.pl";
     private final static String QUAKELIVE_PASS = "";
     private final static String QUAKELIVE_PARAMETERS = "u=%s&p=%s&r=0";
+    
+    //http://www.quakelive.com/#profile/matches/Napastnik/5793181/CTF
 
     private String cookies = null;
 

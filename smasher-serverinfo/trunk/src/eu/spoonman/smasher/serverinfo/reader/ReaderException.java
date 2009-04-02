@@ -18,22 +18,47 @@
 
 package eu.spoonman.smasher.serverinfo.reader;
 
-import eu.spoonman.smasher.serverinfo.ServerInfo;
-
 /**
- * Reader to read from bytes array to serverinfo.
- * 
  * @author Tomasz Kalkosiński
- * 
+ *
  */
-public interface Reader {
+public class ReaderException extends Exception {
 
     /**
-     * Parse server data into serverinfo field map and players map.
      * 
-     * @param serverInfo
-     * @param bytes
      */
-    public void readData(ServerInfo serverInfo, byte[] bytes) throws ReaderException;
+    public ReaderException() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+    /**
+     * @param arg0
+     * @param arg1
+     */
+    public ReaderException(String arg0, Throwable arg1) {
+        super(arg0, arg1);
+        // TODO Auto-generated constructor stub
+    }
+
+    /**
+     * @param arg0
+     */
+    public ReaderException(String arg0) {
+        super(arg0);
+        // TODO Auto-generated constructor stub
+    }
+
+    /**
+     * @param arg0
+     */
+    public ReaderException(Throwable arg0) {
+        super(arg0);
+        // TODO Auto-generated constructor stub
+    }
+    
+    
+    
+    
 
 }
