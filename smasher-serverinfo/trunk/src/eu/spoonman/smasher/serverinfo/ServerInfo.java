@@ -23,6 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+
 public class ServerInfo {
 	
 	private ServerInfoStatus status;
@@ -33,10 +35,13 @@ public class ServerInfo {
 	
 	private List<PlayerInfo> playerInfos;
 	private Map<TeamKey, TeamInfo> teamInfos;
-    private Map<String, String> namedAttributes;
-    
+	
     private ProgressInfo progressInfo;
     private GameInfo gameInfo;
+    
+    //Raw readed datas
+    private Map<String, String> namedAttributes;
+    private JSONObject json;
     
     public ServerInfo(ServerInfoStatus status) {
         this();
@@ -212,4 +217,14 @@ public class ServerInfo {
     public void setModVersion(Version modVersion) {
         this.modVersion = modVersion;
     }
+
+    public JSONObject getJson() {
+        return json;
+    }
+
+    public void setJson(JSONObject json) {
+        this.json = json;
+    }
+    
+    
 }
