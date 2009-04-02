@@ -18,10 +18,16 @@
 
 package eu.spoonman.smasher.serverinfo.parser.playerinfo;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.TeamKey;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 
@@ -30,6 +36,18 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  * 
  */
 public class QuakeLivePlayerInfoParser implements ServerInfoParser {
+    
+    private final String JSONRedKey = "RED_SCOREBOARD";
+    private final String JSONBlueKey = "BLUE_SCOREBOARD";
+    
+    private final String JSONPlayerName = "PLAYER_NICK";
+    private final String JSONPlayerScore = "SCORE";
+    private final String JSONPlayerTeam = "TEAM";
+    
+    private final String JSONQuittersValue = "QUITTERS";
+    private final String JSONTeamRedValue = "Red";
+    private final String JSONTeamBlueValue = "Blue";
+    
     /**
      * Logger for this class
      */
@@ -37,16 +55,31 @@ public class QuakeLivePlayerInfoParser implements ServerInfoParser {
     
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
-        for (PlayerInfo playerInfo : serverInfo.getPlayerInfos()) {
+        
+        if (serverInfo.getJson() == null)
+            throw new ParserException("Cannot parse players - no JSON object.");
+        
+        JSONArray array = (JSONArray) serverInfo.getJson().get(JSONBlueKey);
+        
+        for (Iterator<JSONObject> iterator = array.iterator(); iterator.hasNext();) {
+            PlayerInfo playerInfo = new PlayerInfo();
+            playerInfo.setNamedAttributes(iterator.next());
             
-            if (log.isDebugEnabled())
-                log.debug(String.format(ServerInfoParser.fieldLogFormat, "fields", playerInfo.getRawAttributes()));
+            playerInfo.setName((String) playerInfo.getNamedAttributes().get(JSONPlayerName));
+            playerInfo.setScore(((Long) playerInfo.getNamedAttributes().get(JSONPlayerScore)).intValue());
             
-            playerInfo.setName(playerInfo.getRawAttributes().get(2));
-            playerInfo.setScore(Integer.parseInt(playerInfo.getRawAttributes().get(0)));
-            playerInfo.setPing(Integer.parseInt(playerInfo.getRawAttributes().get(1)));
-            playerInfo.getNamedAttributes().put("skill", playerInfo.getRawAttributes().get(3));
+            String teamKey = (String)playerInfo.getNamedAttributes().get(JSONPlayerTeam);
+            
+            if (teamKey != null && teamKey.equals(JSONTeamRedValue))
+                playerInfo.setTeamKey(TeamKey.RED_TEAM);
+            else if (teamKey != null && teamKey.equals(JSONTeamBlueValue))
+                playerInfo.setTeamKey(TeamKey.BLUE_TEAM);
+            
+            //Don't add QUITTERS
+            if (playerInfo.getName().equals(JSONQuittersValue))
+                continue;
+            
+            serverInfo.getPlayerInfos().add(playerInfo);
         }
-            
     }
 }

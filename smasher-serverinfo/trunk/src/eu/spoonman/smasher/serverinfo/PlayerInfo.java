@@ -29,13 +29,13 @@ public class PlayerInfo
     private int score;
     private int ping;
     private ArrayList<String> rawAttributes;
-    private Map<String, String> namedAttributes;
+    private Map<String, Object> namedAttributes;
     private EnumSet<PlayerFlags> playerFlags;
     private TeamKey teamKey;
     
     public PlayerInfo() {
         rawAttributes = new ArrayList<String>();
-        namedAttributes = new HashMap<String, String>();
+        namedAttributes = new HashMap<String, Object>();
         playerFlags = EnumSet.noneOf(PlayerFlags.class);
     }
     
@@ -206,14 +206,14 @@ public class PlayerInfo
     /**
      * @return the namedAttributes
      */
-    public Map<String, String> getNamedAttributes() {
+    public Map<String, Object> getNamedAttributes() {
         return namedAttributes;
     }
 
     /**
      * @param namedAttributes the namedAttributes to set
      */
-    public void setNamedAttributes(Map<String, String> namedAttributes) {
+    public void setNamedAttributes(Map<String, Object> namedAttributes) {
         this.namedAttributes = namedAttributes;
     }
     
