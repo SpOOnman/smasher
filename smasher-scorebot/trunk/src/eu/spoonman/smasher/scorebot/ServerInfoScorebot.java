@@ -227,7 +227,7 @@ public class ServerInfoScorebot extends Scorebot {
 	}
 
 	//Needed for tests
-	ServerInfo getPreviousServerInfo() {
+	public ServerInfo getPreviousServerInfo() {
 		return previousServerInfo;
 	}
 
@@ -235,7 +235,7 @@ public class ServerInfoScorebot extends Scorebot {
 		this.previousServerInfo = previousServerInfo;
 	}
 
-	ServerInfo getCurrentServerInfo() {
+	public ServerInfo getCurrentServerInfo() {
 		return currentServerInfo;
 	}
 
