@@ -45,7 +45,7 @@ public class ConsoleFormatter {
 
 	private final ConsoleColors colors;
 
-	private boolean formatMainLine;
+	private Boolean formatMainLine;
 	private List<String> mainLines;
 	private List<String> jointLines;
 	private List<String> exclusiveLines;
@@ -72,6 +72,26 @@ public class ConsoleFormatter {
 	}
 
 	public void format(OutputStyle style, LazyFormat lazyFormatString) {
+		switch (style) {
+		case DONT_SHOW:
+			return;
+		case TRIGGER_MAIN_LINE:
+			synchronized (formatMainLine) {
+				formatMainLine = true;
+			}
+		case EXCLUSIVE_NEW_LINE:
+			synchr
+			
+			
+			
+			break;
+
+		default:
+			break;
+		}
+		switch(style) {
+		
+		}
 		if (style == OutputStyle.DONT_SHOW)
 			return;
 
