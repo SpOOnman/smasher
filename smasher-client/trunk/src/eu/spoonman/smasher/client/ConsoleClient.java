@@ -18,26 +18,17 @@
 
 package eu.spoonman.smasher.client;
 
-import eu.spoonman.smasher.common.Observer;
-import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
-import eu.spoonman.smasher.serverinfo.GameInfo;
-import eu.spoonman.smasher.serverinfo.PlayerInfo;
 
-public class ConsoleClient implements Observer<Pair<GameInfo, GameInfo>> {
+public class ConsoleClient extends Client {
 
 	public static void main(String[] args) throws InterruptedException {
 
 		final ConsoleClient client = new ConsoleClient();
 
 		ServerInfoScorebot scorebot = new ServerInfoScorebot();
-		scorebot.getGameInfoChange().register(client);
-		scorebot.getPlayerInfoChange().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(Pair<PlayerInfo, PlayerInfo> pair) {
-				client.onPlayerChange(pair);
-			};
-		});
-
+		client.register(scorebot);
+		
 		scorebot.start();
 
 		synchronized (client) {
@@ -45,24 +36,6 @@ public class ConsoleClient implements Observer<Pair<GameInfo, GameInfo>> {
 		}
 		
 		scorebot.stop();
-	}
-
-	/**
-	 * @param pair
-	 */
-	protected void onPlayerChange(Pair<PlayerInfo, PlayerInfo> pair) {
-		System.out.println("Zmiana " + pair);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see eu.spoonman.smasher.common.Observer#notify(java.lang.Object)
-	 */
-	@Override
-	public void notify(Pair<GameInfo, GameInfo> t) {
-		System.out.println("Zmiana " + t);
-
 	}
 
 }
