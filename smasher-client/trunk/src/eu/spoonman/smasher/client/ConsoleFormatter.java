@@ -17,25 +17,78 @@
  */
 package eu.spoonman.smasher.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.output.OutputStyle;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 
 /**
- * @author Tomasz Kalkosiński
  * Default console formatter.
- *
+ * 
+ * @author Tomasz Kalkosiński
  */
 public class ConsoleFormatter {
-	
+
+	/**
+	 * Interface needed for lazy evaluation.
+	 * 
+	 * @author Tomasz Kalkosiński
+	 */
+	private interface LazyFormat {
+		public String format();
+	}
+
+	private final String PLAYER_NAME_CHANGE = "Player %s changed name to %s";
+
 	private final ConsoleColors colors;
-	
+
+	private boolean formatMainLine;
+	private List<String> mainLines;
+	private List<String> jointLines;
+	private List<String> exclusiveLines;
+
 	/**
 	 * @param colors
 	 */
 	public ConsoleFormatter(ConsoleColors colors) {
 		this.colors = colors;
+
+		formatMainLine = false;
+
+		mainLines = new ArrayList<String>();
+		jointLines = new ArrayList<String>();
+		exclusiveLines = new ArrayList<String>();
 	}
-	
+
+	private void clear() {
+		formatMainLine = false;
+
+		mainLines.clear();
+		jointLines.clear();
+		exclusiveLines.clear();
+	}
+
+	public void format(OutputStyle style, LazyFormat lazyFormatString) {
+		if (style == OutputStyle.DONT_SHOW)
+			return;
+
+		lazyFormatString.format();
+	}
+
+	public void formatPlayerNameChange(final Pair<PlayerInfo, PlayerInfo> pair, OutputStyle style) {
+		format(style, new LazyFormat() {
+
+			@Override
+			public String format() {
+				return String.format(PLAYER_NAME_CHANGE, pair.getFirst().getName(), pair.getSecond()
+						.getName());
+			}
+		});
+	}
+
 	public String formatMatchLine(ServerInfoScorebot scorebot) {
 		String format = "Game %s. %s%s %s%d%s vs %s%d%s";
 		return String.format(format, "A1");
@@ -43,10 +96,11 @@ public class ConsoleFormatter {
 
 	public String formatShort(PlayerInfo playerInfo) {
 		return String.format("%s (%d)", playerInfo.getName(), playerInfo.getScore());
-		
+
 	}
-	
+
 	public String formatLong(PlayerInfo playerInfo) {
-		return String.format("%s (%d) P%d", playerInfo.getName(), playerInfo.getScore(), playerInfo.getPing());
-	}	
+		return String
+				.format("%s (%d) P%d", playerInfo.getName(), playerInfo.getScore(), playerInfo.getPing());
+	}
 }

@@ -18,9 +18,15 @@
 
 package eu.spoonman.smasher.client;
 
+import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
+import eu.spoonman.smasher.serverinfo.PlayerInfo;
 
 public class ConsoleClient extends Client {
+	
+	private OutputConfiguration outputConfiguration;
+	private ConsoleFormatter consoleFormatter;
 
 	public static void main(String[] args) throws InterruptedException {
 
@@ -36,6 +42,14 @@ public class ConsoleClient extends Client {
 		}
 		
 		scorebot.stop();
+	}
+	
+	/* (non-Javadoc)
+	 * @see eu.spoonman.smasher.client.Client#onPlayerScoreChangeEvent(eu.spoonman.smasher.common.Pair)
+	 */
+	@Override
+	protected void onPlayerScoreChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+		super.onPlayerScoreChangeEvent(pair);
 	}
 
 }
