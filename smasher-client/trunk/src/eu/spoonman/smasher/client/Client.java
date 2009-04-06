@@ -24,6 +24,8 @@ import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
+import eu.spoonman.smasher.serverinfo.ProgressInfo;
+import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 /**
  * Default abstract implementation of scorebot subscription.
@@ -43,6 +45,11 @@ public abstract class Client {
 	protected void register(Scorebot scorebot) {
 		registerOnGameInfoChange(scorebot);
 		
+		registerOnProgressInfoChange(scorebot);
+		
+		registerOnTeamNameChangeEvent(scorebot);
+		registerOnTeamScoreChangeEvent(scorebot);
+		
 		registerOnPlayerConnectedEvent(scorebot);
 		registerOnPlayerDisconnectedEvent(scorebot);
 		registerOnPlayerNameChangeEvent(scorebot);
@@ -57,53 +64,91 @@ public abstract class Client {
 
 	protected void registerOnGameInfoChange(Scorebot scorebot) {
 		scorebot.getGameInfoChange().register(new Observer<Pair<GameInfo, GameInfo>>() {
-			public void notify(Pair<GameInfo, GameInfo> t) {
-				onGameInfoChange(t);
+			public void notify(Pair<GameInfo, GameInfo> pair) {
+				onGameInfoChange(pair);
 			}
+		});
+	}
+	
+	protected void registerOnProgressInfoChange(Scorebot scorebot) {
+		scorebot.getProgressInfoChange().register(new Observer<Pair<ProgressInfo, ProgressInfo>>() {
+			public void notify(Pair<ProgressInfo, ProgressInfo> pair) {
+				onProgressInfoChange(pair);
+			}
+		});
+	}
+	
+	protected void registerOnTeamNameChangeEvent(Scorebot scorebot) {
+		scorebot.getTeamNameChangedEvent().register(new Observer<Pair<TeamInfo,TeamInfo>>() {
+			public void notify(eu.spoonman.smasher.common.Pair<TeamInfo,TeamInfo> pair) {
+				onTeamNameChangeEvent(pair);
+				
+			};
+		});
+	}
+	
+	protected void registerOnTeamScoreChangeEvent(Scorebot scorebot) {
+		scorebot.getTeamScoreChangedEvent().register(new Observer<Pair<TeamInfo,TeamInfo>>() {
+			public void notify(eu.spoonman.smasher.common.Pair<TeamInfo,TeamInfo> pair) {
+				onTeamScoreChangeEvent(pair);
+				
+			};
 		});
 	}
 
 	protected void registerOnPlayerConnectedEvent(Scorebot scorebot) {
 		scorebot.getPlayerConnectedEvent().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> t) {
-				onPlayerConnectedEvent(t);
+			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
+				onPlayerConnectedEvent(pair);
 			}
 		});
 	}
 	
 	protected void registerOnPlayerDisconnectedEvent(Scorebot scorebot) {
 		scorebot.getPlayerDisconnectedEvent().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> t) {
-				onPlayerDisconnectedEvent(t);
+			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
+				onPlayerDisconnectedEvent(pair);
 			}
 		});
 	}
 	
 	protected void registerOnPlayerNameChangeEvent(Scorebot scorebot) {
 		scorebot.getPlayerNameChangedEvent().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> t) {
-				onPlayerNameChangeEvent(t);
+			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
+				onPlayerNameChangeEvent(pair);
 			}
 		});
 	}
 	
 	protected void registerOnPlayerPingChangeEvent(Scorebot scorebot) {
 		scorebot.getPlayerPingChangedEvent().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> t) {
-				onPlayerPingChangeEvent(t);
+			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
+				onPlayerPingChangeEvent(pair);
 			}
 		});
 	}
 	
 	protected void registerOnPlayerScoreChangeEvent(Scorebot scorebot) {
 		scorebot.getPlayerScoreChangedEvent().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> t) {
-				onPlayerScoreChangeEvent(t);
+			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
+				onPlayerScoreChangeEvent(pair);
 			}
 		});
 	}
 	
 	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
+		logEvent(pair);
+	}
+	
+	protected void onProgressInfoChange(Pair<ProgressInfo, ProgressInfo> pair) {
+		logEvent(pair);
+	}
+	
+	protected void onTeamNameChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
+		logEvent(pair);
+	}
+	
+	protected void onTeamScoreChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
 		logEvent(pair);
 	}
 
