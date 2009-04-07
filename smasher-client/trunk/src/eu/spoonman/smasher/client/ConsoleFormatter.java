@@ -21,9 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.output.OutputStyle;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
+import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 /**
  * Default console formatter.
@@ -41,9 +43,16 @@ public class ConsoleFormatter {
 		public String format();
 	}
 
+	private final String PLAYER_CONNECTED_EVENT = "Player %s connected";
+	private final String PLAYER_DISCONNECTED_EVENT = "Player %s disconnected";
 	private final String PLAYER_NAME_CHANGE = "Player %s changed name to %s";
+	private final String PLAYER_SCORE_CHANGE = "Player %s scores to %d";
+	
+	private final String TEAM_NAME_CHANGE = "Team %s renames to %s";
+	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
 
 	private final ConsoleColors colors;
+	private final OutputConfiguration outputConfiguration;
 
 	private Boolean formatMainLine;
 	private List<String> mainLines;
@@ -53,8 +62,9 @@ public class ConsoleFormatter {
 	/**
 	 * @param colors
 	 */
-	public ConsoleFormatter(ConsoleColors colors) {
+	public ConsoleFormatter(ConsoleColors colors, OutputConfiguration outputConfiguration) {
 		this.colors = colors;
+		this.outputConfiguration = outputConfiguration;
 
 		formatMainLine = false;
 
@@ -75,36 +85,92 @@ public class ConsoleFormatter {
 		switch (style) {
 		case DONT_SHOW:
 			return;
+			
 		case TRIGGER_MAIN_LINE:
 			synchronized (formatMainLine) {
 				formatMainLine = true;
 			}
+			
 		case EXCLUSIVE_NEW_LINE:
-			synchr
+			synchronized (exclusiveLines) {
+				exclusiveLines.add(lazyFormatString.format());
+			}
 			
-			
-			
-			break;
+		case JOINT_NEW_LINE:
+			synchronized (jointLines) {
+				jointLines.add(lazyFormatString.format());
+			}
+
+		case MAIN_LINE:
+			synchronized (mainLines) {
+				mainLines.add(lazyFormatString.format());
+			}
 
 		default:
-			break;
+			throw new RuntimeException("Enum value " + style + " not found.");
 		}
-		switch(style) {
-		
-		}
-		if (style == OutputStyle.DONT_SHOW)
-			return;
-
-		lazyFormatString.format();
 	}
 
-	public void formatPlayerNameChange(final Pair<PlayerInfo, PlayerInfo> pair, OutputStyle style) {
-		format(style, new LazyFormat() {
+	public void formatPlayerConnectedEvent(final Pair<PlayerInfo, PlayerInfo> pair) {
+		format(outputConfiguration.getShowEveryPlayerConnectEvent(), new LazyFormat() {
+			
+			@Override
+			public String format() {
+				return String.format(PLAYER_CONNECTED_EVENT, pair.getSecond().getName());
+			}
+		});
+	}
+	
+	public void formatPlayerDisconnectedEvent(final Pair<PlayerInfo, PlayerInfo> pair) {
+		format(outputConfiguration.getShowEveryPlayerDisconnectEvent(), new LazyFormat() {
+			
+			@Override
+			public String format() {
+				return String.format(PLAYER_DISCONNECTED_EVENT, pair.getFirst().getName());
+			}
+		});
+	}
+	
+	public void formatPlayerNameChange(final Pair<PlayerInfo, PlayerInfo> pair) {
+		format(outputConfiguration.getShowEveryPlayerNameChange(), new LazyFormat() {
 
 			@Override
 			public String format() {
 				return String.format(PLAYER_NAME_CHANGE, pair.getFirst().getName(), pair.getSecond()
 						.getName());
+			}
+		});
+	}
+	
+	public void formatPlayerScoreChange(final Pair<PlayerInfo, PlayerInfo> pair) {
+		format(outputConfiguration.getShowEveryPlayerScoreChange(), new LazyFormat() {
+			
+			@Override
+			public String format() {
+				return String.format(PLAYER_SCORE_CHANGE, pair.getSecond().getName(), pair.getSecond()
+						.getScore());
+			}
+		});
+	}
+	
+	public void formatTeamNameChange(final Pair<TeamInfo, TeamInfo> pair) {
+		format(outputConfiguration.getShowEveryPlayerNameChange(), new LazyFormat() {
+			
+			@Override
+			public String format() {
+				return String.format(TEAM_NAME_CHANGE, pair.getFirst().getName(), pair.getSecond()
+						.getName());
+			}
+		});
+	}
+	
+	public void formatTeamScoreChange(final Pair<TeamInfo, TeamInfo> pair) {
+		format(outputConfiguration.getShowEveryTeamScoreChange(), new LazyFormat() {
+			
+			@Override
+			public String format() {
+				return String.format(TEAM_SCORE_CHANGE, pair.getSecond().getName(), pair.getSecond()
+						.getScore());
 			}
 		});
 	}

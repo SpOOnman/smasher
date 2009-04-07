@@ -30,6 +30,25 @@ public class OutputConfiguration {
 	private OutputStyle showEveryPlayerDisconnectEvent = OutputStyle.JOINT_NEW_LINE;
 	
 	private OutputStyle showEveryTeamScoreChange = OutputStyle.TRIGGER_MAIN_LINE;
-	
 
+	public OutputStyle getShowEveryPlayerScoreChange() {
+		return showEveryPlayerScoreChange;
+	}
+
+	public OutputStyle getShowEveryPlayerNameChange() {
+		return showEveryPlayerNameChange;
+	}
+
+	public OutputStyle getShowEveryPlayerConnectEvent() {
+		return showEveryPlayerConnectEvent;
+	}
+
+	public OutputStyle getShowEveryPlayerDisconnectEvent() {
+		return showEveryPlayerDisconnectEvent;
+	}
+
+	public OutputStyle getShowEveryTeamScoreChange() {
+		return showEveryTeamScoreChange;
+	}
+	
 }

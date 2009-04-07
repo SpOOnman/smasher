@@ -25,7 +25,7 @@ import eu.spoonman.smasher.serverinfo.PlayerInfo;
 
 public class ConsoleClient extends Client {
 	
-	private OutputConfiguration outputConfiguration;
+
 	private ConsoleFormatter consoleFormatter;
 
 	public static void main(String[] args) throws InterruptedException {
