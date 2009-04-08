@@ -21,7 +21,10 @@ package eu.spoonman.smasher.client;
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
+import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
+import eu.spoonman.smasher.serverinfo.ProgressInfo;
+import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 public class ConsoleClient extends Client {
 	
@@ -43,13 +46,58 @@ public class ConsoleClient extends Client {
 		
 		scorebot.stop();
 	}
-	
-	/* (non-Javadoc)
-	 * @see eu.spoonman.smasher.client.Client#onPlayerScoreChangeEvent(eu.spoonman.smasher.common.Pair)
-	 */
+
+	@Override
+	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
+		super.onGameInfoChange(pair);
+	}
+
+	@Override
+	protected void onPlayerConnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+		// TODO Auto-generated method stub
+		super.onPlayerConnectedEvent(pair);
+	}
+
+	@Override
+	protected void onPlayerDisconnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+		// TODO Auto-generated method stub
+		super.onPlayerDisconnectedEvent(pair);
+	}
+
+	@Override
+	protected void onPlayerNameChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+		// TODO Auto-generated method stub
+		super.onPlayerNameChangeEvent(pair);
+	}
+
+	@Override
+	protected void onPlayerPingChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+		// TODO Auto-generated method stub
+		super.onPlayerPingChangeEvent(pair);
+	}
+
 	@Override
 	protected void onPlayerScoreChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+		// TODO Auto-generated method stub
 		super.onPlayerScoreChangeEvent(pair);
+	}
+
+	@Override
+	protected void onProgressInfoChange(Pair<ProgressInfo, ProgressInfo> pair) {
+		// TODO Auto-generated method stub
+		super.onProgressInfoChange(pair);
+	}
+
+	@Override
+	protected void onTeamNameChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
+		// TODO Auto-generated method stub
+		super.onTeamNameChangeEvent(pair);
+	}
+
+	@Override
+	protected void onTeamScoreChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
+		// TODO Auto-generated method stub
+		super.onTeamScoreChangeEvent(pair);
 	}
 
 }
