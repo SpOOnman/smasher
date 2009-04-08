@@ -81,6 +81,16 @@ public abstract class Client {
 		scorebot.getPlayerNameChangedEvent().unregister(playerNameChangeEventObserver);
 		scorebot.getPlayerPingChangedEvent().unregister(playerPingChangeEventObserver);
 		scorebot.getPlayerScoreChangedEvent().unregister(playerScoreChangeEventObserver);
+		
+		gameInfoChangeObserver = null;
+		progressInfoChangeObserver = null;
+		teamNameChangeEventObserver = null;
+		teamScoreChangeEventObserver = null;
+		playerConnectedEventObserver = null;
+		playerDisconnectedEventObserver = null;
+		playerNameChangeEventObserver = null;
+		playerPingChangeEventObserver = null;
+		playerScoreChangeEventObserver = null;
 	}
 
 	protected <T> void logEvent(Pair<T, T> pair) {
