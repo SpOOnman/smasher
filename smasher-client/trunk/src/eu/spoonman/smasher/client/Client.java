@@ -35,6 +35,16 @@ import eu.spoonman.smasher.serverinfo.TeamInfo;
  */
 public abstract class Client {
 
+	private Observer<Pair<GameInfo, GameInfo>> gameInfoChangeObserver;
+	private Observer<Pair<ProgressInfo, ProgressInfo>> progressInfoChangeObserver;
+	private Observer<Pair<TeamInfo, TeamInfo>> teamNameChangeEventObserver;
+	private Observer<Pair<TeamInfo, TeamInfo>> teamScoreChangeEventObserver;
+	private Observer<Pair<PlayerInfo, PlayerInfo>> playerConnectedEventObserver;
+	private Observer<Pair<PlayerInfo, PlayerInfo>> playerDisconnectedEventObserver;
+	private Observer<Pair<PlayerInfo, PlayerInfo>> playerNameChangeEventObserver;
+	private Observer<Pair<PlayerInfo, PlayerInfo>> playerPingChangeEventObserver;
+	private Observer<Pair<PlayerInfo, PlayerInfo>> playerScoreChangeEventObserver;
+
 	/**
 	 * Logger for this class
 	 */
@@ -44,12 +54,12 @@ public abstract class Client {
 
 	protected void register(Scorebot scorebot) {
 		registerOnGameInfoChange(scorebot);
-		
+
 		registerOnProgressInfoChange(scorebot);
-		
+
 		registerOnTeamNameChangeEvent(scorebot);
 		registerOnTeamScoreChangeEvent(scorebot);
-		
+
 		registerOnPlayerConnectedEvent(scorebot);
 		registerOnPlayerDisconnectedEvent(scorebot);
 		registerOnPlayerNameChangeEvent(scorebot);
@@ -57,97 +67,128 @@ public abstract class Client {
 		registerOnPlayerScoreChangeEvent(scorebot);
 
 	}
+	
+	protected void unregister(Scorebot scorebot) {
+		scorebot.getGameInfoChange().unregister(gameInfoChangeObserver);
+		
+		scorebot.getProgressInfoChange().unregister(progressInfoChangeObserver);
+		
+		scorebot.getTeamNameChangedEvent().unregister(teamNameChangeEventObserver);
+		scorebot.getTeamScoreChangedEvent().unregister(teamScoreChangeEventObserver);
+		
+		scorebot.getPlayerConnectedEvent().unregister(playerConnectedEventObserver);
+		scorebot.getPlayerDisconnectedEvent().unregister(playerDisconnectedEventObserver);
+		scorebot.getPlayerNameChangedEvent().unregister(playerNameChangeEventObserver);
+		scorebot.getPlayerPingChangedEvent().unregister(playerPingChangeEventObserver);
+		scorebot.getPlayerScoreChangedEvent().unregister(playerScoreChangeEventObserver);
+	}
 
 	protected <T> void logEvent(Pair<T, T> pair) {
 		log.debug(String.format(loggingPattern, pair.getFirst(), pair.getSecond()));
 	}
 
 	protected void registerOnGameInfoChange(Scorebot scorebot) {
-		scorebot.getGameInfoChange().register(new Observer<Pair<GameInfo, GameInfo>>() {
+		gameInfoChangeObserver = new Observer<Pair<GameInfo, GameInfo>>() {
 			public void notify(Pair<GameInfo, GameInfo> pair) {
 				onGameInfoChange(pair);
 			}
-		});
+		};
+
+		scorebot.getGameInfoChange().register(gameInfoChangeObserver);
 	}
-	
+
 	protected void registerOnProgressInfoChange(Scorebot scorebot) {
-		scorebot.getProgressInfoChange().register(new Observer<Pair<ProgressInfo, ProgressInfo>>() {
+		progressInfoChangeObserver = new Observer<Pair<ProgressInfo, ProgressInfo>>() {
 			public void notify(Pair<ProgressInfo, ProgressInfo> pair) {
 				onProgressInfoChange(pair);
 			}
-		});
+		};
+		scorebot.getProgressInfoChange().register(progressInfoChangeObserver);
 	}
-	
+
 	protected void registerOnTeamNameChangeEvent(Scorebot scorebot) {
-		scorebot.getTeamNameChangedEvent().register(new Observer<Pair<TeamInfo,TeamInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<TeamInfo,TeamInfo> pair) {
+		teamNameChangeEventObserver = new Observer<Pair<TeamInfo, TeamInfo>>() {
+			public void notify(eu.spoonman.smasher.common.Pair<TeamInfo, TeamInfo> pair) {
 				onTeamNameChangeEvent(pair);
-				
+
 			};
-		});
+		};
+
+		scorebot.getTeamNameChangedEvent().register(teamNameChangeEventObserver);
 	}
-	
+
 	protected void registerOnTeamScoreChangeEvent(Scorebot scorebot) {
-		scorebot.getTeamScoreChangedEvent().register(new Observer<Pair<TeamInfo,TeamInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<TeamInfo,TeamInfo> pair) {
+		teamScoreChangeEventObserver = new Observer<Pair<TeamInfo, TeamInfo>>() {
+			public void notify(eu.spoonman.smasher.common.Pair<TeamInfo, TeamInfo> pair) {
 				onTeamScoreChangeEvent(pair);
-				
+
 			};
-		});
+		};
+		scorebot.getTeamScoreChangedEvent().register(teamScoreChangeEventObserver);
 	}
 
 	protected void registerOnPlayerConnectedEvent(Scorebot scorebot) {
-		scorebot.getPlayerConnectedEvent().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
+		playerConnectedEventObserver = new Observer<Pair<PlayerInfo, PlayerInfo>>() {
 			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
 				onPlayerConnectedEvent(pair);
 			}
-		});
+		};
+
+		scorebot.getPlayerConnectedEvent().register(playerConnectedEventObserver);
 	}
-	
+
 	protected void registerOnPlayerDisconnectedEvent(Scorebot scorebot) {
-		scorebot.getPlayerDisconnectedEvent().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
+		playerDisconnectedEventObserver = new Observer<Pair<PlayerInfo, PlayerInfo>>() {
 			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
 				onPlayerDisconnectedEvent(pair);
 			}
-		});
+		};
+
+		scorebot.getPlayerDisconnectedEvent().register(playerDisconnectedEventObserver);
 	}
-	
+
 	protected void registerOnPlayerNameChangeEvent(Scorebot scorebot) {
-		scorebot.getPlayerNameChangedEvent().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
+		playerNameChangeEventObserver = new Observer<Pair<PlayerInfo, PlayerInfo>>() {
 			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
 				onPlayerNameChangeEvent(pair);
 			}
-		});
+		};
+
+		scorebot.getPlayerNameChangedEvent().register(playerNameChangeEventObserver);
 	}
-	
+
 	protected void registerOnPlayerPingChangeEvent(Scorebot scorebot) {
-		scorebot.getPlayerPingChangedEvent().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
+		playerPingChangeEventObserver = new Observer<Pair<PlayerInfo, PlayerInfo>>() {
 			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
 				onPlayerPingChangeEvent(pair);
 			}
-		});
+		};
+
+		scorebot.getPlayerPingChangedEvent().register(playerPingChangeEventObserver);
 	}
-	
+
 	protected void registerOnPlayerScoreChangeEvent(Scorebot scorebot) {
-		scorebot.getPlayerScoreChangedEvent().register(new Observer<Pair<PlayerInfo, PlayerInfo>>() {
+		playerScoreChangeEventObserver = new Observer<Pair<PlayerInfo, PlayerInfo>>() {
 			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
 				onPlayerScoreChangeEvent(pair);
 			}
-		});
+		};
+
+		scorebot.getPlayerScoreChangedEvent().register(playerScoreChangeEventObserver);
 	}
-	
+
 	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
 		logEvent(pair);
 	}
-	
+
 	protected void onProgressInfoChange(Pair<ProgressInfo, ProgressInfo> pair) {
 		logEvent(pair);
 	}
-	
+
 	protected void onTeamNameChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
 		logEvent(pair);
 	}
-	
+
 	protected void onTeamScoreChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
 		logEvent(pair);
 	}
@@ -155,19 +196,19 @@ public abstract class Client {
 	protected void onPlayerConnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
 		logEvent(pair);
 	}
-	
+
 	protected void onPlayerDisconnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
 		logEvent(pair);
 	}
-	
+
 	protected void onPlayerNameChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
 		logEvent(pair);
 	}
-	
+
 	protected void onPlayerPingChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
 		logEvent(pair);
 	}
-	
+
 	protected void onPlayerScoreChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
 		logEvent(pair);
 	}
