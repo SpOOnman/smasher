@@ -18,6 +18,9 @@
 package eu.spoonman.smasher.client;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tomasz Kalkosiński
@@ -29,25 +32,64 @@ public class CommandLineParser {
 		START, STOP, SHOW
 	}
 
-	public void parseAndExecute(String line) {
+	public void parseAndExecute(String line) throws ClientException {
 		String[] split = line.split(" ");
 
 		Commands command = null;
 		InetAddress address = null;
 		String scorebotId = null;
-		String[] args = new String[2];
+		List<String> args = new ArrayList<String>();
 
 		for (String word : args) {
 
-			//Search for first known command;
+			// Search for first known command;
 			if (command == null) {
 				command = searchForCommand(word);
+				if (command != null)
+					continue;
+			}
+
+			// Search for IP
+			if (address == null) {
+				address = searchForIP(word);
+				if (address != null)
+					continue;
 			}
 			
-			//Search for
-
+			if (scorebotId == null) {
+				scorebotId = searchForScorebotId(word);
+				if (scorebotId != null)
+					continue;
+			}
+			
+			args.add(word);
 		}
+		
+		execute(command, address, scorebotId, args);
 
+	}
+	
+	protected void execute(Commands command, InetAddress address, String scorebotId, List<String> args) throws ClientException {
+		
+		switch (command) {
+		case START:
+			if (address == null)
+				throw new ClientException("IP address is needed.");
+			
+			break;
+			
+		case SHOW:
+			if (scorebotId == null)
+				throw new ClientException("Scorebot ID is needed.");
+			break;
+			
+		case STOP:
+			if (scorebotId == null)
+				throw new ClientException("Scorebot ID is needed.");
+
+		default:
+			throw new ClientException("Unknown command " + command);
+		}
 	}
 
 	private Commands searchForCommand(String word) {
@@ -59,7 +101,21 @@ public class CommandLineParser {
 		} catch (IllegalArgumentException e) {
 			return null;
 		}
+	}
+	
+	private InetAddress searchForIP(String word) {
+		try {
+			InetAddress address = InetAddress.getByName(word);
+			
+			return address;
 
+		} catch (UnknownHostException e) {
+			return null;
+		}
+	}
+	
+	private String searchForScorebotId(String word) {
+		return null;
 	}
 
 }
