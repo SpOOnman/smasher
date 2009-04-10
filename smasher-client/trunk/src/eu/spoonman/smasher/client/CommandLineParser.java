@@ -71,6 +71,9 @@ public class CommandLineParser {
 	
 	protected void execute(Commands command, InetAddress address, String scorebotId, List<String> args) throws ClientException {
 		
+		if (command == null)
+			throw new ClientException("Unknown command");
+		
 		switch (command) {
 		case START:
 			if (address == null)
