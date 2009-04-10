@@ -21,6 +21,7 @@ package eu.spoonman.smasher.serverinfo.builder;
 
 import java.util.List;
 
+import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.Version;
 import eu.spoonman.smasher.serverinfo.header.Header;
@@ -33,6 +34,8 @@ import eu.spoonman.smasher.serverinfo.reader.Reader;
  *
  */
 public interface Builder {
+    
+    public Games getGame();
     
     public Header getHeader();
     

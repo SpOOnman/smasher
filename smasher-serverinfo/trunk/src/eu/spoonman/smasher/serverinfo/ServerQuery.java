@@ -218,5 +218,23 @@ public class ServerQuery {
     public void setPort(int port) {
         this.port = port;
     }
+    
+    /**
+     * @return the address
+     */
+    public InetAddress getAddress() {
+        return address;
+    }
+    
+    /**
+     * @return the port
+     */
+    public int getPort() {
+        return port;
+    }
+    
+    public Games getGame() {
+        return builder.getGame();
+    }
 
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
 import eu.spoonman.smasher.serverinfo.Version;
@@ -30,6 +31,11 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
 
     private static final Pattern versionPattern = Pattern
             .compile("(\\w+)\\s+([\\.\\w]+)\\s(\\w+)\\-(\\w+)\\s(.+)");
+    
+    @Override
+    public Games getGame() {
+        return Games.QUAKELIVE;
+    }
 
     @Override
     public Header getHeader() {

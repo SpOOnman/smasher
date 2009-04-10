@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.Version;
 import eu.spoonman.smasher.serverinfo.header.Header;
@@ -27,6 +28,11 @@ public class Quake2Builder extends BuilderFactory implements Builder {
 
     private static final Pattern versionPattern = Pattern
             .compile("(\\w+)\\s+([\\.\\w]+)\\s(\\w+)\\-(\\w+)\\s(.+)");
+    
+    @Override
+    public Games getGame() {
+        return Games.QUAKE2;
+    }
 
     @Override
     public Header getHeader() {

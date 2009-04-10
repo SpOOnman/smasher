@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.PlayerFlags;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
@@ -54,6 +55,11 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
     
     private static final Pattern versionPattern = Pattern
         .compile("(\\w+)\\s([\\.\\w]+)\\s(\\w+)\\-(\\w+)\\s(.+)");
+    
+    @Override
+    public Games getGame() {
+        return Games.QUAKE3ARENA;
+    }
     
     @Override
     public Header getHeader() {

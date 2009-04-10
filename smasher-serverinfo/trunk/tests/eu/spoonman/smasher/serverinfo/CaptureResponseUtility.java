@@ -30,8 +30,8 @@ import java.net.UnknownHostException;
 public class CaptureResponseUtility {
     
     public static void main(String[] args) throws IOException {
-        InetAddress address = InetAddress.getByName("85.25.86.234");
-        ServerQuery serverQuery = ServerQueryManager.createServerQuery(Games.QUAKELIVE, address, 27012);
+        InetAddress address = InetAddress.getByName("85.25.86.234"); //92.48.121.75 //85.25.86.234
+        ServerQuery serverQuery = ServerQueryManager.createServerQuery(Games.QUAKELIVE, address, 27025);
         
         String captured = captureResponse(serverQuery);
         System.out.println(captured);
