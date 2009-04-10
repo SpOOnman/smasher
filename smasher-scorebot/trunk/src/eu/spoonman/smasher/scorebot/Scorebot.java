@@ -41,7 +41,7 @@ public abstract class Scorebot {
 	protected GameDelegate<TeamInfo> teamNameChangedEvent;
 	protected GameDelegate<TeamInfo> teamScoreChangedEvent;
 	
-	public Scorebot() {
+	Scorebot() {
 		
 		differenceStartEvent = new GameDelegate<Scorebot>();
 		differenceStopEvent = new GameDelegate<Scorebot>();

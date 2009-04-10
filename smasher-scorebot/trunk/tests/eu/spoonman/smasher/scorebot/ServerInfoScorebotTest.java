@@ -34,7 +34,7 @@ public class ServerInfoScorebotTest {
 		playerInfoPairs.get(3).setSecond(null);
 		playerInfoPairs.get(4).setFirst(null);
 		
-		ServerInfoScorebot serverInfoScorebot = new ServerInfoScorebot();
+		ServerInfoScorebot serverInfoScorebot = new ServerInfoScorebot(null);
 		serverInfoScorebot.reviseLCSPlayerPairs(playerInfoPairs);
 		
 		assertEquals(5, playerInfoPairs.size());
@@ -55,7 +55,7 @@ public class ServerInfoScorebotTest {
 		};
 			
 				
-		final ServerInfoScorebot scorebot =  new ServerInfoScorebot();
+		final ServerInfoScorebot scorebot =  new ServerInfoScorebot(null);
 		scorebot.setPreviousServerInfo(TestHelper.getServerInfo());
 		
 		ServerInfo current = TestHelper.getServerInfo();

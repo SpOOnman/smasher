@@ -27,6 +27,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
+
 import eu.spoonman.smasher.common.LCS;
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.serverinfo.GameInfo;
@@ -55,15 +57,17 @@ public class ServerInfoScorebot extends Scorebot {
 	private ServerQuery serverQuery;
 	private ServerInfo previousServerInfo;
 	private ServerInfo currentServerInfo;
+	
+	public ServerInfoScorebot(ServerQuery serverQuery) {
+		this.serverQuery = serverQuery;
+	}
 
 	@Override
 	public void start() {
-		try {
-			serverQuery = ServerQueryManager.createServerQuery(Games.QUAKE3ARENA, Inet4Address
-					.getByName("194.187.43.245"), 27972);
-
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		
+		if (isRunning()) {
+			log.debug("Scorebot is already running. It won't be started again.");
+			return;
 		}
 
 		setRunning(true);
@@ -72,7 +76,7 @@ public class ServerInfoScorebot extends Scorebot {
 
 			@Override
 			public void run() {
-				log.debug("Starting new thread.");
+				log.debug("Starting new scorebot running thread.");
 				internalStart();
 			}
 
@@ -241,6 +245,10 @@ public class ServerInfoScorebot extends Scorebot {
 
 	void setCurrentServerInfo(ServerInfo currentServerInfo) {
 		this.currentServerInfo = currentServerInfo;
+	}
+	
+	ServerQuery getServerQuery() {
+		return serverQuery;
 	}
 	
 	
