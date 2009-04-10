@@ -46,10 +46,15 @@ public class ConsoleMain {
 		log.debug("Console found. Starting reading.");
 		
 		String line = null;
+		CommandLineParser parser = new CommandLineParser();
 		
 		while ((line = console.readLine()) != null && (!(line.equalsIgnoreCase("quit")))) {
-			
-			
+			try {
+				parser.parseAndExecute(line);
+			} catch (ClientException e) {
+				log.info("Client exception", e);
+				console.writer().print(e.toString());
+			}
 		}
 		
 		log.debug("Quitting. Bye bye.");

@@ -35,7 +35,7 @@ public class ConsoleClient extends Client {
 
 		final ConsoleClient client = new ConsoleClient();
 
-		ServerInfoScorebot scorebot = new ServerInfoScorebot();
+		ServerInfoScorebot scorebot = new ServerInfoScorebot(null);
 		client.register(scorebot);
 		
 		scorebot.start();

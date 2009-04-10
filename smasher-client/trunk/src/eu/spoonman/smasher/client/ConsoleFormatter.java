@@ -17,6 +17,7 @@
  */
 package eu.spoonman.smasher.client;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +59,8 @@ public class ConsoleFormatter {
 	private List<String> mainLines;
 	private List<String> jointLines;
 	private List<String> exclusiveLines;
+	
+	private static PrintStream output;
 
 	/**
 	 * @param colors
@@ -72,6 +75,12 @@ public class ConsoleFormatter {
 		jointLines = new ArrayList<String>();
 		exclusiveLines = new ArrayList<String>();
 	}
+	
+	public void flush() {
+		synchronized (output) {
+			output.println();
+		}
+	}
 
 	private void clear() {
 		formatMainLine = false;
@@ -79,6 +88,18 @@ public class ConsoleFormatter {
 		mainLines.clear();
 		jointLines.clear();
 		exclusiveLines.clear();
+	}
+	
+	public List<String> formatOutput() {
+		List<String> output = new ArrayList<String>();
+		
+		synchronized (formatMainLine) {
+			synchronized (exclusiveLines) {
+				
+			}
+		}
+		
+		return output;
 	}
 
 	public void format(OutputStyle style, LazyFormat lazyFormatString) {
