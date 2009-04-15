@@ -41,7 +41,7 @@ public class CommandLineParser {
 		String scorebotId = null;
 		List<String> args = new ArrayList<String>();
 
-		for (String word : args) {
+		for (String word : split) {
 
 			// Search for first known command;
 			if (command == null) {
