@@ -37,6 +37,7 @@ public class CommandLineParser {
 
 		Commands command = null;
 		InetAddress address = null;
+		int port = 0;
 		String scorebotId = null;
 		List<String> args = new ArrayList<String>();
 
@@ -52,8 +53,10 @@ public class CommandLineParser {
 			// Search for IP
 			if (address == null) {
 				address = searchForIP(word);
-				if (address != null)
+				if (address != null) {
+					port = searchForPort(word);
 					continue;
+				}
 			}
 			
 			if (scorebotId == null) {
@@ -65,11 +68,11 @@ public class CommandLineParser {
 			args.add(word);
 		}
 		
-		execute(command, address, scorebotId, args);
+		execute(command, address, port, scorebotId, args);
 
 	}
 	
-	protected void execute(Commands command, InetAddress address, String scorebotId, List<String> args) throws ClientException {
+	protected void execute(Commands command, InetAddress address, int port, String scorebotId, List<String> args) throws ClientException {
 		
 		if (command == null)
 			throw new ClientException("Unknown command");
@@ -108,13 +111,26 @@ public class CommandLineParser {
 	
 	private InetAddress searchForIP(String word) {
 		try {
-			InetAddress address = InetAddress.getByName(word);
+			String addr = word.split(":")[0];
+			InetAddress address = InetAddress.getByName(addr);
 			
 			return address;
 
 		} catch (UnknownHostException e) {
 			return null;
 		}
+	}
+	
+	private int searchForPort(String word) {
+		try {
+			String[] splitted = word.split(":");
+			if (splitted.length > 1) {
+				return Integer.parseInt(splitted[1]);
+			}
+		} catch (NumberFormatException e) {
+		}
+		
+		return 0;
 	}
 	
 	private String searchForScorebotId(String word) {
