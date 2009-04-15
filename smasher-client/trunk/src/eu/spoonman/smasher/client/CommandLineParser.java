@@ -17,6 +17,8 @@
  */
 package eu.spoonman.smasher.client;
 
+import org.apache.log4j.Logger;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -27,6 +29,12 @@ import java.util.List;
  * 
  */
 public class CommandLineParser {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger log = Logger.getLogger(CommandLineParser.class);
+	
+	
 
 	enum Commands {
 		START, STOP, SHOW
@@ -101,6 +109,8 @@ public class CommandLineParser {
 	private Commands searchForCommand(String word) {
 		try {
 			Commands valueOf = Enum.valueOf(Commands.class, word.toUpperCase());
+			
+			log.debug("Parsed command: " + valueOf);
 
 			return valueOf;
 
@@ -114,6 +124,8 @@ public class CommandLineParser {
 			String addr = word.split(":")[0];
 			InetAddress address = InetAddress.getByName(addr);
 			
+			log.debug("Parsed IP: " + address.toString());
+			
 			return address;
 
 		} catch (UnknownHostException e) {
@@ -125,7 +137,11 @@ public class CommandLineParser {
 		try {
 			String[] splitted = word.split(":");
 			if (splitted.length > 1) {
-				return Integer.parseInt(splitted[1]);
+				int port = Integer.parseInt(splitted[1]);
+				
+				log.debug("Parsed port: " + port);
+				
+				return port;
 			}
 		} catch (NumberFormatException e) {
 		}
