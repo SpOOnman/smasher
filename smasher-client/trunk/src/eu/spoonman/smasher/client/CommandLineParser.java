@@ -19,6 +19,11 @@ package eu.spoonman.smasher.client;
 
 import org.apache.log4j.Logger;
 
+import eu.spoonman.smasher.scorebot.Scorebot;
+import eu.spoonman.smasher.scorebot.ScorebotManager;
+import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
+import eu.spoonman.smasher.serverinfo.Games;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -33,20 +38,18 @@ public class CommandLineParser {
 	 * Logger for this class
 	 */
 	private static final Logger log = Logger.getLogger(CommandLineParser.class);
-	
-	
 
 	enum Commands {
 		START, STOP, SHOW
 	}
 
-	public void parseAndExecute(String line) throws ClientException {
+	public void parseAndExecute(Client client, String line) throws ClientException {
 		String[] split = line.split(" ");
 
 		Commands command = null;
 		InetAddress address = null;
 		int port = 0;
-		String scorebotId = null;
+		Scorebot scorebot = null;
 		List<String> args = new ArrayList<String>();
 
 		for (String word : split) {
@@ -67,20 +70,20 @@ public class CommandLineParser {
 				}
 			}
 			
-			if (scorebotId == null) {
-				scorebotId = searchForScorebotId(word);
-				if (scorebotId != null)
+			if (scorebot == null) {
+				scorebot = searchForScorebot(word);
+				if (scorebot != null)
 					continue;
 			}
 			
 			args.add(word);
 		}
 		
-		execute(command, address, port, scorebotId, args);
+		execute(client, command, address, port, scorebot, args);
 
 	}
 	
-	protected void execute(Commands command, InetAddress address, int port, String scorebotId, List<String> args) throws ClientException {
+	protected void execute(Client client, Commands command, InetAddress address, int port, Scorebot scorebot, List<String> args) throws ClientException {
 		
 		if (command == null)
 			throw new ClientException("Unknown command");
@@ -90,16 +93,24 @@ public class CommandLineParser {
 			if (address == null)
 				throw new ClientException("IP address is needed.");
 			
+			Scorebot _scorebot = ScorebotManager.getInstance().createOrGetScorebot(Games.QUAKE3ARENA, address, port);
+			client.register(_scorebot);
+			
 			break;
 			
 		case SHOW:
-			if (scorebotId == null)
+			if (scorebot == null)
 				throw new ClientException("Scorebot ID is needed.");
 			break;
 			
 		case STOP:
-			if (scorebotId == null)
+			if (scorebot == null)
 				throw new ClientException("Scorebot ID is needed.");
+			
+			client.unregister(scorebot);
+			ScorebotManager.getInstance().stopScorebot(scorebot);
+			
+			break;
 
 		default:
 			throw new ClientException("Unknown command " + command);
