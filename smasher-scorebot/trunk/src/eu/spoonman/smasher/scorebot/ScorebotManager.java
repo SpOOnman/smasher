@@ -72,11 +72,27 @@ public class ScorebotManager {
 		}
 	}
 	
+	public void stopScorebot(Scorebot scorebot) {
+		
+	}
+	
 	private void runScorebot(final Scorebot scorebot) {
 		executorService.execute(new Runnable() {
 			public void run() {
 				scorebot.start();
 			}
 		});
+	}
+
+	/**
+	 * @param word
+	 * @return
+	 */
+	public Scorebot getScorebotById(String word) {
+		
+		synchronized (scorebots) {
+		}
+		
+		return null;
 	}
 }
