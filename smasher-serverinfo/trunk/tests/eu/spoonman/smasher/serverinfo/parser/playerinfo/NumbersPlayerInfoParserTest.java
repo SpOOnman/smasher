@@ -27,6 +27,20 @@ public class NumbersPlayerInfoParserTest {
         
         return serverInfo;
     }
+    
+    @Test
+    public void parseIntoServerInfoNull() throws ParserException {
+        ServerInfoParser parser = new NumbersPlayerInfoParser("testingAtt", 0, TeamKey.RED_TEAM, EnumSet.of(PlayerFlags.IN_PLAY), ";");
+        
+        ServerInfo serverInfo = createServerInfo();
+        serverInfo.getNamedAttributes().put("testingAtt", null);
+        
+        parser.parseIntoServerInfo(serverInfo);
+
+        for (PlayerInfo playerInfo : serverInfo.getPlayerInfos()) {
+            assertEquals(null, playerInfo.getTeamKey());
+        }
+    }
 
     @Test
     public void parseIntoServerInfoOne() throws ParserException {
