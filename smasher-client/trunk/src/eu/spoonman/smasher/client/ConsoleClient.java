@@ -19,8 +19,6 @@
 package eu.spoonman.smasher.client;
 
 import eu.spoonman.smasher.common.Pair;
-import eu.spoonman.smasher.output.OutputConfiguration;
-import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
@@ -28,8 +26,6 @@ import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 public class ConsoleClient extends Client {
 	
-
-	private ConsoleFormatter consoleFormatter;
 
 	@Override
 	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {

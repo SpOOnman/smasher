@@ -17,17 +17,16 @@
  */
 package eu.spoonman.smasher.client;
 
-import org.apache.log4j.Logger;
-
-import eu.spoonman.smasher.scorebot.Scorebot;
-import eu.spoonman.smasher.scorebot.ScorebotManager;
-import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
-import eu.spoonman.smasher.serverinfo.Games;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import eu.spoonman.smasher.scorebot.Scorebot;
+import eu.spoonman.smasher.scorebot.ScorebotManager;
+import eu.spoonman.smasher.serverinfo.Games;
 
 /**
  * @author Tomasz Kalkosiński
