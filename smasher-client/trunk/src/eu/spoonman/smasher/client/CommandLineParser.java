@@ -160,8 +160,8 @@ public class CommandLineParser {
 		return 0;
 	}
 	
-	private String searchForScorebotId(String word) {
-		return null;
+	private Scorebot searchForScorebot(String word) {
+		return ScorebotManager.getInstance().getScorebotById(word);
 	}
 
 }
