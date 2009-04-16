@@ -33,11 +33,27 @@ import eu.spoonman.smasher.serverinfo.ServerQueryManager;
  */
 public class ScorebotManager {
 	
-	private final static ExecutorService executorService = Executors.newCachedThreadPool();
+	private final ExecutorService executorService;
+	private List<ServerInfoScorebot> scorebots;
 	
-	private static List<ServerInfoScorebot> scorebots = new ArrayList<ServerInfoScorebot>();
+	private static ScorebotManager scorebotManager;
 	
-	public static ServerInfoScorebot createOrGetScorebot(Games game, Inet4Address address, int port) {
+	private ScorebotManager() {
+		scorebots = new ArrayList<ServerInfoScorebot>();
+		executorService = Executors.newCachedThreadPool();
+	}
+	
+	public static ScorebotManager getInstance() {
+		
+		synchronized (scorebotManager) {
+			if (scorebotManager == null)
+				scorebotManager = new ScorebotManager();
+			
+			return scorebotManager;
+		}
+	}
+	
+	public ServerInfoScorebot createOrGetScorebot(Games game, Inet4Address address, int port) {
 		
 		synchronized (scorebots) {
 			for (ServerInfoScorebot scorebot : scorebots) {
@@ -56,7 +72,7 @@ public class ScorebotManager {
 		}
 	}
 	
-	private static void runScorebot(final Scorebot scorebot) {
+	private void runScorebot(final Scorebot scorebot) {
 		executorService.execute(new Runnable() {
 			public void run() {
 				scorebot.start();
