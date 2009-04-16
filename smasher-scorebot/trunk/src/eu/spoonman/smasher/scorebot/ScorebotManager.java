@@ -20,6 +20,8 @@ package eu.spoonman.smasher.scorebot;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.ServerQuery;
@@ -30,6 +32,8 @@ import eu.spoonman.smasher.serverinfo.ServerQueryManager;
  *
  */
 public class ScorebotManager {
+	
+	private final static ExecutorService executorService = Executors.newCachedThreadPool();
 	
 	private static List<ServerInfoScorebot> scorebots = new ArrayList<ServerInfoScorebot>();
 	
@@ -47,7 +51,16 @@ public class ScorebotManager {
 			ServerInfoScorebot scorebot = new ServerInfoScorebot(serverQuery);
 			
 			scorebots.add(scorebot);
+			runScorebot(scorebot);
 			return scorebot;
 		}
+	}
+	
+	private static void runScorebot(final Scorebot scorebot) {
+		executorService.execute(new Runnable() {
+			public void run() {
+				scorebot.start();
+			}
+		});
 	}
 }
