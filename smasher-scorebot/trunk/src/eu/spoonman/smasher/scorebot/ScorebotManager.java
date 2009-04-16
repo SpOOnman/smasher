@@ -17,7 +17,7 @@
  */
 package eu.spoonman.smasher.scorebot;
 
-import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -53,7 +53,7 @@ public class ScorebotManager {
 		}
 	}
 	
-	public ServerInfoScorebot createOrGetScorebot(Games game, Inet4Address address, int port) {
+	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port) {
 		
 		synchronized (scorebots) {
 			for (ServerInfoScorebot scorebot : scorebots) {
