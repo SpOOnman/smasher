@@ -45,14 +45,12 @@ public class ScorebotManager {
 		executorService = Executors.newCachedThreadPool();
 	}
 
-	public static ScorebotManager getInstance() {
+	public synchronized static ScorebotManager getInstance() {
 
-		synchronized (scorebotManager) {
-			if (scorebotManager == null)
-				scorebotManager = new ScorebotManager();
+		if (scorebotManager == null)
+			scorebotManager = new ScorebotManager();
 
-			return scorebotManager;
-		}
+		return scorebotManager;
 	}
 
 	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port) {
