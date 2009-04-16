@@ -67,14 +67,20 @@ public class NumbersPlayerInfoParser implements ServerInfoParser {
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
 
+        //Map returns null either if key is mapped to null or there is no key at all.
+        if (!(serverInfo.getNamedAttributes().containsKey(attributeName)))
+            throw new AttributeNotFoundException(attributeName);
+
         String value = serverInfo.getNamedAttributes().get(attributeName);
         
         if (log.isDebugEnabled()) {
             log.debug(String.format(ServerInfoParser.fieldLogFormat, attributeName, value));
         }
         
-        if (value == null)
-            throw new AttributeNotFoundException(attributeName);
+        if (value == null) {
+            log.debug("No players found.");
+            return;
+        }
         
         Scanner scanner = new Scanner(value).useDelimiter(delimitier);
         while (scanner.hasNextInt()) {
