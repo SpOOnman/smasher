@@ -73,16 +73,7 @@ public class ServerInfoScorebot extends Scorebot {
 
 		setRunning(true);
 
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				log.debug("Starting new scorebot running thread.");
-				internalStart();
-			}
-
-		}).run();
-
+		internalStart();
 	}
 
 	@Override
