@@ -41,7 +41,11 @@ public abstract class Scorebot {
 	protected GameDelegate<TeamInfo> teamNameChangedEvent;
 	protected GameDelegate<TeamInfo> teamScoreChangedEvent;
 	
-	Scorebot() {
+	private final String id;
+	
+	Scorebot(String id) {
+		
+		this.id = id;
 		
 		differenceStartEvent = new GameDelegate<Scorebot>();
 		differenceStopEvent = new GameDelegate<Scorebot>();
@@ -64,6 +68,10 @@ public abstract class Scorebot {
 	public abstract void start();
 	
 	public abstract void stop();
+	
+	public String getId() {
+		return id;
+	}
 
 	public GameDelegate<GameInfo> getGameInfoChange() {
 		return gameInfoChange;

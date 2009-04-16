@@ -58,7 +58,8 @@ public class ServerInfoScorebot extends Scorebot {
 	private ServerInfo previousServerInfo;
 	private ServerInfo currentServerInfo;
 	
-	public ServerInfoScorebot(ServerQuery serverQuery) {
+	public ServerInfoScorebot(String id, ServerQuery serverQuery) {
+		super(id);
 		this.serverQuery = serverQuery;
 	}
 

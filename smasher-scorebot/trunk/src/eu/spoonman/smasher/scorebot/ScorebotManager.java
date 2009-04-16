@@ -20,6 +20,7 @@ package eu.spoonman.smasher.scorebot;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,53 +30,54 @@ import eu.spoonman.smasher.serverinfo.ServerQueryManager;
 
 /**
  * @author Tomasz Kalkosiński
- *
+ * 
  */
 public class ScorebotManager {
-	
+
 	private final ExecutorService executorService;
 	private List<ServerInfoScorebot> scorebots;
-	
+	private Random random = new Random();
+
 	private static ScorebotManager scorebotManager;
-	
+
 	private ScorebotManager() {
 		scorebots = new ArrayList<ServerInfoScorebot>();
 		executorService = Executors.newCachedThreadPool();
 	}
-	
+
 	public static ScorebotManager getInstance() {
-		
+
 		synchronized (scorebotManager) {
 			if (scorebotManager == null)
 				scorebotManager = new ScorebotManager();
-			
+
 			return scorebotManager;
 		}
 	}
-	
+
 	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port) {
-		
+
 		synchronized (scorebots) {
 			for (ServerInfoScorebot scorebot : scorebots) {
-				if (scorebot.getServerQuery().getGame().equals(game) &&
-						scorebot.getServerQuery().getAddress().equals(address) &&
-						scorebot.getServerQuery().getPort() == port)
+				if (scorebot.getServerQuery().getGame().equals(game)
+						&& scorebot.getServerQuery().getAddress().equals(address)
+						&& scorebot.getServerQuery().getPort() == port)
 					return scorebot;
 			}
-			
+
 			ServerQuery serverQuery = ServerQueryManager.createServerQuery(game, address, port);
-			ServerInfoScorebot scorebot = new ServerInfoScorebot(serverQuery);
-			
+			ServerInfoScorebot scorebot = new ServerInfoScorebot(createUniqueId(), serverQuery);
+
 			scorebots.add(scorebot);
 			runScorebot(scorebot);
 			return scorebot;
 		}
 	}
-	
+
 	public void stopScorebot(Scorebot scorebot) {
-		
+
 	}
-	
+
 	private void runScorebot(final Scorebot scorebot) {
 		executorService.execute(new Runnable() {
 			public void run() {
@@ -84,15 +86,36 @@ public class ScorebotManager {
 		});
 	}
 
+	private String createUniqueId() {
+
+		boolean found = false;
+		String id = null;
+
+		do {
+			char letter = (char) (random.nextInt(26) + 65); // 'A' = 65
+			id = String.format("%c%d", letter, random.nextInt(8) + 1);
+			
+			for (ServerInfoScorebot scorebot : scorebots) {
+				if (scorebot.getId().equals(id)) {
+					found = true;
+					continue;
+				}
+				
+			}
+		} while (found == true);
+		
+		return id;
+	}
+
 	/**
 	 * @param word
 	 * @return
 	 */
 	public Scorebot getScorebotById(String word) {
-		
+
 		synchronized (scorebots) {
 		}
-		
+
 		return null;
 	}
 }
