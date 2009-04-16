@@ -31,22 +31,6 @@ public class ConsoleClient extends Client {
 
 	private ConsoleFormatter consoleFormatter;
 
-	public static void main(String[] args) throws InterruptedException {
-
-		final ConsoleClient client = new ConsoleClient();
-
-		ServerInfoScorebot scorebot = new ServerInfoScorebot(null);
-		client.register(scorebot);
-		
-		scorebot.start();
-
-		synchronized (client) {
-			client.wait(3000);
-		}
-		
-		scorebot.stop();
-	}
-
 	@Override
 	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
 		super.onGameInfoChange(pair);
