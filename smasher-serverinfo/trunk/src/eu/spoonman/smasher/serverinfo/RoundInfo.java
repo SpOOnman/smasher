@@ -65,6 +65,11 @@ public class RoundInfo extends ProgressInfo {
             return false;
         return true;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("[RoundInfo: %d/%d, (%s)]", roundNumber, roundLimit, this.getProgressInfoFlags().toString());
+    }
 
 
 
