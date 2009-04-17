@@ -112,4 +112,12 @@ public abstract class Scorebot {
 	public GameDelegate<TeamInfo> getTeamScoreChangedEvent() {
 		return teamScoreChangedEvent;
 	}
+
+	public GameDelegate<Scorebot> getDifferenceStartEvent() {
+		return differenceStartEvent;
+	}
+
+	public GameDelegate<Scorebot> getDifferenceStopEvent() {
+		return differenceStopEvent;
+	}
 }
