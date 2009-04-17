@@ -57,32 +57,32 @@ public class ConsoleClient extends Client {
 
 	@Override
 	protected void onPlayerConnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
-		// TODO Auto-generated method stub
 		super.onPlayerConnectedEvent(pair);
+		formatter.formatPlayerConnectedEvent(pair);
 	}
 
 	@Override
 	protected void onPlayerDisconnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
-		// TODO Auto-generated method stub
 		super.onPlayerDisconnectedEvent(pair);
+		formatter.formatPlayerDisconnectedEvent(pair);
 	}
 
 	@Override
 	protected void onPlayerNameChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
-		// TODO Auto-generated method stub
 		super.onPlayerNameChangeEvent(pair);
+		formatter.formatPlayerNameChange(pair);
 	}
 
 	@Override
 	protected void onPlayerPingChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
-		// TODO Auto-generated method stub
 		super.onPlayerPingChangeEvent(pair);
+		formatter.formatPlayerNameChange(pair);
 	}
 
 	@Override
 	protected void onPlayerScoreChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
-		// TODO Auto-generated method stub
 		super.onPlayerScoreChangeEvent(pair);
+		formatter.formatPlayerScoreChange(pair);
 	}
 
 	@Override
@@ -93,8 +93,8 @@ public class ConsoleClient extends Client {
 
 	@Override
 	protected void onTeamNameChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
-		// TODO Auto-generated method stub
 		super.onTeamNameChangeEvent(pair);
+		formatter.formatTeamNameChange(pair);
 	}
 
 	@Override

@@ -79,15 +79,15 @@ public class ConsoleFormatter {
 		exclusiveLines = new ArrayList<String>();
 	}
 	
-	public void flush() {
-		synchronized (output) {
-			for(String line : formatOutput()) {
-				output.println(line);
-			}
+	public synchronized void flush() {
+		for(String line : formatOutput()) {
+			output.println(line);
 		}
+		
+		clear();
 	}
 
-	private void clear() {
+	private synchronized void clear() {
 		formatMainLine = false;
 
 		mainLines.clear();
@@ -95,24 +95,15 @@ public class ConsoleFormatter {
 		exclusiveLines.clear();
 	}
 	
-	public List<String> formatOutput() {
+	private synchronized List<String> formatOutput() {
 		List<String> output = new ArrayList<String>();
 		
-		synchronized (formatMainLine) {
-			synchronized (exclusiveLines) {
-				synchronized (jointLines) {
-					synchronized (mainLines) {
-						if (formatMainLine) {
-							output.add(formatMatchLine(client.getScorebot()));
-						}
-						
-						output.addAll(exclusiveLines);
-						
-					}
-				}
-			}
+		if (formatMainLine) {
+			output.add(formatMatchLine(client.getScorebot()));
 		}
 		
+		output.addAll(exclusiveLines);
+						
 		return output;
 	}
 
