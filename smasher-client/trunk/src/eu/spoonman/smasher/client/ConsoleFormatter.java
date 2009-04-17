@@ -79,7 +79,9 @@ public class ConsoleFormatter {
 	
 	public void flush() {
 		synchronized (output) {
-			output.println();
+			for(String line : formatOutput()) {
+				output.println(line);
+			}
 		}
 	}
 
@@ -98,6 +100,11 @@ public class ConsoleFormatter {
 			synchronized (exclusiveLines) {
 				synchronized (jointLines) {
 					synchronized (mainLines) {
+						if (formatMainLine) {
+							output.add(formatMatchLine(scorebot));
+						}
+						
+						output.addAll(exclusiveLines);
 						
 					}
 				}
@@ -203,7 +210,7 @@ public class ConsoleFormatter {
 
 	public String formatMatchLine(ServerInfoScorebot scorebot) {
 		String format = "Game %s. %s%s %s%d%s vs %s%d%s";
-		return String.format(format, "A1");
+		return String.format(format, scorebot.getId());
 	}
 
 	public String formatShort(PlayerInfo playerInfo) {

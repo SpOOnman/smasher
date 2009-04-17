@@ -42,6 +42,7 @@ public class ConsoleClient extends Client {
 	@Override
 	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
 		super.onDifferenceStopEvent(pair);
+		formatter.flush();
 	}
 
 	@Override
