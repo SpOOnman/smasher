@@ -19,7 +19,6 @@
 package eu.spoonman.smasher.client;
 
 import eu.spoonman.smasher.common.Pair;
-import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
@@ -30,8 +29,8 @@ public class ConsoleClient extends Client {
 	
 	private ConsoleFormatter formatter;
 	
-	public ConsoleClient() {
-		formatter = new ConsoleFormatter(new ConsoleColors(), new OutputConfiguration());
+	public ConsoleClient(ConsoleFormatter formatter) {
+		this.formatter = formatter;
 	}
 	
 	@Override

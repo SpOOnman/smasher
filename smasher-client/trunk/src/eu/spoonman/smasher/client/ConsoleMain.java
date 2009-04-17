@@ -47,11 +47,10 @@ public class ConsoleMain {
 		
 		String line = null;
 		CommandLineParser parser = new CommandLineParser();
-		final ConsoleClient client = new ConsoleClient();
 		
 		while ((line = console.readLine()) != null && (!(line.equalsIgnoreCase("quit")))) {
 			try {
-				parser.parseAndExecute(client, line);
+				parser.parseAndExecute(line);
 			} catch (ClientException e) {
 				log.info("Client exception", e);
 				console.writer().print(e.toString());

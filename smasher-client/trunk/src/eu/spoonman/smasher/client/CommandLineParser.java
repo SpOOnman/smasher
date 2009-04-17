@@ -42,7 +42,7 @@ public class CommandLineParser {
 		START, STOP, SHOW
 	}
 
-	public void parseAndExecute(Client client, String line) throws ClientException {
+	public void parseAndExecute(String line) throws ClientException {
 		String[] split = line.split(" ");
 
 		Commands command = null;
@@ -78,11 +78,11 @@ public class CommandLineParser {
 			args.add(word);
 		}
 		
-		execute(client, command, address, port, scorebot, args);
+		execute(command, address, port, scorebot, args);
 
 	}
 	
-	protected void execute(Client client, Commands command, InetAddress address, int port, Scorebot scorebot, List<String> args) throws ClientException {
+	protected void execute(Commands command, InetAddress address, int port, Scorebot scorebot, List<String> args) throws ClientException {
 		
 		if (command == null)
 			throw new ClientException("Unknown command");
@@ -93,7 +93,8 @@ public class CommandLineParser {
 				throw new ClientException("IP address is needed.");
 			
 			Scorebot _scorebot = ScorebotManager.getInstance().createOrGetScorebot(Games.QUAKE3ARENA, address, port);
-			client.register(_scorebot);
+			Client consoleClient = ClientBuilder.getConsoleClient();
+			consoleClient.register(_scorebot);
 			
 			break;
 			
@@ -106,7 +107,7 @@ public class CommandLineParser {
 			if (scorebot == null)
 				throw new ClientException("Scorebot ID is needed.");
 			
-			client.unregister(scorebot);
+			//client.unregister(scorebot);
 			ScorebotManager.getInstance().stopScorebot(scorebot);
 			
 			break;

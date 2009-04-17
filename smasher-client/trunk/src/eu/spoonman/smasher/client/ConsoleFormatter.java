@@ -24,6 +24,7 @@ import java.util.List;
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.output.OutputStyle;
+import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
@@ -61,6 +62,7 @@ public class ConsoleFormatter {
 	private List<String> exclusiveLines;
 	
 	private static PrintStream output;
+	private Client client;
 
 	/**
 	 * @param colors
@@ -101,7 +103,7 @@ public class ConsoleFormatter {
 				synchronized (jointLines) {
 					synchronized (mainLines) {
 						if (formatMainLine) {
-							output.add(formatMatchLine(scorebot));
+							output.add(formatMatchLine(client.getScorebot()));
 						}
 						
 						output.addAll(exclusiveLines);
@@ -208,7 +210,7 @@ public class ConsoleFormatter {
 		});
 	}
 
-	public String formatMatchLine(ServerInfoScorebot scorebot) {
+	public String formatMatchLine(Scorebot scorebot) {
 		String format = "Game %s. %s%s %s%d%s vs %s%d%s";
 		return String.format(format, scorebot.getId());
 	}
@@ -222,4 +224,14 @@ public class ConsoleFormatter {
 		return String
 				.format("%s (%d) P%d", playerInfo.getName(), playerInfo.getScore(), playerInfo.getPing());
 	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+	
+	
 }

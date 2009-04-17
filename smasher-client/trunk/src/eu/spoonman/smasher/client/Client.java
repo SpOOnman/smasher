@@ -46,6 +46,8 @@ public abstract class Client {
 	private Observer<Pair<PlayerInfo, PlayerInfo>> playerScoreChangeEventObserver;
 	private Observer<Pair<Scorebot, Scorebot>> differenceStartEventObserver;
 	private Observer<Pair<Scorebot, Scorebot>> differenceStopEventObserver;
+	
+	private Scorebot scorebot;
 
 	/**
 	 * Logger for this class
@@ -71,6 +73,8 @@ public abstract class Client {
 		registerOnPlayerNameChangeEvent(scorebot);
 		registerOnPlayerPingChangeEvent(scorebot);
 		registerOnPlayerScoreChangeEvent(scorebot);
+		
+		this.scorebot = scorebot;
 
 	}
 	
@@ -102,6 +106,8 @@ public abstract class Client {
 		playerNameChangeEventObserver = null;
 		playerPingChangeEventObserver = null;
 		playerScoreChangeEventObserver = null;
+		
+		this.scorebot = null;
 	}
 
 	protected <T> void logEvent(String name, Pair<T, T> pair) {
@@ -260,6 +266,10 @@ public abstract class Client {
 	
 	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
 		logEvent("DifferenceStop", pair);
+	}
+	
+	public Scorebot getScorebot() {
+		return scorebot;
 	}
 
 }
