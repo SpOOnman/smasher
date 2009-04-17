@@ -69,6 +69,7 @@ public class ConsoleFormatter {
 		this.colors = colors;
 		this.outputConfiguration = outputConfiguration;
 
+		output = System.out;
 		formatMainLine = false;
 
 		mainLines = new ArrayList<String>();
@@ -95,7 +96,11 @@ public class ConsoleFormatter {
 		
 		synchronized (formatMainLine) {
 			synchronized (exclusiveLines) {
-				
+				synchronized (jointLines) {
+					synchronized (mainLines) {
+						
+					}
+				}
 			}
 		}
 		

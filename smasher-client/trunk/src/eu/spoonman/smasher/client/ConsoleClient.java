@@ -19,12 +19,19 @@
 package eu.spoonman.smasher.client;
 
 import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 public class ConsoleClient extends Client {
+	
+	private ConsoleFormatter formatter;
+	
+	public ConsoleClient() {
+		formatter = new ConsoleFormatter(new ConsoleColors(), new OutputConfiguration());
+	}
 	
 
 	@Override
@@ -76,8 +83,8 @@ public class ConsoleClient extends Client {
 
 	@Override
 	protected void onTeamScoreChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
-		// TODO Auto-generated method stub
 		super.onTeamScoreChangeEvent(pair);
+		formatter.formatTeamScoreChange(pair);
 	}
 
 }
