@@ -18,8 +18,6 @@
 
 package eu.spoonman.smasher.scorebot;
 
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -27,17 +25,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
-
 import eu.spoonman.smasher.common.LCS;
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.serverinfo.GameInfo;
-import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.ServerQuery;
-import eu.spoonman.smasher.serverinfo.ServerQueryManager;
 
 /**
  * @author Tomasz Kalkosiński
@@ -107,7 +101,7 @@ public class ServerInfoScorebot extends Scorebot {
 			count++;
 
 			try {
-				wait(interval);
+				Thread.sleep(interval);
 			} catch (InterruptedException e) {
 				log.error("Scorebot thread unexpectedly interrupted.", e);
 			}
