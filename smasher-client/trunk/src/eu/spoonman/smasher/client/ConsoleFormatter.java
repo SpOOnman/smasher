@@ -54,7 +54,7 @@ public class ConsoleFormatter {
 	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
 
 	private final ConsoleColors colors;
-	private final OutputConfiguration outputConfiguration;
+	private OutputConfiguration outputConfiguration;
 
 	private Boolean formatMainLine;
 	private List<String> mainLines;
@@ -231,6 +231,12 @@ public class ConsoleFormatter {
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	void setOutputConfiguration(OutputConfiguration outputConfiguration) {
+		synchronized (this.outputConfiguration) {
+			this.outputConfiguration = outputConfiguration;
+		}
 	}
 	
 	

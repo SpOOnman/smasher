@@ -19,6 +19,7 @@
 package eu.spoonman.smasher.client;
 
 import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
@@ -47,6 +48,11 @@ public class ConsoleClient extends Client {
 	@Override
 	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
 		super.onGameInfoChange(pair);
+		
+		assert(pair.getSecond() != null);
+		
+		if (pair.getFirst() == null || pair.getFirst().getGameType() != pair.getSecond().getGameType())
+			formatter.setOutputConfiguration(new OutputConfiguration());
 	}
 
 	@Override
