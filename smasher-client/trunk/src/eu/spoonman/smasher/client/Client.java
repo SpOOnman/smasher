@@ -50,7 +50,7 @@ public abstract class Client {
 	 */
 	private static final Logger log = Logger.getLogger(Client.class);
 
-	private String loggingPattern = "< %s > : < %s >";
+	private String loggingPattern = "Differentt %s : < %s > : < %s >";
 
 	protected void register(Scorebot scorebot) {
 		registerOnGameInfoChange(scorebot);
@@ -93,8 +93,8 @@ public abstract class Client {
 		playerScoreChangeEventObserver = null;
 	}
 
-	protected <T> void logEvent(Pair<T, T> pair) {
-		log.debug(String.format(loggingPattern, pair.getFirst(), pair.getSecond()));
+	protected <T> void logEvent(String name, Pair<T, T> pair) {
+		log.debug(String.format(loggingPattern, name, pair.getFirst(), pair.getSecond()));
 	}
 
 	protected void registerOnGameInfoChange(Scorebot scorebot) {
@@ -188,39 +188,39 @@ public abstract class Client {
 	}
 
 	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
-		logEvent(pair);
+		logEvent("GameInfo", pair);
 	}
 
 	protected void onProgressInfoChange(Pair<ProgressInfo, ProgressInfo> pair) {
-		logEvent(pair);
+		logEvent("ProgressInfo", pair);
 	}
 
 	protected void onTeamNameChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
-		logEvent(pair);
+		logEvent("TeamName", pair);
 	}
 
 	protected void onTeamScoreChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
-		logEvent(pair);
+		logEvent("TeamScore", pair);
 	}
 
 	protected void onPlayerConnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
-		logEvent(pair);
+		logEvent("PlayerConnected", pair);
 	}
 
 	protected void onPlayerDisconnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
-		logEvent(pair);
+		logEvent("PlayerDisconnected", pair);
 	}
 
 	protected void onPlayerNameChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
-		logEvent(pair);
+		logEvent("PlayerName", pair);
 	}
 
 	protected void onPlayerPingChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
-		logEvent(pair);
+		logEvent("PlayerPing", pair);
 	}
 
 	protected void onPlayerScoreChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
-		logEvent(pair);
+		logEvent("PlayerScore", pair);
 	}
 
 }
