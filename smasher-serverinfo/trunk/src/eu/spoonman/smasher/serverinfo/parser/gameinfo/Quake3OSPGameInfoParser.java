@@ -81,6 +81,9 @@ public class Quake3OSPGameInfoParser extends QuakeEngineGameInfoParser {
 
         case 4:
             return GameTypes.CAPTURE_THE_FLAG;
+            
+        case 5:
+            return GameTypes.CLAN_ARENA;
 
         default:
             return GameTypes.UNKNOWN;
