@@ -44,6 +44,8 @@ public abstract class Client {
 	private Observer<Pair<PlayerInfo, PlayerInfo>> playerNameChangeEventObserver;
 	private Observer<Pair<PlayerInfo, PlayerInfo>> playerPingChangeEventObserver;
 	private Observer<Pair<PlayerInfo, PlayerInfo>> playerScoreChangeEventObserver;
+	private Observer<Pair<Scorebot, Scorebot>> differenceStartEventObserver;
+	private Observer<Pair<Scorebot, Scorebot>> differenceStopEventObserver;
 
 	/**
 	 * Logger for this class
@@ -53,6 +55,10 @@ public abstract class Client {
 	private String loggingPattern = "Differentt %s : < %s > : < %s >";
 
 	protected void register(Scorebot scorebot) {
+		
+		registerOnDifferenceStartEvent(scorebot);
+		registerOnDifferenceStopEvent(scorebot);
+		
 		registerOnGameInfoChange(scorebot);
 
 		registerOnProgressInfoChange(scorebot);
@@ -69,6 +75,9 @@ public abstract class Client {
 	}
 	
 	protected void unregister(Scorebot scorebot) {
+		scorebot.getDifferenceStartEvent().unregister(differenceStartEventObserver);
+		scorebot.getDifferenceStopEvent().unregister(differenceStopEventObserver);
+		
 		scorebot.getGameInfoChange().unregister(gameInfoChangeObserver);
 		
 		scorebot.getProgressInfoChange().unregister(progressInfoChangeObserver);
@@ -82,6 +91,8 @@ public abstract class Client {
 		scorebot.getPlayerPingChangedEvent().unregister(playerPingChangeEventObserver);
 		scorebot.getPlayerScoreChangedEvent().unregister(playerScoreChangeEventObserver);
 		
+		differenceStartEventObserver = null;
+		differenceStopEventObserver = null;
 		gameInfoChangeObserver = null;
 		progressInfoChangeObserver = null;
 		teamNameChangeEventObserver = null;
@@ -186,6 +197,26 @@ public abstract class Client {
 
 		scorebot.getPlayerScoreChangedEvent().register(playerScoreChangeEventObserver);
 	}
+	
+	protected void registerOnDifferenceStartEvent(Scorebot scorebot) {
+		differenceStartEventObserver = new Observer<Pair<Scorebot, Scorebot>>() {
+			public void notify(eu.spoonman.smasher.common.Pair<Scorebot, Scorebot> pair) {
+				onDifferenceStartEvent(pair);
+			}
+		};
+		
+		scorebot.getDifferenceStartEvent().register(differenceStartEventObserver);
+	}
+	
+	protected void registerOnDifferenceStopEvent(Scorebot scorebot) {
+		differenceStopEventObserver = new Observer<Pair<Scorebot, Scorebot>>() {
+			public void notify(eu.spoonman.smasher.common.Pair<Scorebot, Scorebot> pair) {
+				onDifferenceStopEvent(pair);
+			}
+		};
+		
+		scorebot.getDifferenceStopEvent().register(differenceStopEventObserver);
+	}
 
 	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
 		logEvent("GameInfo", pair);
@@ -221,6 +252,14 @@ public abstract class Client {
 
 	protected void onPlayerScoreChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
 		logEvent("PlayerScore", pair);
+	}
+	
+	protected void onDifferenceStartEvent(Pair<Scorebot, Scorebot> pair) {
+		logEvent("DifferenceStart", pair);
+	}
+	
+	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
+		logEvent("DifferenceStop", pair);
 	}
 
 }

@@ -20,6 +20,7 @@ package eu.spoonman.smasher.client;
 
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.output.OutputConfiguration;
+import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
@@ -33,6 +34,15 @@ public class ConsoleClient extends Client {
 		formatter = new ConsoleFormatter(new ConsoleColors(), new OutputConfiguration());
 	}
 	
+	@Override
+	protected void onDifferenceStartEvent(Pair<Scorebot, Scorebot> pair) {
+		super.onDifferenceStartEvent(pair);
+	}
+	
+	@Override
+	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
+		super.onDifferenceStopEvent(pair);
+	}
 
 	@Override
 	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
