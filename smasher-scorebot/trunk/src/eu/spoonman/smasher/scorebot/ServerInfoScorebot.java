@@ -209,6 +209,8 @@ public class ServerInfoScorebot extends Scorebot {
 		
 		differenceStartEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
 
+		//Please ensure that game info is differenced first so in case of change we can change
+		//display rules before any other changes are differenced.
 		differenceGameInfo();
 		differenceProgressInfo();
 		differencePlayerInfos();
