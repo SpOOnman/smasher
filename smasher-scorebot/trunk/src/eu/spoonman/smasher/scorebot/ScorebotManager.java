@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.ServerQuery;
@@ -109,6 +108,10 @@ public class ScorebotManager {
 	public Scorebot getScorebotById(String word) {
 
 		synchronized (scorebots) {
+			for (ServerInfoScorebot scorebot : scorebots) {
+				if (scorebot.getId().equals(word))
+					return scorebot;
+			}
 		}
 
 		return null;
