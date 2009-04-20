@@ -21,12 +21,18 @@ package eu.spoonman.smasher.scorebot;
  * @author Tomasz Kalkosinski
  *
  */
-class ScorebotThread {
+class ScorebotThread extends Thread {
 	
 	private final Scorebot scorebot;
 	
 	ScorebotThread(Scorebot scorebot) {
 		this.scorebot = scorebot;
+	}
+	
+	@Override
+	public void run() {
+		super.run();
+		scorebot.start();
 	}
 
 	public Scorebot getScorebot() {

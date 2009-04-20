@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.ServerQuery;
@@ -73,15 +74,11 @@ public class ScorebotManager {
 	}
 
 	public void stopScorebot(Scorebot scorebot) {
-
+		scorebot.stop();
 	}
 
 	private void runScorebot(final Scorebot scorebot) {
-		executorService.execute(new Runnable() {
-			public void run() {
-				scorebot.start();
-			}
-		});
+		executorService.execute(new ScorebotThread(scorebot));
 	}
 
 	private String createUniqueId() {
