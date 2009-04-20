@@ -110,6 +110,11 @@ public class ConsoleFormatter {
 	public ConsoleFormatter(ConsoleColors colors, OutputConfiguration outputConfiguration) {
 		this.colors = colors;
 		this.outputConfiguration = outputConfiguration;
+		
+		String.format(MAIN_LINE_TDM2,
+				colors.getBold(), scorebot.getId(), colors.getReset(),
+				colors.getRed(), colors.getBold(), scorebot.getReadTeamName(), colors.getReset(),
+				);
 
 		output = System.out;
 		formatMainLine = false;
