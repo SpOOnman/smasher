@@ -141,8 +141,8 @@ public class ServerInfoScorebot extends Scorebot {
 	private void differenceTeamInfos() {
 		
 		for(TeamKey key : TeamKey.values()) {
-			TeamInfo left = previousServerInfo.getTeamInfos() == null ? null : previousServerInfo.getTeamInfos().get(key);
-			TeamInfo right = currentServerInfo.getTeamInfos() == null ? null : currentServerInfo.getTeamInfos().get(key);
+			TeamInfo left = previousServerInfo == null || previousServerInfo.getTeamInfos() == null ? null : previousServerInfo.getTeamInfos().get(key);
+			TeamInfo right = currentServerInfo == null || currentServerInfo.getTeamInfos() == null ? null : currentServerInfo.getTeamInfos().get(key);
 			
 			if (left == null && right == null)
 				continue;
