@@ -109,6 +109,7 @@ public class ConsoleFormatter {
 
 	public void format(OutputStyle style, LazyFormat lazyFormatString) {
 		switch (style) {
+		
 		case DONT_SHOW:
 			return;
 			
@@ -116,21 +117,25 @@ public class ConsoleFormatter {
 			synchronized (formatMainLine) {
 				formatMainLine = true;
 			}
+			break;
 			
 		case EXCLUSIVE_NEW_LINE:
 			synchronized (exclusiveLines) {
 				exclusiveLines.add(lazyFormatString.format());
 			}
+			break;
 			
 		case JOINT_NEW_LINE:
 			synchronized (jointLines) {
 				jointLines.add(lazyFormatString.format());
 			}
+			break;
 
 		case MAIN_LINE:
 			synchronized (mainLines) {
 				mainLines.add(lazyFormatString.format());
 			}
+			break;
 
 		default:
 			throw new RuntimeException("Enum value " + style + " not found.");
