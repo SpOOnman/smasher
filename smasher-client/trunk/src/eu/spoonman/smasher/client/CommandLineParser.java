@@ -41,79 +41,87 @@ public class CommandLineParser {
 	enum Commands {
 		START, STOP, SHOW
 	}
-
-	public void parseAndExecute(String line) throws ClientException {
-		String[] split = line.split(" ");
-
+	
+	/**
+	 * I know that no properties is a poor design, but it's only Data Value Object.
+	 */
+	class CommandData {
 		Commands command = null;
 		InetAddress address = null;
 		int port = 0;
 		Scorebot scorebot = null;
 		List<String> args = new ArrayList<String>();
+		
+	}
+
+	public void parseAndExecute(String line) throws ClientException {
+		String[] split = line.split(" ");
+		
+		CommandData data = new CommandData();
 
 		for (String word : split) {
 
 			// Search for first known command;
-			if (command == null) {
-				command = searchForCommand(word);
-				if (command != null)
+			if (data.command == null) {
+				data.command = searchForCommand(word);
+				if (data.command != null)
 					continue;
 			}
 
 			// Search for IP
-			if (address == null) {
-				address = searchForIP(word);
-				if (address != null) {
-					port = searchForPort(word);
+			if (data.address == null) {
+				data.address = searchForIP(word);
+				if (data.address != null) {
+					data.port = searchForPort(word);
 					continue;
 				}
 			}
 			
-			if (scorebot == null) {
-				scorebot = searchForScorebot(word);
-				if (scorebot != null)
+			if (data.scorebot == null) {
+				data.scorebot = searchForScorebot(word);
+				if (data.scorebot != null)
 					continue;
 			}
 			
-			args.add(word);
+			data.args.add(word);
 		}
 		
-		execute(command, address, port, scorebot, args);
+		execute(data);
 
 	}
 	
-	protected void execute(Commands command, InetAddress address, int port, Scorebot scorebot, List<String> args) throws ClientException {
+	protected void execute(CommandData data) throws ClientException {
 		
-		if (command == null)
+		if (data.command == null)
 			throw new ClientException("Unknown command");
 		
-		switch (command) {
+		switch (data.command) {
 		case START:
-			if (address == null)
+			if (data.address == null)
 				throw new ClientException("IP address is needed.");
 			
-			Scorebot _scorebot = ScorebotManager.getInstance().createOrGetScorebot(Games.QUAKE3ARENA, address, port);
+			Scorebot _scorebot = ScorebotManager.getInstance().createOrGetScorebot(Games.QUAKE3ARENA, data.address, data.port);
 			Client consoleClient = ClientBuilder.getConsoleClient();
 			consoleClient.register(_scorebot);
 			
 			break;
 			
 		case SHOW:
-			if (scorebot == null)
+			if (data.scorebot == null)
 				throw new ClientException("Scorebot ID is needed.");
 			break;
 			
 		case STOP:
-			if (scorebot == null)
+			if (data.scorebot == null)
 				throw new ClientException("Scorebot ID is needed.");
 			
-			//client.unregister(scorebot);
-			ScorebotManager.getInstance().stopScorebot(scorebot);
+			//client.unregister(data.scorebot);
+			ScorebotManager.getInstance().stopScorebot(data.scorebot);
 			
 			break;
 
 		default:
-			throw new ClientException("Unknown command " + command);
+			throw new ClientException("Unknown command " + data.command);
 		}
 	}
 
