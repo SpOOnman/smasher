@@ -32,6 +32,8 @@ import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.ServerQuery;
+import eu.spoonman.smasher.serverinfo.TeamInfo;
+import eu.spoonman.smasher.serverinfo.TeamKey;
 
 /**
  * @author Tomasz Kalkosiński
@@ -135,6 +137,35 @@ public class ServerInfoScorebot extends Scorebot {
 			progressInfoChange.notifyAll(new Pair<ProgressInfo, ProgressInfo>(previousServerInfo
 					.getProgressInfo(), currentServerInfo.getProgressInfo()));
 	}
+	
+	private void differenceTeamInfos() {
+		
+		for(TeamKey key : TeamKey.values()) {
+			TeamInfo left = previousServerInfo.getTeamInfos() == null ? null : previousServerInfo.getTeamInfos().get(key);
+			TeamInfo right = currentServerInfo.getTeamInfos() == null ? null : currentServerInfo.getTeamInfos().get(key);
+			
+			if (left == null && right == null)
+				continue;
+			
+			if (left != null && right != null) {
+				differenceTeamInfo(new Pair<TeamInfo, TeamInfo>(left, right));
+			}
+			
+			if ((left == null && right != null) || (left != null && right == null)) {
+				log.debug("One of teams disappeared.");
+			}
+		}
+	}
+
+	private void differenceTeamInfo(Pair<TeamInfo, TeamInfo> pair) {
+		if (!(pair.getFirst().getName().equals(pair.getSecond().getName()))) {
+			teamNameChangedEvent.notifyAll(pair);
+		}
+		
+		if (pair.getFirst().getScore() != pair.getSecond().getScore()) {
+			teamScoreChangedEvent.notifyAll(pair);
+		}
+	}
 
 	private void differencePlayerInfos() {
 		List<PlayerInfo> left = previousServerInfo == null ? new ArrayList<PlayerInfo>() : previousServerInfo
@@ -213,6 +244,7 @@ public class ServerInfoScorebot extends Scorebot {
 		//display rules before any other changes are differenced.
 		differenceGameInfo();
 		differenceProgressInfo();
+		differenceTeamInfos();
 		differencePlayerInfos();
 		
 		differenceStopEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
