@@ -53,6 +53,46 @@ public class ConsoleFormatter {
 	private final String TEAM_NAME_CHANGE = "Team %s renames to %s";
 	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
 
+	/*
+	<!-- This is summary information while scorebot is running -->
+    <!-- Keys:
+
+            %1% scorebot id
+            %2% map symbol
+            %3% map name
+            %4% time
+
+            %6% server ip
+            %7% server name
+            %8% gametype name
+            %9% mod name
+
+            %10% red team name color stripped
+            %11% red team score
+            %12% red team avg ping
+            %13% red team players
+            %14% red team net from last print (zero = blank)
+
+            %15% blue team name color stripped
+            %16% blue team score
+            %17% blue team avg ping
+            %18% blue team players
+            %19% blue team net from last print (zero = blank)
+
+            %20% spectator players
+            %21% team score difference (zero = blank)
+
+            %22% events inline
+
+            ^W   winning team color (^N if there is a tie)
+            ^L   loosing team color (^N if there is a tie)
+
+    -->
+    */
+	
+	private final String MAIN_LINE_TDM = "^O%1%^N. ^R^O%10%^N  (%|14$+2|) ^O%11%^N  vs  ^O%16%^N (%|19$+2|)  ^B^O%15%^N (%4%, map: ^O%2%) ^O^W*^N%|21$+2|^O^W*^N %22%";
+	private final String MAIN_LINE_TDM2 = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s%s) %s%s*%s%+2d%s%s*%s %s";
+
 	private final ConsoleColors colors;
 	private OutputConfiguration outputConfiguration;
 
