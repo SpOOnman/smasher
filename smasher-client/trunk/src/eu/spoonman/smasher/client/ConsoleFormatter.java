@@ -21,11 +21,16 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.Duration;
+import org.joda.time.Period;
+import org.joda.time.Seconds;
+
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.output.OutputStyle;
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
+import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.RoundInfo;
@@ -150,6 +155,36 @@ public class ConsoleFormatter {
 
 		default:
 			throw new RuntimeException("Enum value " + style + " not found.");
+		}
+	}
+	
+	public void formatGameInfoChange(final Pair<GameInfo, GameInfo> pair) {
+		if (pair.getFirst() == null && pair.getSecond() != null) {
+			format(OutputStyle.TRIGGER_MAIN_LINE, null);
+			return;
+		}
+		
+		if (pair.getFirst().getClass() != pair.getSecond().getClass()) {
+			format(OutputStyle.TRIGGER_MAIN_LINE, null);
+			return;
+		}
+	}
+	
+	public void formatProgressInfoChange(final Pair<ProgressInfo, ProgressInfo> pair) {
+		if (pair.getFirst() == null && pair.getSecond() != null) {
+			format(OutputStyle.TRIGGER_MAIN_LINE, null);
+			return;
+		}
+		
+		if (pair.getFirst().getClass() != pair.getSecond().getClass()) {
+			format(OutputStyle.TRIGGER_MAIN_LINE, null);
+			return;
+		}
+		
+		if (pair.getFirst() instanceof TimePeriodInfo) { //both are
+			Period diff = ((TimePeriodInfo)pair.getFirst()).getPeriod().minus(((TimePeriodInfo)pair.getSecond()).getPeriod());
+			if (Math.abs(diff.getSeconds()) >= 30)
+				format(OutputStyle.TRIGGER_MAIN_LINE, null);
 		}
 	}
 

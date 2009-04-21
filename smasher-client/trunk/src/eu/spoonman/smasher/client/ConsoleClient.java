@@ -53,6 +53,8 @@ public class ConsoleClient extends Client {
 		
 		if (pair.getFirst() == null || pair.getFirst().getGameType() != pair.getSecond().getGameType())
 			formatter.setOutputConfiguration(new OutputConfiguration());
+		
+		formatter.formatGameInfoChange(pair);
 	}
 
 	@Override
@@ -87,8 +89,8 @@ public class ConsoleClient extends Client {
 
 	@Override
 	protected void onProgressInfoChange(Pair<ProgressInfo, ProgressInfo> pair) {
-		// TODO Auto-generated method stub
 		super.onProgressInfoChange(pair);
+		formatter.formatProgressInfoChange(pair);
 	}
 
 	@Override
