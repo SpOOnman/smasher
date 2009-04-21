@@ -27,8 +27,11 @@ import eu.spoonman.smasher.output.OutputStyle;
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
+import eu.spoonman.smasher.serverinfo.ProgressInfo;
+import eu.spoonman.smasher.serverinfo.RoundInfo;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
+import eu.spoonman.smasher.serverinfo.TimePeriodInfo;
 
 /**
  * Default console formatter.
@@ -53,8 +56,11 @@ public class ConsoleFormatter {
 	
 	private final String TEAM_NAME_CHANGE = "Team %s renames to %s";
 	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
+	
+	private final String TIME_PERIOD_INFO = "%d:%d";
+	private final String ROUND_INFO = "%d/%d";
 
-	private final static String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%d) %s%d%s  vs  %s%d%s (%d)  %s%s%s%s (%s, map: %s) %s%s*%s%d%s%s*%s %s";
+	private final static String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s) %s%s*%s%+2d%s%s*%s %s";
 
 	private final ConsoleColors colors;
 	private OutputConfiguration outputConfiguration;
@@ -242,7 +248,7 @@ public class ConsoleFormatter {
 				colors.getBold(), blueTeam.getScore(), colors.getReset(),
 				blueTeam.getScore() - lastPrintedBlueScore,
 				colors.getBlue(), colors.getBold(), blueTeam.getName(), colors.getReset(),
-				serverInfoScorebot.getCurrentServerInfo().getProgressInfo().toString(),
+				formatProgressInfo(serverInfoScorebot.getCurrentServerInfo().getProgressInfo()),
 				serverInfoScorebot.getCurrentServerInfo().getGameInfo().getMap(),
 				colors.getBold(), winningColor, colors.getReset(), Math.abs(redTeam.getScore() - blueTeam.getScore()), colors.getBold(), winningColor, colors.getReset(),
 				inlines
@@ -252,6 +258,25 @@ public class ConsoleFormatter {
 		lastPrintedBlueScore = blueTeam.getScore();
 		
 		return returnString;
+	}
+	
+	private String formatProgressInfo(ProgressInfo progressInfo) {
+		
+		assert(progressInfo != null);
+		
+		if (progressInfo instanceof TimePeriodInfo) {
+			TimePeriodInfo time = (TimePeriodInfo)progressInfo;
+			
+			return String.format(TIME_PERIOD_INFO, time.getPeriod().getMinutes(), time.getPeriod().getSeconds());
+		}
+		
+		if (progressInfo instanceof RoundInfo) {
+			RoundInfo rounds = (RoundInfo)progressInfo;
+			
+			return String.format(ROUND_INFO, rounds.getRoundNumber(), rounds.getRoundLimit());
+		}
+		
+		return progressInfo.toString();
 	}
 	
 	public String formatShort(PlayerInfo playerInfo) {
