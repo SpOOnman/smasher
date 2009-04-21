@@ -59,7 +59,7 @@ public class ConsoleFormatter {
 	
 	private final String TIME_PERIOD_INFO = "%d:%d";
 	private final String ROUND_INFO = "%d/%d";
-
+	
 	private final static String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s) %s%s*%s%+2d%s%s*%s %s";
 
 	private final ConsoleColors colors;
@@ -243,14 +243,14 @@ public class ConsoleFormatter {
 		String returnString = String.format(MAIN_LINE_TDM,
 				colors.getBold(), scorebot.getId(), colors.getReset(),
 				colors.getRed(), colors.getBold(), redTeam.getName(), colors.getReset(),
-				redTeam.getScore() - lastPrintedRedScore,
+				formatNet(redTeam.getScore() - lastPrintedRedScore),
 				colors.getBold(), redTeam.getScore(), colors.getReset(),
 				colors.getBold(), blueTeam.getScore(), colors.getReset(),
-				blueTeam.getScore() - lastPrintedBlueScore,
+				formatNet(blueTeam.getScore() - lastPrintedBlueScore),
 				colors.getBlue(), colors.getBold(), blueTeam.getName(), colors.getReset(),
 				formatProgressInfo(serverInfoScorebot.getCurrentServerInfo().getProgressInfo()),
 				serverInfoScorebot.getCurrentServerInfo().getGameInfo().getMap(),
-				colors.getBold(), winningColor, colors.getReset(), Math.abs(redTeam.getScore() - blueTeam.getScore()), colors.getBold(), winningColor, colors.getReset(),
+				colors.getBold(), winningColor, colors.getReset(), formatNet(Math.abs(redTeam.getScore() - blueTeam.getScore())), colors.getBold(), winningColor, colors.getReset(),
 				inlines
 				);
 		
@@ -277,6 +277,14 @@ public class ConsoleFormatter {
 		}
 		
 		return progressInfo.toString();
+	}
+	
+	private String formatNet(int net) {
+		if (net == 0)
+			return "  ";
+		
+		return String.format("%+d", net);
+		
 	}
 	
 	public String formatShort(PlayerInfo playerInfo) {
