@@ -54,7 +54,7 @@ public class ConsoleFormatter {
 	private final String TEAM_NAME_CHANGE = "Team %s renames to %s";
 	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
 
-	private final String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s%s) %s%s*%s%+2d%s%s*%s %s";
+	private final static String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%d) %s%d%s  vs  %s%d%s (%d)  %s%s%s%s (%s, map: %s) %s%s*%s%d%s%s*%s %s";
 
 	private final ConsoleColors colors;
 	private OutputConfiguration outputConfiguration;
@@ -213,7 +213,7 @@ public class ConsoleFormatter {
 	
 	//private final String MAIN_LINE_TDM2 = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s) %s%s*%s%+2d%s%s*%s %s";
 
-	public String formatMatchLine(Scorebot scorebot) {
+	public synchronized String formatMatchLine(Scorebot scorebot) {
 		
 		if (!(scorebot instanceof ServerInfoScorebot))
 			throw new RuntimeException("Cannot draw line with scorebot different than ServerInfoScorebot");
@@ -253,7 +253,7 @@ public class ConsoleFormatter {
 		
 		return returnString;
 	}
-
+	
 	public String formatShort(PlayerInfo playerInfo) {
 		return String.format("%s (%d)", playerInfo.getName(), playerInfo.getScore());
 
