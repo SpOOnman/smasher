@@ -28,6 +28,7 @@ import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
+import eu.spoonman.smasher.serverinfo.TeamKey;
 
 /**
  * Default console formatter.
@@ -53,45 +54,7 @@ public class ConsoleFormatter {
 	private final String TEAM_NAME_CHANGE = "Team %s renames to %s";
 	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
 
-	/*
-	<!-- This is summary information while scorebot is running -->
-    <!-- Keys:
-
-            %1% scorebot id
-            %2% map symbol
-            %3% map name
-            %4% time
-
-            %6% server ip
-            %7% server name
-            %8% gametype name
-            %9% mod name
-
-            %10% red team name color stripped
-            %11% red team score
-            %12% red team avg ping
-            %13% red team players
-            %14% red team net from last print (zero = blank)
-
-            %15% blue team name color stripped
-            %16% blue team score
-            %17% blue team avg ping
-            %18% blue team players
-            %19% blue team net from last print (zero = blank)
-
-            %20% spectator players
-            %21% team score difference (zero = blank)
-
-            %22% events inline
-
-            ^W   winning team color (^N if there is a tie)
-            ^L   loosing team color (^N if there is a tie)
-
-    -->
-    */
-	
-	private final String MAIN_LINE_TDM = "^O%1%^N. ^R^O%10%^N  (%|14$+2|) ^O%11%^N  vs  ^O%16%^N (%|19$+2|)  ^B^O%15%^N (%4%, map: ^O%2%) ^O^W*^N%|21$+2|^O^W*^N %22%";
-	private final String MAIN_LINE_TDM2 = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s%s) %s%s*%s%+2d%s%s*%s %s";
+	private final String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s%s) %s%s*%s%+2d%s%s*%s %s";
 
 	private final ConsoleColors colors;
 	private OutputConfiguration outputConfiguration;
@@ -103,6 +66,8 @@ public class ConsoleFormatter {
 	
 	private static PrintStream output;
 	private Client client;
+	private int lastPrintedRedScore;
+	private int lastPrintedBlueScore;
 
 	/**
 	 * @param colors
@@ -111,11 +76,6 @@ public class ConsoleFormatter {
 		this.colors = colors;
 		this.outputConfiguration = outputConfiguration;
 		
-		String.format(MAIN_LINE_TDM2,
-				colors.getBold(), scorebot.getId(), colors.getReset(),
-				colors.getRed(), colors.getBold(), scorebot.getReadTeamName(), colors.getReset(),
-				);
-
 		output = System.out;
 		formatMainLine = false;
 
@@ -250,10 +210,48 @@ public class ConsoleFormatter {
 			}
 		});
 	}
+	
+	//private final String MAIN_LINE_TDM2 = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s) %s%s*%s%+2d%s%s*%s %s";
 
 	public String formatMatchLine(Scorebot scorebot) {
-		String format = "Game %s. %s%s %s%d%s vs %s%d%s";
-		return String.format(format, scorebot.getId());
+		
+		if (!(scorebot instanceof ServerInfoScorebot))
+			throw new RuntimeException("Cannot draw line with scorebot different than ServerInfoScorebot");
+		
+		ServerInfoScorebot serverInfoScorebot = (ServerInfoScorebot)scorebot;
+		TeamInfo redTeam = serverInfoScorebot.getCurrentServerInfo().getTeamInfos().get(TeamKey.RED_TEAM);
+		TeamInfo blueTeam = serverInfoScorebot.getCurrentServerInfo().getTeamInfos().get(TeamKey.BLUE_TEAM);
+		
+		if (redTeam == null || blueTeam == null)
+			throw new RuntimeException("There is no red either blue team!");
+		
+		String winningColor = colors.getReset();
+		
+		if (redTeam.getScore() > blueTeam.getScore())
+			winningColor = colors.getRed();
+		else if (redTeam.getScore() < blueTeam.getScore())
+			winningColor = colors.getBlue();
+		
+		String inlines = "inlines";
+		
+		String returnString = String.format(MAIN_LINE_TDM,
+				colors.getBold(), scorebot.getId(), colors.getReset(),
+				colors.getRed(), colors.getBold(), redTeam.getName(), colors.getReset(),
+				redTeam.getScore() - lastPrintedRedScore,
+				colors.getBold(), redTeam.getScore(), colors.getReset(),
+				colors.getBold(), blueTeam.getScore(), colors.getReset(),
+				blueTeam.getScore() - lastPrintedBlueScore,
+				colors.getBlue(), colors.getBold(), blueTeam.getName(), colors.getReset(),
+				serverInfoScorebot.getCurrentServerInfo().getProgressInfo().toString(),
+				serverInfoScorebot.getCurrentServerInfo().getGameInfo().getMap(),
+				colors.getBold(), winningColor, colors.getReset(), Math.abs(redTeam.getScore() - blueTeam.getScore()), colors.getBold(), winningColor, colors.getReset(),
+				inlines
+				);
+		
+		lastPrintedRedScore = redTeam.getScore();
+		lastPrintedBlueScore = blueTeam.getScore();
+		
+		return returnString;
 	}
 
 	public String formatShort(PlayerInfo playerInfo) {
