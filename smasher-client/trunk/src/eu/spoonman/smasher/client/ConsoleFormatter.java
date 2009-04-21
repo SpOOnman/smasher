@@ -185,6 +185,9 @@ public class ConsoleFormatter {
 			Period diff = ((TimePeriodInfo)pair.getFirst()).getPeriod().minus(((TimePeriodInfo)pair.getSecond()).getPeriod());
 			if (Math.abs(diff.getSeconds()) >= 30)
 				format(OutputStyle.TRIGGER_MAIN_LINE, null);
+			
+			//static Seconds	standardSecondsIn(ReadablePeriod period) 
+	          //Creates a new Seconds representing the number of complete standard length seconds in the specified period.
 		}
 	}
 
