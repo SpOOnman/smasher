@@ -88,6 +88,11 @@ public class ProgressInfo {
             return false;
         return true;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("[ProgressInfo: %s, (%s)]", rawText, this.getProgressInfoFlags().toString());
+    }
 
     /**
      * @return the rawText
