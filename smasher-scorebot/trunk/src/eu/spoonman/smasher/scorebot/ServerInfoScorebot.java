@@ -74,6 +74,7 @@ public class ServerInfoScorebot extends Scorebot {
 
 	@Override
 	public void stop() {
+		log.debug("Stopping scorebot " + this.getId());
 		setRunning(false);
 	}
 
@@ -108,6 +109,8 @@ public class ServerInfoScorebot extends Scorebot {
 				log.error("Scorebot thread unexpectedly interrupted.", e);
 			}
 		}
+		
+		log.info(String.format("Scorebot %s has stopped.", getId()));
 	}
 
 	private void differenceGameInfo() {
