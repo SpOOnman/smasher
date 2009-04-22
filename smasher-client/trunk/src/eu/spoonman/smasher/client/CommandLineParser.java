@@ -20,7 +20,9 @@ package eu.spoonman.smasher.client;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -37,9 +39,22 @@ public class CommandLineParser {
 	 * Logger for this class
 	 */
 	private static final Logger log = Logger.getLogger(CommandLineParser.class);
+	
+	Map<String, Games> gameMapping = new HashMap<String, Games>();
 
 	enum Commands {
 		START, STOP, SHOW
+	}
+	
+	public CommandLineParser() {
+		gameMapping.put("q3", Games.QUAKE3ARENA);
+		gameMapping.put("q3a", Games.QUAKE3ARENA);
+		gameMapping.put("quake3a", Games.QUAKE3ARENA);
+		gameMapping.put("q2", Games.QUAKE2);
+		gameMapping.put("quake2", Games.QUAKE2);
+		gameMapping.put("ql", Games.QUAKELIVE);
+		gameMapping.put("quakelive", Games.QUAKELIVE);
+		gameMapping.put("qz", Games.QUAKELIVE);
 	}
 	
 	/**
@@ -47,6 +62,7 @@ public class CommandLineParser {
 	 */
 	class CommandData {
 		Commands command = null;
+		Games game = null;
 		InetAddress address = null;
 		int port = 0;
 		Scorebot scorebot = null;
@@ -76,6 +92,12 @@ public class CommandLineParser {
 					continue;
 				}
 			}
+			// Search for game
+			if (data.game == null) {
+				data.game = searchForGame(word);
+				if (data.game != null)
+					continue;
+			}
 			
 			if (data.scorebot == null) {
 				data.scorebot = searchForScorebot(word);
@@ -98,9 +120,12 @@ public class CommandLineParser {
 		switch (data.command) {
 		case START:
 			if (data.address == null)
-				throw new ClientException("IP address is needed.");
+				throw new ClientException("I don't have IP.");
 			
-			Scorebot _scorebot = ScorebotManager.getInstance().createOrGetScorebot(Games.QUAKE3ARENA, data.address, data.port);
+			if (data.game == null)
+				throw new ClientException("I don't know what game to use.");
+			
+			Scorebot _scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port);
 			Client consoleClient = ClientBuilder.getConsoleClient();
 			consoleClient.register(_scorebot);
 			
@@ -150,6 +175,10 @@ public class CommandLineParser {
 		} catch (UnknownHostException e) {
 			return null;
 		}
+	}
+	
+	private Games searchForGame(String word) {
+		return this.gameMapping.get(word);
 	}
 	
 	private int searchForPort(String word) {
