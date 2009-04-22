@@ -327,7 +327,7 @@ public class ConsoleFormatter {
 			return String.format(ROUND_INFO, rounds.getRoundNumber(), rounds.getRoundLimit());
 		}
 		
-		return progressInfo.toString();
+		return progressInfo.getRawText();
 	}
 	
 	private String formatNet(int net) {
