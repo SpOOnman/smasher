@@ -68,7 +68,7 @@ public class ConsoleFormatter {
 	private final int TDM_INTERVAL = 30; //seconds
 	private final int INTERVAL = TDM_INTERVAL * 2;
 	
-	private final static String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s) %s%s*%s%+2d%s%s*%s %s";
+	private final static String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%s) %s%d%s  vs  %s%d%s (%s)  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
 
 	private final ConsoleColors colors;
 	private OutputConfiguration outputConfiguration;
@@ -270,8 +270,6 @@ public class ConsoleFormatter {
 		});
 	}
 	
-	//private final String MAIN_LINE_TDM2 = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s) %s%s*%s%+2d%s%s*%s %s";
-
 	public synchronized String formatMatchLine(Scorebot scorebot) {
 		
 		if (!(scorebot instanceof ServerInfoScorebot))
