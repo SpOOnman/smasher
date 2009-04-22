@@ -191,8 +191,12 @@ public class ConsoleFormatter {
 		
 		//Or every 30 minutes
 		if (pair.getFirst() instanceof TimePeriodInfo) { //both are
-			Seconds seconds = Seconds.standardSecondsIn(((TimePeriodInfo)pair.getSecond()).getPeriod());
-			mark = Integer.toString((int) (Math.floor(seconds.getSeconds() / TDM_INTERVAL)));
+			Seconds secondsFirst = Seconds.standardSecondsIn(((TimePeriodInfo)pair.getFirst()).getPeriod());
+			Seconds secondsSecond = Seconds.standardSecondsIn(((TimePeriodInfo)pair.getSecond()).getPeriod());
+			
+			int modifier = secondsFirst.getSeconds() < secondsSecond.getSeconds() ? -1 : 1;
+			
+			mark = Integer.toString((int) (Math.floor(secondsSecond.getSeconds() + modifier / TDM_INTERVAL)));
 		}
 		
 		//Or every round
