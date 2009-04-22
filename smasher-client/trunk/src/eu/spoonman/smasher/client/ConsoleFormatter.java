@@ -65,6 +65,9 @@ public class ConsoleFormatter {
 	private final String TIME_PERIOD_INFO = "%d:%d";
 	private final String ROUND_INFO = "%d/%d";
 	
+	private final int TDM_INTERVAL = 30; //seconds
+	private final int INTERVAL = TDM_INTERVAL * 2;
+	
 	private final static String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%+2d) %s%d%s  vs  %s%d%s (%+2d)  %s%s%s%s (%s, map: %s) %s%s*%s%+2d%s%s*%s %s";
 
 	private final ConsoleColors colors;
@@ -79,6 +82,8 @@ public class ConsoleFormatter {
 	private Client client;
 	private int lastPrintedRedScore;
 	private int lastPrintedBlueScore;
+	
+	private String timeMark = "NULL";
 
 	/**
 	 * @param colors
@@ -180,14 +185,24 @@ public class ConsoleFormatter {
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
 			return;
 		}
+
+		//Show every change
+		String mark = pair.getSecond().getRawText();
 		
+		//Or every 30 minutes
 		if (pair.getFirst() instanceof TimePeriodInfo) { //both are
-			Period diff = ((TimePeriodInfo)pair.getFirst()).getPeriod().minus(((TimePeriodInfo)pair.getSecond()).getPeriod());
-			if (Math.abs(diff.getSeconds()) >= 30)
-				format(OutputStyle.TRIGGER_MAIN_LINE, null);
+			Seconds seconds = Seconds.standardSecondsIn(((TimePeriodInfo)pair.getSecond()).getPeriod());
+			mark = Integer.toString((int) (Math.floor(seconds.getSeconds() / TDM_INTERVAL)));
+		}
+		
+		//Or every round
+		if (pair.getFirst() instanceof RoundInfo) { //both are
+			mark = Integer.toString(((RoundInfo) pair.getSecond()).getRoundNumber());
+		}
 			
-			//static Seconds	standardSecondsIn(ReadablePeriod period) 
-	          //Creates a new Seconds representing the number of complete standard length seconds in the specified period.
+		if (!(mark.equals(timeMark))) {
+			timeMark = mark;
+			format(OutputStyle.TRIGGER_MAIN_LINE, null);
 		}
 	}
 
