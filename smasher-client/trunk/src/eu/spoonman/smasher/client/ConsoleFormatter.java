@@ -199,7 +199,7 @@ public class ConsoleFormatter {
 		if (pair.getFirst() instanceof RoundInfo) { //both are
 			mark = Integer.toString(((RoundInfo) pair.getSecond()).getRoundNumber());
 		}
-			
+		
 		if (!(mark.equals(timeMark))) {
 			timeMark = mark;
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);

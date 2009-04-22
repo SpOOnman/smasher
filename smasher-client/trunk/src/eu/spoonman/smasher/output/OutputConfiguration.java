@@ -29,7 +29,7 @@ public class OutputConfiguration {
 	private OutputStyle showEveryPlayerConnectEvent = OutputStyle.JOINT_NEW_LINE;
 	private OutputStyle showEveryPlayerDisconnectEvent = OutputStyle.JOINT_NEW_LINE;
 	
-	private OutputStyle showEveryTeamScoreChange = OutputStyle.TRIGGER_MAIN_LINE;
+	private OutputStyle showEveryTeamScoreChange = OutputStyle.DONT_SHOW;
 
 	public OutputStyle getShowEveryPlayerScoreChange() {
 		return showEveryPlayerScoreChange;
