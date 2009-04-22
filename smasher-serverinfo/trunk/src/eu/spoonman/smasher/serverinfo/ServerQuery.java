@@ -18,6 +18,8 @@
 
 package eu.spoonman.smasher.serverinfo;
 
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -44,6 +46,10 @@ import eu.spoonman.smasher.serverinfo.reader.ReaderException;
  * 
  */
 public class ServerQuery {
+    /**
+     * Logger for this class
+     */
+    private static final Logger log = Logger.getLogger(ServerQuery.class);
 
     private final int packetSize = 65507;
 
@@ -60,7 +66,7 @@ public class ServerQuery {
     
     private Version gameVersion;
     private Version modVersion;
-
+    
     /**
      * Determines whether builder has already builded parsers. This should
      * happen after first query has done and builder can determine parsers based
@@ -173,7 +179,7 @@ public class ServerQuery {
             try {
                 parser.parseIntoServerInfo(serverInfo);
             } catch (ParserException e) {
-                e.printStackTrace();
+                log.info("Parsing error", e);
             }
         }
     }
