@@ -62,7 +62,7 @@ public class ConsoleFormatter {
 	private final String TEAM_NAME_CHANGE = "Team %s renames to %s";
 	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
 	
-	private final String TIME_PERIOD_INFO = "%d:%d";
+	private final String TIME_PERIOD_INFO = "%d:%02d";
 	private final String ROUND_INFO = "%d/%d";
 	
 	private final int TDM_INTERVAL = 30; //seconds
@@ -289,7 +289,12 @@ public class ConsoleFormatter {
 		else if (redTeam.getScore() < blueTeam.getScore())
 			winningColor = colors.getBlue();
 		
-		String inlines = "inlines";
+		StringBuilder mainLines = new StringBuilder();
+		
+		for (String line : this.mainLines) {
+			mainLines.append(line);
+			mainLines.append(" ");
+		}
 		
 		String returnString = String.format(MAIN_LINE_TDM,
 				colors.getBold(), scorebot.getId(), colors.getReset(),
@@ -302,7 +307,7 @@ public class ConsoleFormatter {
 				formatProgressInfo(serverInfoScorebot.getCurrentServerInfo().getProgressInfo()),
 				serverInfoScorebot.getCurrentServerInfo().getGameInfo().getMap(),
 				colors.getBold(), winningColor, colors.getReset(), formatNet(Math.abs(redTeam.getScore() - blueTeam.getScore())), colors.getBold(), winningColor, colors.getReset(),
-				inlines
+				mainLines.toString()
 				);
 		
 		lastPrintedRedScore = redTeam.getScore();
