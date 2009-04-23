@@ -26,8 +26,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +44,9 @@ import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.packet.DiscoverItems;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -189,6 +192,18 @@ public class QuakeLiveService {
             log.error("Protocol", e);
         }
     }
+    
+    private void getPresence(Roster roster, String user) {
+        log.info("Looking for presence of " + user);
+        Presence presence = roster.getPresence(String.format("%s@xmpp.quakelive.com/quakelive", user));
+        log.info(presence.toString());
+        log.info(presence.toXML());
+        
+        presence = roster.getPresence(String.format("%s@xmpp.quakelive.com", user));
+        log.info(presence.toString());
+        log.info(presence.toXML());
+        
+    }
 
     public void xmppLogin(String user, String xaid) throws XMPPException {
         XMPPConnection.DEBUG_ENABLED = true;
@@ -198,6 +213,17 @@ public class QuakeLiveService {
         
         log.debug("Logged in as " + user);
         
+        PacketListener myListener = new PacketListener() {
+            public void processPacket(Packet packet) {
+                //if (packet instanceof Message) {
+                    //Message msg = (Message) packet;
+                    log.info(String.format("Received message: ", packet.toXML()));
+                //}
+            }
+        };
+        // Register the listener.
+        connection.addPacketListener(myListener, null);
+        
         Roster roster = connection.getRoster();
         Collection<RosterEntry> entries = roster.getEntries();
          
@@ -205,19 +231,14 @@ public class QuakeLiveService {
         for(RosterEntry r:entries) {
             log.info(String.format("RoosterEntry: %s, %s, %s, %s ", r.getName(), r.getType().toString(), r.getUser(), r.getStatus()));
         }
+        
+        getPresence(roster, "serek");
+        getPresence(roster, "razorsl");
+        getPresence(roster, "DeeDoubleU");
+        
+        PacketFilter filter = new AndFilter();
 
-        PacketFilter filter = new AndFilter(new PacketTypeFilter(Message.class));
-
-        PacketListener myListener = new PacketListener() {
-            public void processPacket(Packet packet) {
-                if (packet instanceof Message) {
-                    Message msg = (Message) packet;
-                    log.info(String.format("Received message: ", msg.toXML()));
-                }
-            }
-        };
-        // Register the listener.
-        connection.addPacketListener(myListener, filter);
+        
     }
 
     public static void main(String[] args) throws LoginException, IOException, XMPPException {
