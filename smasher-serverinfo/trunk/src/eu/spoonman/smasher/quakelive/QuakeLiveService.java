@@ -27,7 +27,6 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -37,16 +36,13 @@ import org.apache.log4j.Logger;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
+import org.jivesoftware.smack.RosterListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.AndFilter;
 import org.jivesoftware.smack.filter.PacketFilter;
-import org.jivesoftware.smack.filter.PacketTypeFilter;
-import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smackx.ServiceDiscoveryManager;
-import org.jivesoftware.smackx.packet.DiscoverItems;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -225,6 +221,23 @@ public class QuakeLiveService {
         connection.addPacketListener(myListener, null);
         
         Roster roster = connection.getRoster();
+        
+        roster.addRosterListener(new RosterListener() {
+            public void entriesAdded(Collection<String> addresses) {
+                log.info("Entries added: " + addresses.toString());
+            }
+            public void entriesDeleted(Collection<String> addresses) {
+                log.info("Entries deleted: " + addresses.toString());
+            }
+            public void entriesUpdated(Collection<String> addresses) {
+                log.info("Entries updated: " + addresses.toString());
+            }
+            public void presenceChanged(Presence presence) {
+                log.info("Presence changed: " + presence.getFrom() + " " + presence.toXML());
+            }
+        });
+        
+        
         Collection<RosterEntry> entries = roster.getEntries();
          
         log.info("" + entries.size() + " friends:");
