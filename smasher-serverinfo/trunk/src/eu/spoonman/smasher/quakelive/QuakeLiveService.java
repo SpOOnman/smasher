@@ -195,7 +195,7 @@ public class QuakeLiveService {
     
     private void getPresence(Roster roster, String user) {
         log.info("Looking for presence of " + user);
-        Presence presence = roster.getPresence(String.format("%s@xmpp.quakelive.com/quakelive", user));
+        Presence presence = roster.getPresence(String.format("%s", user));
         log.info(presence.toString());
         log.info(presence.toXML());
         
@@ -229,12 +229,13 @@ public class QuakeLiveService {
          
         log.info("" + entries.size() + " friends:");
         for(RosterEntry r:entries) {
-            log.info(String.format("RoosterEntry: %s, %s, %s, %s ", r.getName(), r.getType().toString(), r.getUser(), r.getStatus()));
+            log.info(String.format("RoosterEntry: %s, %s, %s, %s, %s ", r.getName(), r.getType().toString(), r.getUser(), r.getStatus(), r.getGroups()));
         }
         
         getPresence(roster, "serek");
         getPresence(roster, "razorsl");
         getPresence(roster, "DeeDoubleU");
+        getPresence(roster, "AlexMax");
         
         PacketFilter filter = new AndFilter();
 
