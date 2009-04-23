@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,13 +37,12 @@ import org.apache.log4j.Logger;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
-import org.jivesoftware.smack.RosterListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.filter.AndFilter;
-import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.packet.DiscoverItems;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -192,11 +192,12 @@ public class QuakeLiveService {
     private void getPresence(Roster roster, String user) {
         log.info("Looking for presence of " + user);
         Presence presence = roster.getPresence(String.format("%s", user));
-        log.info(presence.toString());
         log.info(presence.toXML());
         
         presence = roster.getPresence(String.format("%s@xmpp.quakelive.com", user));
-        log.info(presence.toString());
+        log.info(presence.toXML());
+        
+        presence = roster.getPresence(String.format("%s@xmpp.quakelive.com/quakelive", user));
         log.info(presence.toXML());
         
     }
@@ -217,12 +218,13 @@ public class QuakeLiveService {
                 //}
             }
         };
+        
         // Register the listener.
         connection.addPacketListener(myListener, null);
-        
+        System.out.println("biore rooster");
         Roster roster = connection.getRoster();
         
-        roster.addRosterListener(new RosterListener() {
+        /*roster.addRosterListener(new RosterListener() {
             public void entriesAdded(Collection<String> addresses) {
                 log.info("Entries added: " + addresses.toString());
             }
@@ -235,22 +237,48 @@ public class QuakeLiveService {
             public void presenceChanged(Presence presence) {
                 log.info("Presence changed: " + presence.getFrom() + " " + presence.toXML());
             }
-        });
+        });*/
         
         
         Collection<RosterEntry> entries = roster.getEntries();
          
+        System.out.println("przed rooster");
+        
         log.info("" + entries.size() + " friends:");
         for(RosterEntry r:entries) {
             log.info(String.format("RoosterEntry: %s, %s, %s, %s, %s ", r.getName(), r.getType().toString(), r.getUser(), r.getStatus(), r.getGroups()));
         }
         
-        getPresence(roster, "serek");
-        getPresence(roster, "razorsl");
-        getPresence(roster, "DeeDoubleU");
-        getPresence(roster, "AlexMax");
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("Po sleep");
         
-        PacketFilter filter = new AndFilter();
+        //getPresence(roster, "serek");
+        getPresence(roster, "razorsl");
+        getPresence(roster, "QScorebot");
+        //getPresence(roster, "DeeDoubleU");
+        //getPresence(roster, "AlexMax");
+        
+        // Obtain the ServiceDiscoveryManager associated with my XMPPConnection
+        ServiceDiscoveryManager discoManager = ServiceDiscoveryManager.getInstanceFor(connection);
+        
+        // Get the items of a given XMPP entity
+        // This example gets the items associated with online catalog service
+        DiscoverItems discoItems = discoManager.discoverItems("xmpp.quakelive.com");
+
+        // Get the discovered items of the queried XMPP entity
+        Iterator it = discoItems.getItems();
+        // Display the items of the remote XMPP entity
+        while (it.hasNext()) {
+            DiscoverItems.Item item = (DiscoverItems.Item) it.next();
+            System.out.println(item.getEntityID());
+            System.out.println(item.getNode());
+            System.out.println(item.getName());
+        }
 
         
     }
