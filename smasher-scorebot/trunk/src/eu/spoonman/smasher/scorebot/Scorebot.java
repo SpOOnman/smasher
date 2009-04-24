@@ -24,6 +24,7 @@ import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
+import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 public abstract class Scorebot {
@@ -75,6 +76,8 @@ public abstract class Scorebot {
 	public abstract InetAddress getInetAddress();
 	public abstract Games getGame();
 	public abstract int getPort();
+	
+	public abstract ServerInfo getCurrentServerInfo();
 	
 	public String getId() {
 		return id;

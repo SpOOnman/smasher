@@ -75,7 +75,7 @@ public class ServerInfoScorebot extends Scorebot {
 	public int getPort() {
 		return serverQuery.getPort();
 	}
-	
+
 	@Override
 	public void start() {
 		
