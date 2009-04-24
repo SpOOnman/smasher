@@ -179,7 +179,7 @@ public class ServerQuery {
             try {
                 parser.parseIntoServerInfo(serverInfo);
             } catch (ParserException e) {
-                log.info("Parsing error", e);
+                log.error("Parsing error", e);
             }
         }
     }
