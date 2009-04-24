@@ -77,10 +77,10 @@ public class ConsoleFormatter {
 	private OutputConfiguration outputConfiguration;
 
 	private Boolean formatMainLine;
-	private List<String> serviceLines;
-	private List<String> mainLines;
-	private List<String> jointLines;
-	private List<String> exclusiveLines;
+	private List<String> beforeMainLines;
+	private List<String> mainInlines;
+	private List<String> secondMainInlines;
+	private List<String> afterMainLines;
 	
 	private static PrintStream output;
 	private Client client;
@@ -99,9 +99,10 @@ public class ConsoleFormatter {
 		output = System.out;
 		formatMainLine = false;
 
-		mainLines = new ArrayList<String>();
-		jointLines = new ArrayList<String>();
-		exclusiveLines = new ArrayList<String>();
+		beforeMainLines = new ArrayList<String>();
+		mainInlines = new ArrayList<String>();
+		secondMainInlines = new ArrayList<String>();
+		afterMainLines = new ArrayList<String>();
 	}
 	
 	public synchronized void flush() {
@@ -115,22 +116,22 @@ public class ConsoleFormatter {
 	private synchronized void clear() {
 		formatMainLine = false;
 
-		serviceLines.clear();
-		mainLines.clear();
-		jointLines.clear();
-		exclusiveLines.clear();
+		beforeMainLines.clear();
+		mainInlines.clear();
+		secondMainInlines.clear();
+		afterMainLines.clear();
 	}
 	
 	private synchronized List<String> formatOutput() {
 		List<String> output = new ArrayList<String>();
 		
-		output.addAll(serviceLines);
+		output.addAll(beforeMainLines);
 		
 		if (formatMainLine) {
 			output.add(formatMatchLine(client.getScorebot()));
 		}
 		
-		output.addAll(exclusiveLines);
+		output.addAll(afterMainLines);
 						
 		return output;
 	}
@@ -148,20 +149,20 @@ public class ConsoleFormatter {
 			break;
 			
 		case EXCLUSIVE_NEW_LINE:
-			synchronized (exclusiveLines) {
-				exclusiveLines.add(lazyFormatString.format());
+			synchronized (afterMainLines) {
+				afterMainLines.add(lazyFormatString.format());
 			}
 			break;
 			
 		case JOINT_NEW_LINE:
-			synchronized (jointLines) {
-				jointLines.add(lazyFormatString.format());
+			synchronized (secondMainInlines) {
+				secondMainInlines.add(lazyFormatString.format());
 			}
 			break;
 
 		case MAIN_LINE:
-			synchronized (mainLines) {
-				mainLines.add(lazyFormatString.format());
+			synchronized (mainInlines) {
+				mainInlines.add(lazyFormatString.format());
 			}
 			break;
 
@@ -171,8 +172,8 @@ public class ConsoleFormatter {
 	}
 	
 	public void formatScorebotStart(Scorebot scorebot) {
-		synchronized (serviceLines) {
-			serviceLines.add(String.format(SCOREBOT_START,
+		synchronized (beforeMainLines) {
+			beforeMainLines.add(String.format(SCOREBOT_START,
 					colors.getBold(), scorebot.getId(), colors.getReset(),
 					colors.getBold(), scorebot.getGame().toString(), colors.getReset(),
 					scorebot.getInetAddress().toString(), scorebot.getPort()
@@ -185,8 +186,8 @@ public class ConsoleFormatter {
 	}
 	
 	public void formatScorebotStop(Scorebot scorebot) {
-		synchronized (exclusiveLines) {
-			exclusiveLines.add(String.format(SCOREBOT_STOP,
+		synchronized (afterMainLines) {
+			afterMainLines.add(String.format(SCOREBOT_STOP,
 					colors.getBold(), scorebot.getId(), colors.getReset()
 					));
 		}
@@ -325,7 +326,7 @@ public class ConsoleFormatter {
 		
 		StringBuilder mainLines = new StringBuilder();
 		
-		for (String line : this.mainLines) {
+		for (String line : this.mainInlines) {
 			mainLines.append(line);
 			mainLines.append(" ");
 		}
