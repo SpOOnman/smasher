@@ -175,7 +175,7 @@ public class ConsoleFormatter {
 		synchronized (beforeMainLines) {
 			beforeMainLines.add(String.format(SCOREBOT_START,
 					colors.getBold(), scorebot.getId(), colors.getReset(),
-					colors.getBold(), scorebot.getGame().toString(), colors.getReset(),
+					colors.getBold(), scorebot.getGame().getFullName(), colors.getReset(),
 					scorebot.getInetAddress().toString(), scorebot.getPort()
 					));
 		}
