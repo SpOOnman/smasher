@@ -195,6 +195,7 @@ public class ServerInfoScorebot extends Scorebot {
 		List<PlayerInfo> left = previousServerInfo == null ? new ArrayList<PlayerInfo>() : previousServerInfo
 				.getPlayerInfos();
 		
+		//TODO: move this into persister.
 		LCS<PlayerInfo> lcs = new LCS<PlayerInfo>(left, currentServerInfo.getPlayerInfos(),
 				new Comparator<PlayerInfo>() {
 
