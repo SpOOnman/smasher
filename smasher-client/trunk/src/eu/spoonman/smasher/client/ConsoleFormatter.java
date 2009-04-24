@@ -206,6 +206,9 @@ public class ConsoleFormatter {
 	}
 	
 	public void formatProgressInfoChange(final Pair<ProgressInfo, ProgressInfo> pair) {
+		
+		assert(pair.getSecond() != null);
+		
 		if (pair.getFirst() == null && pair.getSecond() != null) {
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
 			return;

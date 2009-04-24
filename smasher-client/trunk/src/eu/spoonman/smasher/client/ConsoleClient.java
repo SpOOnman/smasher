@@ -70,6 +70,9 @@ public class ConsoleClient extends Client {
 		}
 		
 		formatter.flush();
+		
+		if (state == State.STARTING)
+			state = State.RUNNING;
 	}
 
 	@Override
