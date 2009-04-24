@@ -73,6 +73,25 @@ public class Quake3OSPTimeInfoParser implements ServerInfoParser {
             serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.WARMUP));
         } else if (scoreTime.equals("Countdown") || scoreTime.equals("Starting")) {
             serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.COUNTDOWN));
+        } else if (scoreTime.equals("Timelimit") || scoreTime.equals("Timelimit hit") || scoreTime.equals("EndOfMatch")) {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.TIMELIMIT));
+        } else if (scoreTime.equals("Timeout")) {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.TIMEOUT));
+        } else if (scoreTime.equals("Timeout: RED")) {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.TIMEOUT_RED));
+        } else if (scoreTime.equals("Timeout: BLUE")) {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.TIMEOUT_BLUE));
+        } else if (scoreTime.equals("Fraglimit") || scoreTime.equals("Fraglimit hit")) {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.FRAGLIMIT));
+        } else if (scoreTime.equals("Roundlimit") || scoreTime.equals("Roundlimit hit")) {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.ROUNDLIMIT));
+        } else if (scoreTime.equals("Caplimit") || scoreTime.equals("Caplimit hit")) {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.CAPLIMIT));
+        } else if (scoreTime.equals("Sudden Death")) {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime, ProgressInfoFlags.SUDDEN_DEATH));
+        } else {
+            serverInfo.setProgressInfo(new ProgressInfo(scoreTime));
+            throw new ParserException("Unknown time to parse, setting raw.");
         }
     }
 
