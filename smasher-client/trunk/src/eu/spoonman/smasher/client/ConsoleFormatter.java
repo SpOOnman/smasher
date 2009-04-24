@@ -53,6 +53,9 @@ public class ConsoleFormatter {
 	private interface LazyFormat {
 		public String format();
 	}
+	
+	private final String SCOREBOT_START = "%s%s%s. Starting %s%s%s scorebot on %s:%d.";
+	private final String SCOREBOT_STOP = "%S%S%S. Scorebot stopped";
 
 	private final String PLAYER_CONNECTED_EVENT = "Player %s connected";
 	private final String PLAYER_DISCONNECTED_EVENT = "Player %s disconnected";
@@ -74,6 +77,7 @@ public class ConsoleFormatter {
 	private OutputConfiguration outputConfiguration;
 
 	private Boolean formatMainLine;
+	private List<String> serviceLines;
 	private List<String> mainLines;
 	private List<String> jointLines;
 	private List<String> exclusiveLines;
@@ -111,6 +115,7 @@ public class ConsoleFormatter {
 	private synchronized void clear() {
 		formatMainLine = false;
 
+		serviceLines.clear();
 		mainLines.clear();
 		jointLines.clear();
 		exclusiveLines.clear();
@@ -118,6 +123,8 @@ public class ConsoleFormatter {
 	
 	private synchronized List<String> formatOutput() {
 		List<String> output = new ArrayList<String>();
+		
+		output.addAll(serviceLines);
 		
 		if (formatMainLine) {
 			output.add(formatMatchLine(client.getScorebot()));
@@ -163,6 +170,28 @@ public class ConsoleFormatter {
 		}
 	}
 	
+	public void formatScorebotStart(Scorebot scorebot) {
+		synchronized (serviceLines) {
+			serviceLines.add(String.format(SCOREBOT_START,
+					colors.getBold(), scorebot.getId(), colors.getReset(),
+					colors.getBold(), scorebot.getGame().toString(), colors.getReset(),
+					scorebot.getInetAddress().toString(), scorebot.getPort()
+					));
+		}
+		
+		synchronized (formatMainLine) {
+			formatMainLine = true;
+		}
+	}
+	
+	public void formatScorebotStop(Scorebot scorebot) {
+		synchronized (exclusiveLines) {
+			exclusiveLines.add(String.format(SCOREBOT_STOP,
+					colors.getBold(), scorebot.getId(), colors.getReset()
+					));
+		}
+	}
+	
 	public void formatGameInfoChange(final Pair<GameInfo, GameInfo> pair) {
 		if (pair.getFirst() == null && pair.getSecond() != null) {
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
@@ -195,8 +224,9 @@ public class ConsoleFormatter {
 			Seconds secondsSecond = Seconds.standardSecondsIn(((TimePeriodInfo)pair.getSecond()).getPeriod());
 			
 			int modifier = secondsFirst.getSeconds() < secondsSecond.getSeconds() ? -1 : 1;
+			modifier = -1;
 			
-			mark = Integer.toString((int) (Math.floor(secondsSecond.getSeconds() + modifier / TDM_INTERVAL)));
+			mark = Integer.toString((int) (Math.floor( (secondsSecond.getSeconds() + modifier) / TDM_INTERVAL)));
 		}
 		
 		//Or every round

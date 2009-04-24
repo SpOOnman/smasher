@@ -28,20 +28,47 @@ import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 public class ConsoleClient extends Client {
 	
+	enum State {
+		STARTING,
+		RUNNING,
+		STOPPING
+	}
+	
 	private ConsoleFormatter formatter;
+	private State state;
 	
 	public ConsoleClient(ConsoleFormatter formatter) {
 		this.formatter = formatter;
+		state = State.STARTING;
 	}
 	
 	@Override
 	protected void onDifferenceStartEvent(Pair<Scorebot, Scorebot> pair) {
 		super.onDifferenceStartEvent(pair);
+		
+		//If scorebot was already running and it's first run of a client - we need to force setting new OutputConfiguration.
+		if (state == State.RUNNING && pair.getSecond().getCurrentServerInfo() != null)
+			formatter.setOutputConfiguration(new OutputConfiguration());
 	}
 	
 	@Override
 	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
 		super.onDifferenceStopEvent(pair);
+		
+		switch (state) {
+		case STARTING:
+			formatter.formatScorebotStart(pair.getSecond());
+			break;
+			
+		case STOPPING:
+			formatter.formatScorebotStop(pair.getSecond());
+			break;
+			
+			default:
+				break;
+		
+		}
+		
 		formatter.flush();
 	}
 
