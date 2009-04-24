@@ -19,6 +19,8 @@ package eu.spoonman.smasher.client;
 
 import org.apache.log4j.Logger;
 
+import eu.spoonman.smasher.scorebot.ScorebotManager;
+
 /**
  * @author Tomasz Kalkosiński
  *
@@ -58,6 +60,8 @@ public class ConsoleMain {
 				console.flush();
 			}
 		}
+		
+		ScorebotManager.getInstance().shutdown();
 		
 		log.debug("Quitting. Bye bye.");
 	}
