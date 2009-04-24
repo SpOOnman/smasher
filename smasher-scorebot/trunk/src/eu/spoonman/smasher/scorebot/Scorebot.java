@@ -18,7 +18,10 @@
 
 package eu.spoonman.smasher.scorebot;
 
+import java.net.InetAddress;
+
 import eu.spoonman.smasher.serverinfo.GameInfo;
+import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
@@ -68,6 +71,10 @@ public abstract class Scorebot {
 	public abstract void start();
 	
 	public abstract void stop();
+	
+	public abstract InetAddress getInetAddress();
+	public abstract Games getGame();
+	public abstract int getPort();
 	
 	public String getId() {
 		return id;

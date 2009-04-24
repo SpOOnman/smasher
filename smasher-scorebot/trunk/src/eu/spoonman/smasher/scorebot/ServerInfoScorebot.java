@@ -18,6 +18,7 @@
 
 package eu.spoonman.smasher.scorebot;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -28,6 +29,7 @@ import org.apache.log4j.Logger;
 import eu.spoonman.smasher.common.LCS;
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.serverinfo.GameInfo;
+import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
@@ -58,7 +60,22 @@ public class ServerInfoScorebot extends Scorebot {
 		super(id);
 		this.serverQuery = serverQuery;
 	}
-
+	
+	@Override
+	public Games getGame() {
+		return serverQuery.getGame();
+	}
+	
+	@Override
+	public InetAddress getInetAddress() {
+		return serverQuery.getAddress();
+	}
+	
+	@Override
+	public int getPort() {
+		return serverQuery.getPort();
+	}
+	
 	@Override
 	public void start() {
 		
