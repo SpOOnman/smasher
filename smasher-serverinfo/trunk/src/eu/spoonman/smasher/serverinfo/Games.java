@@ -26,14 +26,20 @@ package eu.spoonman.smasher.serverinfo;
  */
 public enum Games {
 
-    QUAKE2 (27910),
-    QUAKE3ARENA (27960),
-    QUAKELIVE (27000);
+    QUAKE2 ("Quake 2", 27910),
+    QUAKE3ARENA ("Quake 3 Arena", 27960),
+    QUAKELIVE ("QuakeLive", 27000);
     
     private int defaultPort;
+    private String fullName;
     
-    private Games(int defaultPort) {
+    private Games(String fullName, int defaultPort) {
+        this.fullName = fullName;
         this.defaultPort = defaultPort;
+    }
+    
+    public String getFullName() {
+        return fullName;
     }
 
     public int getDefaultPort() {
