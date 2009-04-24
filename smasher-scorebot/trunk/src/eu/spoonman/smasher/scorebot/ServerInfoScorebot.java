@@ -33,6 +33,7 @@ import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.ServerInfoStatus;
 import eu.spoonman.smasher.serverinfo.ServerQuery;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
@@ -114,9 +115,12 @@ public class ServerInfoScorebot extends Scorebot {
 			currentServerInfo = serverQuery.query();
 			log.info(currentServerInfo);
 
-			difference();
-
-			previousServerInfo = currentServerInfo;
+			//Don't difference when response is not valid.
+			if (currentServerInfo.getStatus() == ServerInfoStatus.OK) {
+				difference();
+	
+				previousServerInfo = currentServerInfo;
+			}
 
 			count++;
 
