@@ -231,8 +231,9 @@ public class ServerInfoScorebot extends Scorebot {
 		if (pair.getFirst().getScore() != pair.getSecond().getScore())
 			playerScoreChangedEvent.notifyAll(pair);
 		
-		if (pair.getFirst().getPing() != pair.getSecond().getPing())
-			playerPingChangedEvent.notifyAll(pair);
+		//Do not difference with ping changes. Who cares anyway?
+		/*if (pair.getFirst().getPing() != pair.getSecond().getPing())
+			playerPingChangedEvent.notifyAll(pair);*/
 	}
 
 	/**
