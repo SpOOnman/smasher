@@ -116,4 +116,8 @@ public class ScorebotManager {
 
 		return null;
 	}
+	
+	public void shutdown() {
+		executorService.shutdown();
+	}
 }
