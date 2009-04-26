@@ -26,7 +26,7 @@ import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
 
-public class ConsoleClient extends Client {
+public class ConsoleSubscription extends Subscription {
 	
 	enum State {
 		STARTING,
@@ -37,7 +37,7 @@ public class ConsoleClient extends Client {
 	private ConsoleFormatter formatter;
 	private State state;
 	
-	public ConsoleClient(ConsoleFormatter formatter) {
+	public ConsoleSubscription(ConsoleFormatter formatter) {
 		this.formatter = formatter;
 		state = State.STARTING;
 	}

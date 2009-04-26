@@ -33,7 +33,7 @@ import eu.spoonman.smasher.serverinfo.TeamInfo;
  * @author Tomasz Kalkosiński
  * 
  */
-public abstract class Client {
+public abstract class Subscription {
 
 	private Observer<Pair<GameInfo, GameInfo>> gameInfoChangeObserver;
 	private Observer<Pair<ProgressInfo, ProgressInfo>> progressInfoChangeObserver;
@@ -52,7 +52,7 @@ public abstract class Client {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger log = Logger.getLogger(Client.class);
+	private static final Logger log = Logger.getLogger(Subscription.class);
 
 	private String loggingPattern = "Differentt %s : < %s > : < %s >";
 

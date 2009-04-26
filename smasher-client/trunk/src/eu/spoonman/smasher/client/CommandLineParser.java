@@ -126,7 +126,7 @@ public class CommandLineParser {
 				throw new ClientException("I don't know what game to use.");
 			
 			Scorebot _scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port);
-			Client consoleClient = ClientBuilder.getConsoleClient();
+			Subscription consoleClient = ClientBuilder.getConsoleClient();
 			consoleClient.register(_scorebot);
 			
 			break;

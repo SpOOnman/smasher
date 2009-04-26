@@ -25,7 +25,7 @@ import eu.spoonman.smasher.output.OutputConfiguration;
  */
 public class ClientBuilder {
 	
-	public static Client getConsoleClient() {
+	public static Subscription getConsoleClient() {
 		//Color scheme
 		ConsoleColors consoleColors = new ConsoleColors();
 		
@@ -33,13 +33,13 @@ public class ClientBuilder {
 		ConsoleFormatter consoleFormatter = new ConsoleFormatter(consoleColors, new OutputConfiguration());
 		
 		//Client is console based - lines with ASCII characters.
-		Client client = new ConsoleClient(consoleFormatter);
+		Subscription client = new ConsoleSubscription(consoleFormatter);
 		consoleFormatter.setClient(client);
 		
 		return client;
 	}
 	
-	public static Client getIRCClient() {
+	public static Subscription getIRCClient() {
 		return null;
 	}
 

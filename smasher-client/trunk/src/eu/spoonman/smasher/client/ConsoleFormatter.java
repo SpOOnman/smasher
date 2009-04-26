@@ -83,7 +83,7 @@ public class ConsoleFormatter {
 	private List<String> afterMainLines;
 	
 	private static PrintStream output;
-	private Client client;
+	private Subscription client;
 	private int lastPrintedRedScore;
 	private int lastPrintedBlueScore;
 	
@@ -391,11 +391,11 @@ public class ConsoleFormatter {
 				.format("%s (%d) P%d", playerInfo.getName(), playerInfo.getScore(), playerInfo.getPing());
 	}
 
-	public Client getClient() {
+	public Subscription getClient() {
 		return client;
 	}
 
-	public void setClient(Client client) {
+	public void setClient(Subscription client) {
 		this.client = client;
 	}
 
