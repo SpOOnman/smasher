@@ -17,12 +17,9 @@
  */
 package eu.spoonman.smasher.client;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.Duration;
-import org.joda.time.Period;
 import org.joda.time.Seconds;
 
 import eu.spoonman.smasher.common.Pair;
@@ -82,7 +79,6 @@ public class ConsoleFormatter {
 	private List<String> secondMainInlines;
 	private List<String> afterMainLines;
 	
-	private Client client;
 	private Subscription subscription;
 	private int lastPrintedRedScore;
 	private int lastPrintedBlueScore;
@@ -105,7 +101,7 @@ public class ConsoleFormatter {
 	}
 	
 	public synchronized void flush() {
-		client.print(formatOutput());
+		subscription.getClient().print(formatOutput());
 		
 		clear();
 	}
@@ -392,18 +388,10 @@ public class ConsoleFormatter {
 		return subscription;
 	}
 
-	public void setClient(Subscription subscription) {
+	public void setSubscription(Subscription subscription) {
 		this.subscription = subscription;
 	}
 	
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
 	void setOutputConfiguration(OutputConfiguration outputConfiguration) {
 		synchronized (this.outputConfiguration) {
 			this.outputConfiguration = outputConfiguration;

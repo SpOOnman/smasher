@@ -64,7 +64,10 @@ public class SubscriptionManager {
 		ConsoleFormatter consoleFormatter = new ConsoleFormatter(consoleColors, new OutputConfiguration());
 		
 		// Client is console based - lines with ASCII characters.
-		return new ConsoleSubscription(scorebot, client, consoleFormatter);
+		Subscription subscription = new ConsoleSubscription(scorebot, client, consoleFormatter);
+		consoleFormatter.setSubscription(subscription);
+		
+		return subscription;
 	}
 	
 	
