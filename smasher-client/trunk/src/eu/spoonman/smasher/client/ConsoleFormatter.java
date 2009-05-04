@@ -82,8 +82,8 @@ public class ConsoleFormatter {
 	private List<String> secondMainInlines;
 	private List<String> afterMainLines;
 	
-	private static PrintStream output;
-	private Subscription client;
+	private Client client;
+	private Subscription subscription;
 	private int lastPrintedRedScore;
 	private int lastPrintedBlueScore;
 	
@@ -96,7 +96,6 @@ public class ConsoleFormatter {
 		this.colors = colors;
 		this.outputConfiguration = outputConfiguration;
 		
-		output = System.out;
 		formatMainLine = false;
 
 		beforeMainLines = new ArrayList<String>();
@@ -106,9 +105,7 @@ public class ConsoleFormatter {
 	}
 	
 	public synchronized void flush() {
-		for(String line : formatOutput()) {
-			output.println(line);
-		}
+		client.print(formatOutput());
 		
 		clear();
 	}
@@ -128,7 +125,7 @@ public class ConsoleFormatter {
 		output.addAll(beforeMainLines);
 		
 		if (formatMainLine) {
-			output.add(formatMatchLine(client.getScorebot()));
+			output.add(formatMatchLine(subscription.getScorebot()));
 		}
 		
 		output.addAll(afterMainLines);
@@ -391,11 +388,19 @@ public class ConsoleFormatter {
 				.format("%s (%d) P%d", playerInfo.getName(), playerInfo.getScore(), playerInfo.getPing());
 	}
 
-	public Subscription getClient() {
+	public Subscription getSubscription() {
+		return subscription;
+	}
+
+	public void setClient(Subscription subscription) {
+		this.subscription = subscription;
+	}
+	
+	public Client getClient() {
 		return client;
 	}
 
-	public void setClient(Subscription client) {
+	public void setClient(Client client) {
 		this.client = client;
 	}
 

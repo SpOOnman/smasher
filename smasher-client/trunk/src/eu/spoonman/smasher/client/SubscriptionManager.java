@@ -55,8 +55,29 @@ public class SubscriptionManager {
 	}
 	
 	public void subscribe(Client client, Scorebot scorebot) {
+		Subscription subscription = getConsoleSubscription();
 		ConsoleSubscription consoleSubscription = new ConsoleSubscription(new ConsoleFormatter(new ConsoleColors(), new OutputConfiguration()));
 		
 	}
+	
+	private Subscription getIRCSubscription() {
+		return getConsoleSubscription();
+	}
+	
+	private Subscription getConsoleSubscription() {
+		
+		// Color scheme
+		ConsoleColors consoleColors = new ConsoleColors();
+		
+		// Formatting theme
+		ConsoleFormatter consoleFormatter = new ConsoleFormatter(consoleColors, new OutputConfiguration());
+		
+		// Client is console based - lines with ASCII characters.
+		Subscription client = new ConsoleSubscription(consoleFormatter);
+		
+		return client;
+	}
+	
+	
 
 }

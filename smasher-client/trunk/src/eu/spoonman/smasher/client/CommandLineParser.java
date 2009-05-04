@@ -26,6 +26,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import sun.security.jca.GetInstance;
+
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.scorebot.ScorebotManager;
 import eu.spoonman.smasher.serverinfo.Games;
@@ -40,13 +42,15 @@ public class CommandLineParser {
 	 */
 	private static final Logger log = Logger.getLogger(CommandLineParser.class);
 	
-	Map<String, Games> gameMapping = new HashMap<String, Games>();
+	private static Map<String, Games> gameMapping = new HashMap<String, Games>();
 
 	enum Commands {
 		START, STOP, SHOW
 	}
 	
-	public CommandLineParser() {
+	private static CommandLineParser parser;
+	
+	private CommandLineParser() {
 		gameMapping.put("q3", Games.QUAKE3ARENA);
 		gameMapping.put("q3a", Games.QUAKE3ARENA);
 		gameMapping.put("quake3a", Games.QUAKE3ARENA);
@@ -55,6 +59,13 @@ public class CommandLineParser {
 		gameMapping.put("ql", Games.QUAKELIVE);
 		gameMapping.put("quakelive", Games.QUAKELIVE);
 		gameMapping.put("qz", Games.QUAKELIVE);
+	}
+	
+	public static synchronized CommandLineParser getInstance() {
+		if (parser == null)
+			parser = new CommandLineParser();
+		
+		return parser;
 	}
 	
 	/**
@@ -70,7 +81,7 @@ public class CommandLineParser {
 		
 	}
 
-	public void parseAndExecute(String line) throws ClientException {
+	public void parseAndExecute(Client client, String line) throws ClientException {
 		String[] split = line.split(" ");
 		
 		CommandData data = new CommandData();
@@ -108,11 +119,11 @@ public class CommandLineParser {
 			data.args.add(word);
 		}
 		
-		execute(data);
+		execute(client, data);
 
 	}
 	
-	protected void execute(CommandData data) throws ClientException {
+	protected void execute(Client client, CommandData data) throws ClientException {
 		
 		if (data.command == null)
 			throw new ClientException("Unknown command");
@@ -126,8 +137,7 @@ public class CommandLineParser {
 				throw new ClientException("I don't know what game to use.");
 			
 			Scorebot _scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port);
-			Subscription consoleClient = ClientBuilder.getConsoleClient();
-			consoleClient.register(_scorebot);
+			SubscriptionManager.getInstance().subscribe(client, _scorebot);
 			
 			break;
 			
@@ -178,7 +188,7 @@ public class CommandLineParser {
 	}
 	
 	private Games searchForGame(String word) {
-		return this.gameMapping.get(word);
+		return CommandLineParser.gameMapping.get(word);
 	}
 	
 	private int searchForPort(String word) {
