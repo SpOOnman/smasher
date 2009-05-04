@@ -17,30 +17,66 @@
  */
 package eu.spoonman.smasher.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import eu.spoonman.smasher.output.OutputConfiguration;
 
 /**
  * @author Tomasz Kalkosiński
- *
+ * 
  */
 public class ClientBuilder {
-	
-	public static Subscription getConsoleClient() {
-		//Color scheme
-		ConsoleColors consoleColors = new ConsoleColors();
-		
-		//Formatting theme
-		ConsoleFormatter consoleFormatter = new ConsoleFormatter(consoleColors, new OutputConfiguration());
-		
-		//Client is console based - lines with ASCII characters.
-		Subscription client = new ConsoleSubscription(consoleFormatter);
-		consoleFormatter.setClient(client);
-		
-		return client;
+
+	private static ClientBuilder clientBuilder;
+
+	private Client consoleClient;
+	private Map<String, Client> ircClients = new HashMap<String, Client>();
+
+	private ClientBuilder() {
 	}
-	
-	public static Subscription getIRCClient() {
-		return null;
+
+	public static synchronized ClientBuilder getInstance() {
+		if (clientBuilder == null)
+			clientBuilder = new ClientBuilder();
+
+		return clientBuilder;
+	}
+
+	public Client getConsoleClient() {
+
+		if (consoleClient != null) {
+
+			// Color scheme
+			ConsoleColors consoleColors = new ConsoleColors();
+
+			// Formatting theme
+			ConsoleFormatter consoleFormatter = new ConsoleFormatter(consoleColors, new OutputConfiguration());
+
+			// Client is console based - lines with ASCII characters.
+			Subscription client = new ConsoleSubscription(consoleFormatter);
+			consoleFormatter.setClient(client);
+		}
+
+		return consoleClient;
+	}
+
+	public Client getIRCClient(String channelName) {
+		
+		if (ircClients.get(channelName) == null) {
+			
+			// Color scheme
+			ConsoleColors consoleColors = new ConsoleColors();
+			
+			// Formatting theme
+			ConsoleFormatter consoleFormatter = new ConsoleFormatter(consoleColors, new OutputConfiguration());
+			
+			// Client is console based - lines with ASCII characters.
+			Subscription client = new ConsoleSubscription(consoleFormatter);
+			consoleFormatter.setClient(client);
+		}
+		
+		return ircClients.get(channelName);
 	}
 
 }

@@ -19,6 +19,7 @@ package eu.spoonman.smasher.client;
 
 import java.util.List;
 
+import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.scorebot.Scorebot;
 
 /**
@@ -54,7 +55,7 @@ public class SubscriptionManager {
 	}
 	
 	public void subscribe(Client client, Scorebot scorebot) {
-		ConsoleSubscription consoleSubscription = new ConsoleSubscription(new ConsoleFormatter());
+		ConsoleSubscription consoleSubscription = new ConsoleSubscription(new ConsoleFormatter(new ConsoleColors(), new OutputConfiguration()));
 		
 	}
 
