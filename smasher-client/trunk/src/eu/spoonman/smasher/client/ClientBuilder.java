@@ -45,7 +45,7 @@ public class ClientBuilder {
 
 	public Client getConsoleClient() {
 
-		if (consoleClient != null) {
+		if (consoleClient == null) {
 			consoleClient = new Client("__console");
 		}
 
