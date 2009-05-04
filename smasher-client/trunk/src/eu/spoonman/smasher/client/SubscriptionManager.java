@@ -28,22 +28,9 @@ import eu.spoonman.smasher.scorebot.Scorebot;
  */
 public class SubscriptionManager {
 	
-	private class SubscriptionItem {
-		public Subscription subscription;
-		public Client client;
-		public Scorebot scorebot;
-		
-		public SubscriptionItem(Subscription subscription, Client client, Scorebot scorebot) {
-			super();
-			this.subscription = subscription;
-			this.client = client;
-			this.scorebot = scorebot;
-		}
-	}
-	
 	private static SubscriptionManager subscriptionManager;
 	
-	private List<SubscriptionItem> subscriptions;
+	private List<Subscription> subscriptions;
 	
 	private SubscriptionManager() {}
 	
@@ -55,16 +42,19 @@ public class SubscriptionManager {
 	}
 	
 	public void subscribe(Client client, Scorebot scorebot) {
-		Subscription subscription = getConsoleSubscription();
-		ConsoleSubscription consoleSubscription = new ConsoleSubscription(new ConsoleFormatter(new ConsoleColors(), new OutputConfiguration()));
+		Subscription subscription = getConsoleSubscription(client, scorebot);
+		subscriptions.add(subscription);
+	}
+	
+	public void unsubscribe(Client client, Scorebot scorebot) {
 		
 	}
 	
-	private Subscription getIRCSubscription() {
-		return getConsoleSubscription();
+	private Subscription getIRCSubscription(Client client, Scorebot scorebot) {
+		return getConsoleSubscription(client, scorebot);
 	}
 	
-	private Subscription getConsoleSubscription() {
+	private Subscription getConsoleSubscription(Client client, Scorebot scorebot) {
 		
 		// Color scheme
 		ConsoleColors consoleColors = new ConsoleColors();
@@ -73,9 +63,7 @@ public class SubscriptionManager {
 		ConsoleFormatter consoleFormatter = new ConsoleFormatter(consoleColors, new OutputConfiguration());
 		
 		// Client is console based - lines with ASCII characters.
-		Subscription client = new ConsoleSubscription(consoleFormatter);
-		
-		return client;
+		return new ConsoleSubscription(scorebot, client, consoleFormatter);
 	}
 	
 	

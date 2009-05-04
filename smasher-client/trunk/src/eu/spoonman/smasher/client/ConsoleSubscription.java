@@ -37,7 +37,8 @@ public class ConsoleSubscription extends Subscription {
 	private ConsoleFormatter formatter;
 	private State state;
 	
-	public ConsoleSubscription(ConsoleFormatter formatter) {
+	public ConsoleSubscription(Scorebot scorebot, Client client, ConsoleFormatter formatter) {
+		super(scorebot, client);
 		this.formatter = formatter;
 		state = State.STARTING;
 	}

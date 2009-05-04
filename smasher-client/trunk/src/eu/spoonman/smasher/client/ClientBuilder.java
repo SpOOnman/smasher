@@ -46,16 +46,7 @@ public class ClientBuilder {
 	public Client getConsoleClient() {
 
 		if (consoleClient != null) {
-
-			// Color scheme
-			ConsoleColors consoleColors = new ConsoleColors();
-
-			// Formatting theme
-			ConsoleFormatter consoleFormatter = new ConsoleFormatter(consoleColors, new OutputConfiguration());
-
-			// Client is console based - lines with ASCII characters.
-			Subscription client = new ConsoleSubscription(consoleFormatter);
-			consoleFormatter.setClient(client);
+			consoleClient = new Client("__console");
 		}
 
 		return consoleClient;
@@ -64,16 +55,7 @@ public class ClientBuilder {
 	public Client getIRCClient(String channelName) {
 		
 		if (ircClients.get(channelName) == null) {
-			
-			// Color scheme
-			ConsoleColors consoleColors = new ConsoleColors();
-			
-			// Formatting theme
-			ConsoleFormatter consoleFormatter = new ConsoleFormatter(consoleColors, new OutputConfiguration());
-			
-			// Client is console based - lines with ASCII characters.
-			Subscription client = new ConsoleSubscription(consoleFormatter);
-			consoleFormatter.setClient(client);
+			ircClients.put(channelName, new Client(channelName));
 		}
 		
 		return ircClients.get(channelName);

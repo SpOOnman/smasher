@@ -48,15 +48,23 @@ public abstract class Subscription {
 	private Observer<Pair<Scorebot, Scorebot>> differenceStopEventObserver;
 	
 	private Scorebot scorebot;
+	private Client client;
+	
+	protected Subscription(Scorebot scorebot, Client client) {
+		this.scorebot = scorebot;
+		this.client = client;
+		
+		register();
+	}
 
 	/**
 	 * Logger for this class
 	 */
 	private static final Logger log = Logger.getLogger(Subscription.class);
 
-	private String loggingPattern = "Differentt %s : < %s > : < %s >";
+	private String loggingPattern = "Different %s : < %s > : < %s >";
 
-	protected void register(Scorebot scorebot) {
+	protected void register() {
 		
 		registerOnDifferenceStartEvent(scorebot);
 		registerOnDifferenceStopEvent(scorebot);
@@ -73,12 +81,9 @@ public abstract class Subscription {
 		registerOnPlayerNameChangeEvent(scorebot);
 		registerOnPlayerPingChangeEvent(scorebot);
 		registerOnPlayerScoreChangeEvent(scorebot);
-		
-		this.scorebot = scorebot;
-
 	}
 	
-	protected void unregister(Scorebot scorebot) {
+	protected void unregister() {
 		scorebot.getDifferenceStartEvent().unregister(differenceStartEventObserver);
 		scorebot.getDifferenceStopEvent().unregister(differenceStopEventObserver);
 		
@@ -106,8 +111,6 @@ public abstract class Subscription {
 		playerNameChangeEventObserver = null;
 		playerPingChangeEventObserver = null;
 		playerScoreChangeEventObserver = null;
-		
-		this.scorebot = null;
 	}
 
 	protected <T> void logEvent(String name, Pair<T, T> pair) {
@@ -270,6 +273,10 @@ public abstract class Subscription {
 	
 	public Scorebot getScorebot() {
 		return scorebot;
+	}
+	
+	public Client getClient() {
+		return client;
 	}
 
 }
