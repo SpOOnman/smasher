@@ -17,6 +17,7 @@
  */
 package eu.spoonman.smasher.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.spoonman.smasher.output.OutputConfiguration;
@@ -30,7 +31,7 @@ public class SubscriptionManager {
 	
 	private static SubscriptionManager subscriptionManager;
 	
-	private List<Subscription> subscriptions;
+	private List<Subscription> subscriptions = new ArrayList<Subscription>();
 	
 	private SubscriptionManager() {}
 	
