@@ -51,6 +51,12 @@ public abstract class Subscription {
 	private Client client;
 	
 	protected Subscription(Scorebot scorebot, Client client) {
+		if (scorebot == null)
+			throw new IllegalArgumentException("scorebot cannot be null");
+		
+		if (client == null)
+			throw new IllegalArgumentException("client cannot be null");
+		
 		this.scorebot = scorebot;
 		this.client = client;
 		
