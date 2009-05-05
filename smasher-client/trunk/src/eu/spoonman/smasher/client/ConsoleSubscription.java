@@ -67,6 +67,8 @@ public class ConsoleSubscription extends Subscription {
 		if (firstRun)
 			formatter.ensureMainLine();
 		
+		formatter.formatDifferenceStopEvent(pair);
+		
 		formatter.flush();
 		
 		firstRun = false;

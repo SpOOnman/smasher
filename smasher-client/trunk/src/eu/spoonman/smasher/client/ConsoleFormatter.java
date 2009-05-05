@@ -17,6 +17,8 @@
  */
 package eu.spoonman.smasher.client;
 
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,10 @@ import eu.spoonman.smasher.serverinfo.TimePeriodInfo;
  * @author Tomasz Kalkosiński
  */
 public class ConsoleFormatter {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger log = Logger.getLogger(ConsoleFormatter.class);
 
 	/**
 	 * Interface needed for lazy evaluation.
@@ -303,6 +309,19 @@ public class ConsoleFormatter {
 		});
 	}
 	
+	public void formatDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
+		TeamInfo redTeam = pair.getSecond().getCurrentServerInfo().getTeamInfos().get(TeamKey.RED_TEAM);
+		TeamInfo blueTeam = pair.getSecond().getCurrentServerInfo().getTeamInfos().get(TeamKey.BLUE_TEAM);
+		
+		if (redTeam == null || blueTeam == null) {
+			log.error("Cannot format score differences - no red or blue team");
+			return;
+		}
+		
+		if (Math.signum(lastPrintedBlueScore - lastPrintedRedScore) != Math.signum(blueTeam.getScore() - redTeam.getScore()))
+			ensureMainLine();
+	}
+	
 	public synchronized String formatMatchLine(Scorebot scorebot) {
 		
 		if (!(scorebot instanceof ServerInfoScorebot))
@@ -399,6 +418,7 @@ public class ConsoleFormatter {
 			this.outputConfiguration = outputConfiguration;
 		}
 	}
+
 	
 	
 }
