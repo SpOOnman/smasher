@@ -100,6 +100,12 @@ public class ConsoleFormatter {
 		afterMainLines = new ArrayList<String>();
 	}
 	
+	public void ensureMainLine() {
+		synchronized (formatMainLine) {
+			formatMainLine = true;
+		}
+	}
+	
 	public synchronized void flush() {
 		subscription.getClient().print(formatOutput());
 		
@@ -171,10 +177,6 @@ public class ConsoleFormatter {
 					colors.getBold(), scorebot.getGame().getFullName(), colors.getReset(),
 					scorebot.getInetAddress().toString().replaceFirst("^/", ""), scorebot.getPort()
 					));
-		}
-		
-		synchronized (formatMainLine) {
-			formatMainLine = true;
 		}
 	}
 	

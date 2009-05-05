@@ -46,6 +46,7 @@ public class ConsoleSubscription extends Subscription {
 	@Override
 	protected void preUnregister() {
 		super.preUnregister();
+		formatter.ensureMainLine();
 		formatter.formatScorebotStop(getScorebot());
 		formatter.flush();
 	}
@@ -63,6 +64,7 @@ public class ConsoleSubscription extends Subscription {
 	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
 		super.onDifferenceStopEvent(pair);
 		
+		formatter.ensureMainLine();
 		formatter.flush();
 		
 		firstRun = false;
