@@ -169,7 +169,7 @@ public class ConsoleFormatter {
 			beforeMainLines.add(String.format(SCOREBOT_START,
 					colors.getBold(), scorebot.getId(), colors.getReset(),
 					colors.getBold(), scorebot.getGame().getFullName(), colors.getReset(),
-					scorebot.getInetAddress().toString(), scorebot.getPort()
+					scorebot.getInetAddress().toString().replaceFirst("^/", ""), scorebot.getPort()
 					));
 		}
 		
