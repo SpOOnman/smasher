@@ -136,8 +136,8 @@ public class CommandLineParser {
 			if (data.game == null)
 				throw new ClientException("I don't know what game to use.");
 			
-			Scorebot _scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port);
-			SubscriptionManager.getInstance().subscribe(client, _scorebot);
+			Scorebot scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port);
+			SubscriptionManager.getInstance().subscribe(client, scorebot);
 			
 			break;
 			
@@ -150,7 +150,7 @@ public class CommandLineParser {
 			if (data.scorebot == null)
 				throw new ClientException("Scorebot ID is needed.");
 			
-			//client.unregister(data.scorebot);
+			SubscriptionManager.getInstance().unsubscribe(client, data.scorebot);
 			ScorebotManager.getInstance().stopScorebot(data.scorebot);
 			
 			break;

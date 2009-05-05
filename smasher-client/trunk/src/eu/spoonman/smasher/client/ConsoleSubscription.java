@@ -28,19 +28,24 @@ import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 public class ConsoleSubscription extends Subscription {
 	
-	enum State {
-		STARTING,
-		RUNNING,
-		STOPPING
-	}
-	
 	private ConsoleFormatter formatter;
-	private State state;
+	private boolean firstRun = true;
 	
 	public ConsoleSubscription(Scorebot scorebot, Client client, ConsoleFormatter formatter) {
 		super(scorebot, client);
 		this.formatter = formatter;
-		state = State.STARTING;
+	}
+	
+	@Override
+	protected void postRegister() {
+		super.postRegister();
+		formatter.formatScorebotStart(getScorebot());
+	}
+	
+	@Override
+	protected void preUnregister() {
+		super.preUnregister();
+		formatter.formatScorebotStop(getScorebot());
 	}
 	
 	@Override
@@ -48,7 +53,7 @@ public class ConsoleSubscription extends Subscription {
 		super.onDifferenceStartEvent(pair);
 		
 		//If scorebot was already running and it's first run of a client - we need to force setting new OutputConfiguration.
-		if (state == State.RUNNING && pair.getSecond().getCurrentServerInfo() != null)
+		if (firstRun != false && pair.getSecond().getCurrentServerInfo() != null)
 			formatter.setOutputConfiguration(new OutputConfiguration());
 	}
 	
@@ -56,24 +61,9 @@ public class ConsoleSubscription extends Subscription {
 	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
 		super.onDifferenceStopEvent(pair);
 		
-		switch (state) {
-		case STARTING:
-			formatter.formatScorebotStart(pair.getSecond());
-			break;
-			
-		case STOPPING:
-			formatter.formatScorebotStop(pair.getSecond());
-			break;
-			
-			default:
-				break;
-		
-		}
-		
 		formatter.flush();
 		
-		if (state == State.STARTING)
-			state = State.RUNNING;
+		firstRun = false;
 	}
 
 	@Override

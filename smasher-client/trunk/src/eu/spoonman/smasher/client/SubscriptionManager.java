@@ -17,6 +17,8 @@
  */
 package eu.spoonman.smasher.client;
 
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,10 @@ import eu.spoonman.smasher.scorebot.Scorebot;
  *
  */
 public class SubscriptionManager {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger log = Logger.getLogger(SubscriptionManager.class);
 	
 	private static SubscriptionManager subscriptionManager;
 	
@@ -43,12 +49,37 @@ public class SubscriptionManager {
 	}
 	
 	public void subscribe(Client client, Scorebot scorebot) {
-		Subscription subscription = getConsoleSubscription(client, scorebot);
+		Subscription subscription = find(client, scorebot);
+		
+		if (subscription != null)
+			log.info(String.format("Scorebot %s is already subscribed to client %s.", scorebot.getId(), client.getName() ));
+		
+		subscription = getConsoleSubscription(client, scorebot);
 		subscriptions.add(subscription);
+		
+		log.info(String.format("Scorebot %s has been subscribed to client %s.", scorebot.getId(), client.getName() ));
 	}
 	
 	public void unsubscribe(Client client, Scorebot scorebot) {
+		Subscription subscription = find(client, scorebot);
 		
+		if (subscription == null) {
+			log.error(String.format("Cannot find subscription of scorebot %s for client %s.", scorebot.getId(), client.getName() ));
+		}
+		
+		subscription.unregister();
+		subscriptions.remove(subscription);
+		
+		log.info(String.format("Scorebot %s has been unsubscribed from client %s.", scorebot.getId(), client.getName() ));
+	}
+	
+	private Subscription find(Client client, Scorebot scorebot) {
+		for (Subscription subscription : subscriptions) {
+			if (subscription.getClient() == client && subscription.getScorebot() == scorebot)
+				return subscription;
+		}
+		
+		return null;
 	}
 	
 	private Subscription getIRCSubscription(Client client, Scorebot scorebot) {

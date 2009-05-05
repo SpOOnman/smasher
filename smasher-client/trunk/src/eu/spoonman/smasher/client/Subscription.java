@@ -69,7 +69,7 @@ public abstract class Subscription {
 	private static final Logger log = Logger.getLogger(Subscription.class);
 
 	private String loggingPattern = "Different %s : < %s > : < %s >";
-
+	
 	protected void register() {
 		
 		registerOnDifferenceStartEvent(scorebot);
@@ -87,9 +87,18 @@ public abstract class Subscription {
 		registerOnPlayerNameChangeEvent(scorebot);
 		registerOnPlayerPingChangeEvent(scorebot);
 		registerOnPlayerScoreChangeEvent(scorebot);
+		
+		postRegister();
 	}
 	
+	protected void postRegister() {}
+	
+	protected void preUnregister() {}
+	
 	protected void unregister() {
+		
+		preUnregister();
+		
 		scorebot.getDifferenceStartEvent().unregister(differenceStartEventObserver);
 		scorebot.getDifferenceStopEvent().unregister(differenceStopEventObserver);
 		
