@@ -64,7 +64,9 @@ public class ConsoleSubscription extends Subscription {
 	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
 		super.onDifferenceStopEvent(pair);
 		
-		formatter.ensureMainLine();
+		if (firstRun)
+			formatter.ensureMainLine();
+		
 		formatter.flush();
 		
 		firstRun = false;
