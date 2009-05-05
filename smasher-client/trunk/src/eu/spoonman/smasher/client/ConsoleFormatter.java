@@ -52,7 +52,7 @@ public class ConsoleFormatter {
 	}
 	
 	private final String SCOREBOT_START = "%s%s%s. Starting %s%s%s scorebot on %s:%d.";
-	private final String SCOREBOT_STOP = "%S%S%S. Scorebot stopped";
+	private final String SCOREBOT_STOP = "%s%s%s. Scorebot stopped";
 
 	private final String PLAYER_CONNECTED_EVENT = "Player %s connected";
 	private final String PLAYER_DISCONNECTED_EVENT = "Player %s disconnected";
