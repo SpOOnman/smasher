@@ -26,6 +26,7 @@ class ScorebotThread extends Thread {
 	private final Scorebot scorebot;
 	
 	ScorebotThread(Scorebot scorebot) {
+		super("scbot " + scorebot.getId());
 		this.scorebot = scorebot;
 	}
 	
