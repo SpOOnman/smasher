@@ -40,12 +40,14 @@ public class ConsoleSubscription extends Subscription {
 	protected void postRegister() {
 		super.postRegister();
 		formatter.formatScorebotStart(getScorebot());
+		formatter.flush();
 	}
 	
 	@Override
 	protected void preUnregister() {
 		super.preUnregister();
 		formatter.formatScorebotStop(getScorebot());
+		formatter.flush();
 	}
 	
 	@Override
