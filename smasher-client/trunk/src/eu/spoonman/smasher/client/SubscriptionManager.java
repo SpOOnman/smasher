@@ -55,6 +55,7 @@ public class SubscriptionManager {
 			log.info(String.format("Scorebot %s is already subscribed to client %s.", scorebot.getId(), client.getName() ));
 		
 		subscription = getConsoleSubscription(client, scorebot);
+		subscription.register();
 		subscriptions.add(subscription);
 		
 		log.info(String.format("Scorebot %s has been subscribed to client %s.", scorebot.getId(), client.getName() ));

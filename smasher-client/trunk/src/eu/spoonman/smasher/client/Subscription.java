@@ -59,8 +59,6 @@ public abstract class Subscription {
 		
 		this.scorebot = scorebot;
 		this.client = client;
-		
-		register();
 	}
 
 	/**
