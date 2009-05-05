@@ -33,7 +33,12 @@ public class Client {
 	}
 	
 	public void print(List<String> lines) {
-		System.out.println(lines);
+		if (lines == null || lines.size() == 0)
+			return;
+		
+		for (String line : lines) {
+			System.out.println(line);
+		}
 	}
 
 }
