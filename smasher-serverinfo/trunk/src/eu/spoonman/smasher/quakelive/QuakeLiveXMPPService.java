@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,17 +49,18 @@ import org.json.simple.JSONValue;
 
 /**
  * @author Tomasz Kalkosiński
- * QuakeLive Service to retrieve information. It emulates internet browser to get match and players information.
+ * QuakeLive XMPP Service to retrieve information. It emulates internet browser to get match and players information.
  */
-public class QuakeLiveService {
+public class QuakeLiveXMPPService {
 
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(QuakeLiveService.class);
+    private static final Logger log = Logger.getLogger(QuakeLiveXMPPService.class);
 
     private final static String QUAKELIVE_URL_LOGIN_STRING = "http://www.quakelive.com/user/login";
     private final static String QUAKELIVE_URL_LOAD_STRING = "http://www.quakelive.com/user/load";
+    private final static String QUAKELIVE_URL_STATS_FORMAT = "http://www.quakelive.com/stats/matchdetails/%d/%s";
 
     private final static String QUAKELIVE_XMPP_SERVER = "xmpp.quakelive.com";
     private final static String QUAKELIVE_XMPP_RESOURCE = "quakelive";
@@ -68,6 +70,13 @@ public class QuakeLiveService {
     private final static String QUAKELIVE_USER = "tomasz2k@poczta.onet.pl";
     private final static String QUAKELIVE_PASS = "";
     private final static String QUAKELIVE_PARAMETERS = "u=%s&p=%s&r=0";
+    
+    private final static Map<Integer, String> gametypeAddressMap;
+    
+    static {
+        gametypeAddressMap = new HashMap<Integer, String>();
+        gametypeAddressMap.put(1, "Tourney");
+    }
     
     //http://www.quakelive.com/#profile/matches/Napastnik/5793181/CTF
 
@@ -151,7 +160,7 @@ public class QuakeLiveService {
             String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
             String content = httpQuery("POST", QUAKELIVE_URL_LOGIN_STRING, parameters);
 
-            load();
+            //load();
 
         } catch (MalformedURLException e) {
             log.error("URL", e);
@@ -159,6 +168,34 @@ public class QuakeLiveService {
             log.error("Protocol", e);
         }
 
+    }
+    
+    public JSONObject getMatchDetails(Integer matchId, Integer gametype) {
+        String url = String.format(QUAKELIVE_URL_STATS_FORMAT, matchId, gametypeAddressMap.get(gametype));
+        String content;
+        try {
+            content = httpQuery("GET", url, null);
+            
+            Object parsed = JSONValue.parse(content);
+            
+            if (parsed == null)
+                 throw new IOException("Cannot parse QuakeLive response to JSON.");
+                        
+            JSONObject json = (JSONObject)parsed;
+            
+            log.debug(json);
+             
+            return json;
+        } catch (LoginException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return null;
+        
     }
 
     public void load() throws IOException, LoginException, XMPPException {
@@ -284,8 +321,9 @@ public class QuakeLiveService {
     }
 
     public static void main(String[] args) throws LoginException, IOException, XMPPException {
-        QuakeLiveService qls = new QuakeLiveService();
-        qls.login(QUAKELIVE_USER, QUAKELIVE_PASS);
+        QuakeLiveXMPPService qls = new QuakeLiveXMPPService();
+        //qls.login(QUAKELIVE_USER, QUAKELIVE_PASS);
+        qls.getMatchDetails(9865953, 1);
 
     }
 
