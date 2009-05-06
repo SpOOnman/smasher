@@ -37,6 +37,7 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  */
 public class QuakeLivePlayerInfoParser implements ServerInfoParser {
     
+    private final String JSONDuelKey = "SCOREBOARD";
     private final String JSONRedKey = "RED_SCOREBOARD";
     private final String JSONBlueKey = "BLUE_SCOREBOARD";
     
