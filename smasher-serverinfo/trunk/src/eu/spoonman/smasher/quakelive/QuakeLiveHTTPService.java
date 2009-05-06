@@ -80,7 +80,7 @@ public class QuakeLiveHTTPService {
         this.cookies = sb.toString();
     }
 
-    private String httpQuery(String method, String urlString, String parameters) throws LoginException, IOException {
+    String httpQuery(String method, String urlString, String parameters) throws LoginException, IOException {
         try {
 
             URL url = new URL(urlString);
@@ -177,7 +177,7 @@ public class QuakeLiveHTTPService {
     }
 
     public static void main(String[] args) throws LoginException, IOException, XMPPException {
-        QuakeLiveXMPPService qls = new QuakeLiveXMPPService();
+        QuakeLiveHTTPService qls = new QuakeLiveHTTPService();
         qls.getMatchDetails(9865953, 1);
         qls.getMatchDetails(5793181, 4);
 

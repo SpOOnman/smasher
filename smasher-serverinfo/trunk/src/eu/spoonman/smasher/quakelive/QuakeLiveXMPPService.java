@@ -60,7 +60,6 @@ public class QuakeLiveXMPPService {
 
     private final static String QUAKELIVE_URL_LOGIN_STRING = "http://www.quakelive.com/user/login";
     private final static String QUAKELIVE_URL_LOAD_STRING = "http://www.quakelive.com/user/load";
-    private final static String QUAKELIVE_URL_STATS_FORMAT = "http://www.quakelive.com/stats/matchdetails/%d/%s";
 
     private final static String QUAKELIVE_XMPP_SERVER = "xmpp.quakelive.com";
     private final static String QUAKELIVE_XMPP_RESOURCE = "quakelive";
@@ -71,137 +70,16 @@ public class QuakeLiveXMPPService {
     private final static String QUAKELIVE_PASS = "";
     private final static String QUAKELIVE_PARAMETERS = "u=%s&p=%s&r=0";
     
-    private final static Map<Integer, String> gametypeAddressMap;
+    private QuakeLiveHTTPService quakeLiveHTTPService;
     
-    static {
-        gametypeAddressMap = new HashMap<Integer, String>();
-        gametypeAddressMap.put(1, "Tourney");
-    }
-    
-    //http://www.quakelive.com/#profile/matches/Napastnik/5793181/CTF
-
-    private String cookies = null;
-
-    private void setCookies(List<String> cookieList) {
-        StringBuilder sb = new StringBuilder();
-        for (String cookie : cookieList) {
-            String[] split = cookie.split("; ");
-            for (String splitted : split) {
-                if (splitted.startsWith("path") || splitted.startsWith("HttpOnly") || splitted.startsWith("expires"))
-                    continue;
-
-                sb.append(splitted);
-                sb.append("; ");
-            }
-        }
-        
-        this.cookies = sb.toString();
-    }
-
-    private String httpQuery(String method, String urlString, String parameters) throws LoginException, IOException {
-        try {
-
-            URL url = new URL(urlString);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            connection.setRequestMethod(method);
-            connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-
-            //Send out parameters if given
-            if (parameters != null && parameters.length() > 0) {
-                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-                connection.setRequestProperty("Content-Length", new Integer(parameters.length()).toString());
-
-                connection.setDoOutput(true);
-                connection.setReadTimeout(10000);
-
-                OutputStream dataOut = connection.getOutputStream();
-                dataOut.write(parameters.getBytes());
-                dataOut.flush();
-                dataOut.close();
-            }
-
-            //Use cookies if they are set.
-            if (cookies != null && cookies.length() > 0) {
-                connection.setRequestProperty("Cookie", this.cookies);
-                connection.connect();
-            }
-
-            Object responseMessage = connection.getResponseMessage();
-            Map<String, List<String>> headerFields = connection.getHeaderFields();
-            List<String> cookieList = headerFields.get("Set-Cookie");
-            if (cookieList != null && cookieList.size() > 0)
-                setCookies(cookieList);
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null)
-                sb.append(line);
-            String content = sb.toString();
-
-            log.debug(String.format("Header: %s", headerFields));
-            log.debug(String.format("Response %s: %s", responseMessage, content));
-
-            return content;
-        } catch (MalformedURLException e) {
-            log.error("URL", e);
-        } catch (ProtocolException e) {
-            log.error("Protocol", e);
-        }
-
-        return null;
-
-    }
-
-    public void login(String username, String password) throws LoginException, IOException, XMPPException {
-        try {
-
-            String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
-            String content = httpQuery("POST", QUAKELIVE_URL_LOGIN_STRING, parameters);
-
-            //load();
-
-        } catch (MalformedURLException e) {
-            log.error("URL", e);
-        } catch (ProtocolException e) {
-            log.error("Protocol", e);
-        }
-
-    }
-    
-    public JSONObject getMatchDetails(Integer matchId, Integer gametype) {
-        String url = String.format(QUAKELIVE_URL_STATS_FORMAT, matchId, gametypeAddressMap.get(gametype));
-        String content;
-        try {
-            content = httpQuery("GET", url, null);
-            
-            Object parsed = JSONValue.parse(content);
-            
-            if (parsed == null)
-                 throw new IOException("Cannot parse QuakeLive response to JSON.");
-                        
-            JSONObject json = (JSONObject)parsed;
-            
-            log.debug(json);
-             
-            return json;
-        } catch (LoginException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        return null;
-        
+    public QuakeLiveXMPPService(QuakeLiveHTTPService service) {
+        quakeLiveHTTPService = service;
     }
 
     public void load() throws IOException, LoginException, XMPPException {
         try {
 
-            String content = httpQuery("POST", QUAKELIVE_URL_LOAD_STRING, null);
+            String content = quakeLiveHTTPService.httpQuery("POST", QUAKELIVE_URL_LOAD_STRING, null);
 
             Object parsed = JSONValue.parse(content);
                         
@@ -321,10 +199,10 @@ public class QuakeLiveXMPPService {
     }
 
     public static void main(String[] args) throws LoginException, IOException, XMPPException {
-        QuakeLiveXMPPService qls = new QuakeLiveXMPPService();
-        //qls.login(QUAKELIVE_USER, QUAKELIVE_PASS);
-        qls.getMatchDetails(9865953, 1);
-
+        QuakeLiveHTTPService qls = new QuakeLiveHTTPService();
+        QuakeLiveXMPPService qms = new QuakeLiveXMPPService(qls);
+        qls.login(QUAKELIVE_USER, QUAKELIVE_PASS);
+        qms.load();
     }
 
 }
