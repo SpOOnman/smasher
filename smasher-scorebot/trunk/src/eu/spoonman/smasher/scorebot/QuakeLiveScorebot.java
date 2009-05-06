@@ -24,6 +24,7 @@ import eu.spoonman.smasher.serverinfo.QuakeLiveHTTPQuery;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfoStatus;
 import eu.spoonman.smasher.serverinfo.ServerQuery;
+import eu.spoonman.smasher.serverinfo.ServerQueryManager;
 
 /**
  * Mixed type scorebot. It gathers as much information as it can from server, but also queries for statistics
@@ -38,6 +39,9 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 	 * Logger for this class
 	 */
 	private static final Logger log = Logger.getLogger(QuakeLiveScorebot.class);
+	
+	private static final String MATCHID_KEY = "sv_gtid";
+	private static final String GAMETYPE_KEY = "g_gametype";
 	
 	private QuakeLiveHTTPQuery httpQuery = null;
 	
@@ -61,6 +65,15 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 
 			currentServerInfo = serverQuery.query();
 			log.info(currentServerInfo);
+			
+			//It it's first time - be sure to query via HTTP
+			if (currentHTTPServerInfo == null) {
+				startHTTPQuery();
+				currentHTTPServerInfo =  httpQuery.query();
+			}
+			
+			//If it's next time and it looks suspicious - query again via HTTP.
+				
 
 			//Don't difference when response is not valid.
 			if (currentServerInfo.getStatus() == ServerInfoStatus.OK) {
@@ -79,6 +92,13 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 		}
 		
 		log.info(String.format("Scorebot %s has stopped.", getId()));
+	}
+	
+	private void startHTTPQuery() {
+		Integer matchId = Integer.valueOf(currentServerInfo.getNamedAttributes().get(MATCHID_KEY));
+		Integer gametype = Integer.valueOf(currentServerInfo.getNamedAttributes().get(GAMETYPE_KEY));
+		
+		httpQuery = ServerQueryManager.createQuakeLiveHTTPQuery(matchId, gametype);
 	}
 
 }
