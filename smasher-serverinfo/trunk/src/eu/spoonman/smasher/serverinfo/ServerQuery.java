@@ -154,6 +154,7 @@ public class ServerQuery {
 
     private void buildParsers(ServerInfo serverInfo) {
         parserList = builder.getParserList(serverInfo);
+        alreadyBuilded = true;
     }
     
     private void buildPersisers(ServerInfo serverInfo) {

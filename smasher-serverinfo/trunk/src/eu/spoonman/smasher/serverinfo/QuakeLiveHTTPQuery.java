@@ -17,47 +17,82 @@
  */
 package eu.spoonman.smasher.serverinfo;
 
+import org.apache.log4j.Logger;
+
+import java.util.List;
+
+import org.json.simple.JSONObject;
+
 import eu.spoonman.smasher.quakelive.QuakeLiveHTTPService;
 import eu.spoonman.smasher.serverinfo.builder.Builder;
+import eu.spoonman.smasher.serverinfo.parser.ParserException;
+import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
+import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 
 /**
  * @author Tomasz Kalkosiński
- *
+ * 
  */
 public class QuakeLiveHTTPQuery {
+
+    private static final Logger log = Logger.getLogger(QuakeLiveHTTPQuery.class);
+
+    private int matchId;
+    private int gametype;
+
+    private List<ServerInfoParser> parserList;
+    private List<ServerInfoPersister> persisterList;
     
+    private Builder builder;
+
     private QuakeLiveHTTPService httpService;
     
-    public QuakeLiveHTTPQuery(Builder builder) {
+    private boolean alreadyBuilded;
+
+    public QuakeLiveHTTPQuery(Builder builder, int matchId, int gametype) {
+        this.builder = builder;
         httpService = new QuakeLiveHTTPService();
+        this.matchId = matchId;
+        this.gametype = gametype;
+        
+        alreadyBuilded = false;
     }
     
-    /*
-    ServerInfo query(byte[] data) {
+    private void buildParsers(ServerInfo serverInfo) {
+        parserList = builder.getParserList(serverInfo);
+        alreadyBuilded = true;
+    }
+    
+    private void buildPersisers(ServerInfo serverInfo) {
+        persisterList = builder.getPersisterList(serverInfo);
+    }
+
+    public ServerInfo query() {
         ServerInfo serverInfo = new ServerInfo();
-
         try {
-
-            validateResponse(data);
-
-            reader.readData(serverInfo, data);
-
+            
             if (!alreadyBuilded)
                 buildParsers(serverInfo);
-
-            setGameAndMod(serverInfo);
+            
+            JSONObject json = httpService.getMatchDetails(matchId, gametype);
+            serverInfo.setJson(json);
+            
             parseData(serverInfo);
-
+            
             serverInfo.setStatus(ServerInfoStatus.OK);
-
-        } catch (NotValidResponseException e) {
-            serverInfo.setStatus(ServerInfoStatus.NOT_VALID_RESPONSE);
-        } catch (ReaderException e) {
-            serverInfo.setStatus(ServerInfoStatus.NOT_VALID_RESPONSE);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         return serverInfo;
     }
-    */
 
+    private void parseData(ServerInfo serverInfo) {
+        for (ServerInfoParser parser : parserList) {
+            try {
+                parser.parseIntoServerInfo(serverInfo);
+            } catch (ParserException e) {
+                log.error("Parsing error", e);
+            }
+        }
+    }
 }

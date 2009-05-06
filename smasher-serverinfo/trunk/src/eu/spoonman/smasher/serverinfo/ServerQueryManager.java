@@ -37,7 +37,10 @@ public class ServerQueryManager {
         return serverQuery;
     }
     
-    public static QuakeLiveHTTPQuery createQuakeLiveHTTPQuery(Games game, InetAddress inetAddress) {
-        return new QuakeLiveHTTPQuery(BuilderFactory.createQuakeLiveHTTPBuilder());
+    public static QuakeLiveHTTPQuery createQuakeLiveHTTPQuery(int matchId, int gametype) {
+        QuakeLiveHTTPQuery quakeLiveHTTPQuery = new QuakeLiveHTTPQuery(BuilderFactory.createQuakeLiveHTTPBuilder(), matchId, gametype);
+        
+        return quakeLiveHTTPQuery;
+        
     }
 }
