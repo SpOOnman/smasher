@@ -48,14 +48,14 @@ public class ServerInfoScorebot extends Scorebot {
 	 */
 	private static final Logger log = Logger.getLogger(ServerInfoScorebot.class);
 
-	private final long interval = 800; // ms
-	private int count = 0;
+	protected final long interval = 800; // ms
+	protected int count = 0;
 
 	private Boolean running = false;
 
-	private ServerQuery serverQuery;
-	private ServerInfo previousServerInfo;
-	private ServerInfo currentServerInfo;
+	protected ServerQuery serverQuery;
+	protected ServerInfo previousServerInfo;
+	protected ServerInfo currentServerInfo;
 	
 	public ServerInfoScorebot(String id, ServerQuery serverQuery) {
 		super(id);
@@ -102,7 +102,7 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 	}
 
-	private boolean isRunning() {
+	protected boolean isRunning() {
 		synchronized (running) {
 			return running;
 		}
