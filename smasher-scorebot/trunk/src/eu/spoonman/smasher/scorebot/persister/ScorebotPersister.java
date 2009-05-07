@@ -18,7 +18,12 @@
 
 package eu.spoonman.smasher.scorebot.persister;
 
+import java.util.List;
+
+import eu.spoonman.smasher.serverinfo.GameInfo;
+import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.TeamInfo;
 
 /**
  * Persister is a special class that simulates stateful parser.
@@ -27,8 +32,16 @@ import eu.spoonman.smasher.serverinfo.ServerInfo;
  * @author Tomasz Kalkosiński
  *
  */
-public interface ServerInfoPersister {
-    
-    public void persist(ServerInfo serverInfo);
-
+public abstract class ScorebotPersister {
+	
+	public void persist(List<PlayerInfo> left, List<PlayerInfo> right) {}
+	
+	public void persist(PlayerInfo left, PlayerInfo right) {}
+	
+	public void persist(TeamInfo left, TeamInfo right) {}
+	
+	public void persist(GameInfo left, GameInfo right) {}
+	
+	public void persist(ServerInfo left, ServerInfo right) {}
+		
 }

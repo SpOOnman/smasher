@@ -20,19 +20,12 @@ package eu.spoonman.smasher.scorebot.persister;
 
 import org.joda.time.Period;
 
-import eu.spoonman.smasher.serverinfo.ServerInfo;
-
 /**
  * @author Tomasz Kalkosiński
  *
  */
-public class Quake3TimeInfoPersister implements ServerInfoPersister {
+public class Quake3TimeInfoPersister extends ScorebotPersister {
     
     private Period oldPeriod;
     
-    @Override
-    public void persist(ServerInfo serverInfo) {
-        // TODO Auto-generated method stub
-    }
-
 }

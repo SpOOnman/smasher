@@ -38,11 +38,7 @@ import eu.spoonman.smasher.serverinfo.TeamKey;
  * @author Tomasz Kalkosiński
  *
  */
-/**
- * @author spoonman
- *
- */
-public class TeamAssignPersister implements ServerInfoPersister {
+public class TeamAssignPersister extends ScorebotPersister {
     /**
      * Logger for this class
      */
@@ -64,9 +60,9 @@ public class TeamAssignPersister implements ServerInfoPersister {
     }
     
     @Override
-    public void persist(ServerInfo serverInfo) {
-        ArrayList<Integer> X = prepareMatrixX(serverInfo);
-        ArrayList<Integer> B = prepareMatrixB(serverInfo);
+    public void persist(ServerInfo left, ServerInfo right) {
+        ArrayList<Integer> X = prepareMatrixX(left);
+        ArrayList<Integer> B = prepareMatrixB(left);
         //TODO: out of pairs.
         //TwoRowMatrix overlap = prepareOverlapMatrix();
         
