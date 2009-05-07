@@ -19,7 +19,6 @@ import eu.spoonman.smasher.serverinfo.parser.gameinfo.QuakeLiveGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.playerinfo.QuakeLiveJSONPlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.teaminfo.TeamNameParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.QuakeLiveTimeInfoParser;
-import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 import eu.spoonman.smasher.serverinfo.reader.QuakeLiveReader;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
@@ -58,12 +57,6 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
         return list;
     }
     
-    @Override
-    public List<ServerInfoPersister> getPersisterList(ServerInfo serverInfo) {
-        List<ServerInfoPersister> list = new ArrayList<ServerInfoPersister>();
-        return list;
-    }
-
     @Override
     public Version getGameVersion(ServerInfo serverInfo) {
         // QuakeLive 0.1.0.214 linux-i386 Feb 4 2009 21:24:26

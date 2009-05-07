@@ -27,7 +27,6 @@ import eu.spoonman.smasher.quakelive.QuakeLiveHTTPService;
 import eu.spoonman.smasher.serverinfo.builder.Builder;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
-import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 
 /**
  * @author Tomasz Kalkosiński
@@ -41,7 +40,6 @@ public class QuakeLiveHTTPQuery {
     private int gametype;
 
     private List<ServerInfoParser> parserList;
-    private List<ServerInfoPersister> persisterList;
     
     private Builder builder;
 
@@ -61,10 +59,6 @@ public class QuakeLiveHTTPQuery {
     private void buildParsers(ServerInfo serverInfo) {
         parserList = builder.getParserList(serverInfo);
         alreadyBuilded = true;
-    }
-    
-    private void buildPersisers(ServerInfo serverInfo) {
-        persisterList = builder.getPersisterList(serverInfo);
     }
 
     public ServerInfo query() {

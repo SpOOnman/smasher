@@ -24,7 +24,6 @@ import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.Version;
 import eu.spoonman.smasher.serverinfo.header.Header;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
-import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
 /**
@@ -59,12 +58,6 @@ public class QuakeLiveHTTPBuilder extends BuilderFactory implements Builder {
 
     @Override
     public List<ServerInfoParser> getParserList(ServerInfo serverInfo) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<ServerInfoPersister> getPersisterList(ServerInfo serverInfo) {
         // TODO Auto-generated method stub
         return null;
     }

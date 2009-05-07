@@ -39,7 +39,6 @@ import eu.spoonman.smasher.serverinfo.parser.playerinfo.NumbersPlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.playerinfo.Quake3OSPPlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.teaminfo.Quake3OSPTeamInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.Quake3OSPTimeInfoParser;
-import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 import eu.spoonman.smasher.serverinfo.reader.QuakeEngineReader;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
@@ -82,12 +81,6 @@ public class Quake3ArenaBuilder extends BuilderFactory implements Builder {
         list.add(new Quake3OSPTeamInfoParser("Score_Blue", "Blue", TeamKey.BLUE_TEAM));
         list.add(new Quake3OSPTimeInfoParser());
         list.add(new Quake3OSPGameInfoParser());
-        return list;
-    }
-    
-    @Override
-    public List<ServerInfoPersister> getPersisterList(ServerInfo serverInfo) {
-        List<ServerInfoPersister> list = new ArrayList<ServerInfoPersister>();
         return list;
     }
     

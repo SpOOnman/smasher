@@ -16,7 +16,6 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.QuakeEngineGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.playerinfo.Quake3OSPPlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.Quake2TDMTimeInfoParser;
-import eu.spoonman.smasher.serverinfo.persister.ServerInfoPersister;
 import eu.spoonman.smasher.serverinfo.reader.QuakeEngineReader;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
@@ -53,12 +52,6 @@ public class Quake2Builder extends BuilderFactory implements Builder {
         return list;
     }
     
-    @Override
-    public List<ServerInfoPersister> getPersisterList(ServerInfo serverInfo) {
-        List<ServerInfoPersister> list = new ArrayList<ServerInfoPersister>();
-        return list;
-    }
-
     @Override
     public Version getGameVersion(ServerInfo serverInfo) {
         // QuakeLive 0.1.0.214 linux-i386 Feb 4 2009 21:24:26
