@@ -37,7 +37,7 @@ public class TeamAssignPersisterTest {
         ServerInfo serverInfo = getServerInfo();
         
         TeamAssignPersister persister = new TeamAssignPersister();
-        persister.persist(serverInfo);
+        persister.persist(null, serverInfo);
         
         assertNull(serverInfo.getPlayerInfos().get(0).getTeamKey());
         assertNull(serverInfo.getPlayerInfos().get(1).getTeamKey());
@@ -58,14 +58,14 @@ public class TeamAssignPersisterTest {
         ServerInfo serverInfo = getServerInfo();
         
         TeamAssignPersister persister = new TeamAssignPersister();
-        persister.persist(serverInfo);
+        persister.persist(null, serverInfo);
         
         ServerInfo serverInfo2 = getServerInfo();
         serverInfo2.getPlayerInfos().get(3).setScore(1);
         serverInfo2.getTeamInfos().get(TeamKey.RED_TEAM).setScore(23);
         serverInfo2.getTeamInfos().get(TeamKey.BLUE_TEAM).setScore(5);
         
-        persister.persist(serverInfo2);
+        persister.persist(serverInfo, serverInfo2);
         
         assertNull(serverInfo2.getPlayerInfos().get(0).getTeamKey());
         assertNull(serverInfo2.getPlayerInfos().get(1).getTeamKey());
