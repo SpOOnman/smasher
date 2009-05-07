@@ -28,6 +28,8 @@ import org.apache.log4j.Logger;
 
 import eu.spoonman.smasher.common.LCS;
 import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.scorebot.persister.PersisterFactory;
+import eu.spoonman.smasher.scorebot.persister.ScorebotPersister;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
@@ -56,6 +58,8 @@ public class ServerInfoScorebot extends Scorebot {
 	protected ServerQuery serverQuery;
 	protected ServerInfo previousServerInfo;
 	protected ServerInfo currentServerInfo;
+	
+	protected List<ScorebotPersister> persisters;
 	
 	public ServerInfoScorebot(String id, ServerQuery serverQuery) {
 		super(id);
@@ -114,9 +118,14 @@ public class ServerInfoScorebot extends Scorebot {
 
 			currentServerInfo = serverQuery.query();
 			log.info(currentServerInfo);
-
+			
 			//Don't difference when response is not valid.
 			if (currentServerInfo.getStatus() == ServerInfoStatus.OK) {
+				
+				//Create persisters right after first good query. 
+				if (persisters == null)
+					PersisterFactory.getPersisters(currentServerInfo.getGame(), currentServerInfo.getModVersion());
+				
 				difference();
 	
 				previousServerInfo = currentServerInfo;
