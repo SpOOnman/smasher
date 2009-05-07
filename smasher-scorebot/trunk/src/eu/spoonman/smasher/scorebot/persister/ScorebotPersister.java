@@ -22,6 +22,7 @@ import java.util.List;
 
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
+import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
 
@@ -43,5 +44,7 @@ public abstract class ScorebotPersister {
 	public void persist(GameInfo left, GameInfo right) {}
 	
 	public void persist(ServerInfo left, ServerInfo right) {}
+	
+	public void persist(ProgressInfo left, ProgressInfo right) {}
 		
 }

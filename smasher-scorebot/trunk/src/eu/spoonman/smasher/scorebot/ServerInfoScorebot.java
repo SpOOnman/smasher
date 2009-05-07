@@ -159,6 +159,9 @@ public class ServerInfoScorebot extends Scorebot {
 	private void differenceProgressInfo() {
 		ProgressInfo prevProgressInfo = previousServerInfo == null ? null : previousServerInfo
 				.getProgressInfo();
+		
+		for (ScorebotPersister persister : persisters)
+			persister.persist(prevProgressInfo, currentServerInfo.getProgressInfo());
 
 		if (prevProgressInfo == null && currentServerInfo.getProgressInfo() != null) {
 			progressInfoChange.notifyAll(new Pair<ProgressInfo, ProgressInfo>(null, currentServerInfo
@@ -181,6 +184,10 @@ public class ServerInfoScorebot extends Scorebot {
 				continue;
 			
 			if (left != null && right != null) {
+				
+				for (ScorebotPersister persister : persisters)
+					persister.persist(left, right);
+				
 				differenceTeamInfo(new Pair<TeamInfo, TeamInfo>(left, right));
 			}
 			
@@ -204,6 +211,9 @@ public class ServerInfoScorebot extends Scorebot {
 		List<PlayerInfo> left = previousServerInfo == null ? new ArrayList<PlayerInfo>() : previousServerInfo
 				.getPlayerInfos();
 		
+		for (ScorebotPersister persister : persisters)
+			persister.persist(left, currentServerInfo.getPlayerInfos());
+		
 		//TODO: move this into persister.
 		LCS<PlayerInfo> lcs = new LCS<PlayerInfo>(left, currentServerInfo.getPlayerInfos(),
 				new Comparator<PlayerInfo>() {
@@ -223,6 +233,9 @@ public class ServerInfoScorebot extends Scorebot {
 	}
 
 	private void differencePlayerInfo(Pair<PlayerInfo, PlayerInfo> pair) {
+		
+		for (ScorebotPersister persister : persisters)
+			persister.persist(pair.getFirst(), pair.getSecond());
 		
 		if (pair.getFirst() == null && pair.getSecond() != null) {
 			playerConnectedEvent.notifyAll(pair);
