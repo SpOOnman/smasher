@@ -42,6 +42,11 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 	
 	private static final String MATCHID_KEY = "sv_gtid";
 	private static final String GAMETYPE_KEY = "g_gametype";
+	/**
+	 * Query via HTTP each QUERY_PERIOD times.
+	 */
+	private static int QUERY_PERIOD = 10;
+	private int serverQueryCounter = 0;
 	
 	private QuakeLiveHTTPQuery httpQuery = null;
 	
@@ -49,9 +54,6 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 	 * Flag that indicates if HTTP query is needed to obtain things.
 	 */
 	private boolean httpQueryNeeded = false;
-	
-	private ServerInfo previousHTTPServerInfo = null;
-	private ServerInfo currentHTTPServerInfo = null;
 	
 
 	public QuakeLiveScorebot(String id, ServerQuery serverQuery) {
@@ -63,18 +65,9 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 
 		while (isRunning()) {
 
-			currentServerInfo = serverQuery.query();
+			currentServerInfo = internalQuery();
 			log.info(currentServerInfo);
-			
-			//It it's first time - be sure to query via HTTP
-			if (currentHTTPServerInfo == null) {
-				startHTTPQuery();
-				currentHTTPServerInfo =  httpQuery.query();
-			}
-			
-			//If it's next time and it looks suspicious - query again via HTTP.
-				
-
+						
 			//Don't difference when response is not valid.
 			if (currentServerInfo.getStatus() == ServerInfoStatus.OK) {
 				difference();
@@ -92,6 +85,26 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 		}
 		
 		log.info(String.format("Scorebot %s has stopped.", getId()));
+	}
+	
+	private ServerInfo internalQuery() {
+		
+		//It it's first time - create HTTP query.
+		if (currentServerInfo == null) {
+			startHTTPQuery();
+		}
+		
+		if (serverQueryCounter + 1 == QUERY_PERIOD || httpQueryNeeded == true || currentServerInfo == null) {
+			
+			serverQueryCounter = 0;
+			httpQueryNeeded = false;
+			
+			return httpQuery.query();
+		} else {
+			
+			serverQueryCounter++;
+			return serverQuery.query();
+		}
 	}
 	
 	private void startHTTPQuery() {
