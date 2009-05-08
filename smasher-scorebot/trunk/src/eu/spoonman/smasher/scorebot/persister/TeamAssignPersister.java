@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.common.TwoRowEquationSolver;
 import eu.spoonman.smasher.common.TwoRowMatrix;
+import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
@@ -51,7 +52,8 @@ public class TeamAssignPersister extends ScorebotPersister {
 
 	private ArrayList<Pair<PlayerInfo, PlayerInfo>> sortedPlayerPairs;
     
-    public TeamAssignPersister() {
+    public TeamAssignPersister(Scorebot scorebot) {
+    	super(scorebot);
         solver = new TwoRowEquationSolver();
     }
     

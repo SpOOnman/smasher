@@ -17,6 +17,7 @@
  */
 package eu.spoonman.smasher.scorebot.persister;
 
+import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
 
@@ -27,6 +28,10 @@ import eu.spoonman.smasher.serverinfo.TeamInfo;
  * 
  */
 public class AddMissingPropertiesPersister extends ScorebotPersister {
+	
+	public AddMissingPropertiesPersister(Scorebot parent) {
+		super(parent);
+	}
 
 	@Override
 	public void persist(PlayerInfo left, PlayerInfo right) {

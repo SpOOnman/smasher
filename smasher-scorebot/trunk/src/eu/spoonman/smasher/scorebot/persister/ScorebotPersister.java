@@ -37,7 +37,13 @@ import eu.spoonman.smasher.serverinfo.TeamInfo;
  */
 public abstract class ScorebotPersister {
 	
-	public void prePersist(Scorebot scorebot) {}
+	protected Scorebot scorebot;
+	
+	public ScorebotPersister(Scorebot parent) {
+		scorebot = parent;
+	}
+	
+	public void prePersist() {}
 	
 	public void persist(List<Pair<PlayerInfo, PlayerInfo>> playerPairs) {}
 	
@@ -53,6 +59,6 @@ public abstract class ScorebotPersister {
 	
 	public void persist(ProgressInfo left, ProgressInfo right) {}
 	
-	public void postPersist(Scorebot scorebot) {}
+	public void postPersist() {}
 		
 }

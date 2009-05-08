@@ -20,6 +20,7 @@ package eu.spoonman.smasher.scorebot.persister;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.Version;
 
@@ -33,15 +34,19 @@ public class PersisterFactory {
 	 * @param game
 	 * @param modVersion
 	 */
-	public static List<ScorebotPersister> getPersisters(Games game, Version modVersion) {
+	public static List<ScorebotPersister> getPersisters(Scorebot scorebot, Games game, Version modVersion) {
 
 		List<ScorebotPersister> persisters = new ArrayList<ScorebotPersister>();
 
 		switch (game) {
 		
 		case QUAKE3ARENA:
-			persisters.add(new Quake3TimeInfoPersister());
-
+			persisters.add(new Quake3TimeInfoPersister(scorebot));
+			break;
+		
+		case QUAKELIVE:
+			persisters.add(new AddMissingPropertiesPersister(scorebot));
+			break;
 		}
 
 		return persisters;

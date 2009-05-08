@@ -124,7 +124,7 @@ public class ServerInfoScorebot extends Scorebot {
 				
 				//Create persisters right after first good query. 
 				if (persisters == null)
-					PersisterFactory.getPersisters(currentServerInfo.getGame(), currentServerInfo.getModVersion());
+					PersisterFactory.getPersisters(this, currentServerInfo.getGame(), currentServerInfo.getModVersion());
 				
 				difference();
 	
@@ -292,7 +292,7 @@ public class ServerInfoScorebot extends Scorebot {
 		differenceStartEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
 		
 		for (ScorebotPersister persister : persisters)
-			persister.prePersist(this);
+			persister.prePersist();
 		
 		for (ScorebotPersister persister : persisters)
 			persister.persist(previousServerInfo, currentServerInfo);
@@ -305,7 +305,7 @@ public class ServerInfoScorebot extends Scorebot {
 		differencePlayerInfos();
 		
 		for (ScorebotPersister persister : persisters)
-			persister.postPersist(this);
+			persister.postPersist();
 		
 		differenceStopEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
 		

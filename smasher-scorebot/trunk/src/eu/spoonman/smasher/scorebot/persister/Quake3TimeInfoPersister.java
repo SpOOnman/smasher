@@ -20,6 +20,7 @@ package eu.spoonman.smasher.scorebot.persister;
 
 import org.joda.time.Period;
 
+import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.RoundInfo;
 
@@ -29,7 +30,11 @@ import eu.spoonman.smasher.serverinfo.RoundInfo;
  */
 public class Quake3TimeInfoPersister extends ScorebotPersister {
     
-    private Period oldPeriod;
+	public Quake3TimeInfoPersister(Scorebot parent) {
+		super(parent);
+	}
+
+	private Period oldPeriod;
     
     /**
      * Quake 3 doesn't record how many time it's left in timeouts. Copy these values from previous time states.
