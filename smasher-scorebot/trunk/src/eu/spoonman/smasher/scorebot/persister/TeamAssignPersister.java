@@ -22,10 +22,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.common.TwoRowEquationSolver;
 import eu.spoonman.smasher.common.TwoRowMatrix;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
@@ -44,52 +46,65 @@ public class TeamAssignPersister extends ScorebotPersister {
      */
     private static final Logger log = Logger.getLogger(TeamAssignPersister.class);
     
-    private TwoRowMatrix overlapMatrix;
     private TwoRowEquationSolver solver;
+    private boolean couldntSolve = false;
+
+	private ArrayList<Pair<PlayerInfo, PlayerInfo>> sortedPlayerPairs;
     
-    /**
-     * Descending sorted players with score different than 0
-     */
-    private ArrayList<PlayerInfo> sortedPlayers;
-    
-    /**
-     * 
-     */
     public TeamAssignPersister() {
         solver = new TwoRowEquationSolver();
     }
     
     @Override
-    public void persist(ServerInfo left, ServerInfo right) {
-        ArrayList<Integer> X = prepareMatrixX(left);
-        ArrayList<Integer> B = prepareMatrixB(left);
-        //TODO: out of pairs.
-        //TwoRowMatrix overlap = prepareOverlapMatrix();
-        
-        solver.setX(X);
-        solver.setB(B);
-        solver.setD(null);
-        solver.setTemplateMatrix(overlapMatrix);
-        
-        //Get all solutions
-        ArrayList<TwoRowMatrix> list = solver.solve();
-        
-        //TODO: zero solutions
-        
-        //Remove all matrices that doesn't match old overlap matrix
-        for (Iterator<TwoRowMatrix> iterator = list.iterator(); iterator.hasNext();) {
-            if (!(matchesTemplateMatrix(iterator.next())))
-                iterator.remove();
-        }
-        
-        //Create overlap matrix;
-        overlapMatrix = overlapMatrices(X.size(), list);
-        
-        //Assign players to teams
-        assignPlayers();
+    public void persist(List<Pair<PlayerInfo, PlayerInfo>> playerPairs) {
+    	super.persist(playerPairs);
+    	prepareMatricesOverlayAndX(playerPairs);
+    	
+    	solve();
     }
     
-    private void assignPlayers() {
+    private void solve() {
+    	
+    	solver.setD(null);
+    	
+    	//Get all solutions
+    	ArrayList<TwoRowMatrix> list = solver.solve();
+    	
+    	if (list.size() == 0) {
+    		log.warn("No solutions were found. Resetting template matrix.");
+    		
+    		if (couldntSolve == true) {
+    			log.error("Couldnt solve for two times. Quitting.");
+    			return;
+    		}
+    		
+    		solver.setTemplateMatrix(new TwoRowMatrix(solver.getX().size(), 0));
+    		couldntSolve = true;
+    		solve();
+    	}
+    	
+    	couldntSolve = false;
+    	
+    	//Remove all matrices that doesn't match old overlap matrix
+    	for (Iterator<TwoRowMatrix> iterator = list.iterator(); iterator.hasNext();) {
+    		if (!(matchesTemplateMatrix(solver.getTemplateMatrix(), iterator.next())))
+    			iterator.remove();
+    	}
+    	
+    	//Create overlap matrix;
+    	TwoRowMatrix overlapMatrix = overlapMatrices(solver.getX().size(), list);
+    	
+    	//Assign players to teams
+    	assignPlayers(overlapMatrix);
+    }
+    
+    @Override
+    public void persist(ServerInfo left, ServerInfo right) {
+        prepareMatrixB(right);
+        
+    }
+    
+    private void assignPlayers(TwoRowMatrix overlapMatrix) {
         
         if (overlapMatrix == null) {
             if (log.isDebugEnabled())
@@ -105,9 +120,9 @@ public class TeamAssignPersister extends ScorebotPersister {
                 continue;
             
             if (red == 1)
-                sortedPlayers.get(i).setTeamKey(TeamKey.RED_TEAM);
+                sortedPlayerPairs.get(i).getSecond().setTeamKey(TeamKey.RED_TEAM);
             else
-                sortedPlayers.get(i).setTeamKey(TeamKey.BLUE_TEAM);
+                sortedPlayerPairs.get(i).getSecond().setTeamKey(TeamKey.BLUE_TEAM);
         }
         
         
@@ -131,66 +146,27 @@ public class TeamAssignPersister extends ScorebotPersister {
         return matrix;
     }
     
-    private ArrayList<Integer> prepareMatrixB(ServerInfo serverInfo) {
+    private void prepareMatrixB(ServerInfo serverInfo) {
         ArrayList<Integer> scores = new ArrayList<Integer>();
+        
         scores.add(serverInfo.getTeamInfos().get(TeamKey.RED_TEAM).getScore());
         scores.add(serverInfo.getTeamInfos().get(TeamKey.BLUE_TEAM).getScore());
-        return scores;
+        
+        solver.setB(scores);
     }
     
-    /**
-     * Get player scores vector.
-     * 
-     * @param serverInfo
-     * @return
-     */
-    private ArrayList<Integer> prepareMatrixX(ServerInfo serverInfo) {
-        sortedPlayers = getPlayers(serverInfo);
-        ArrayList<Integer> playerScores = new ArrayList<Integer>();
-        
-        for (PlayerInfo playerInfo : sortedPlayers)
-            playerScores.add(playerInfo.getScore());
-        
-        return playerScores;
-    }
-    
-    /**
-     * Checks if actual solution matches template matrix.
-     * Match means that for every element equals to 1 in template matrix - exact element in solution matrix must be equal to 1 too.
-     * @return
-     */
-    private boolean matchesTemplateMatrix (TwoRowMatrix matrix) {
-        //If there is no overlap matrix every solution is acceptable.
-        if (overlapMatrix == null)
-            return true;
-        
-        //Check each element
-        for (int i = 0 ; i < 2 ; i++)
-            for (int j = 0 ; j < sortedPlayers.size() ; j ++){
-                if (overlapMatrix.getRow(i).get(j) == 1 && matrix.getRow(i).get(j) != 1)
-                    return false;
-            }
-        
-        return true;
-    }
-    
-    /**
-     * Gets all players which score is different than 0 sorted descending by score.
-     * 
-     * @param serverInfo
-     * @return
-     */
-    private ArrayList<PlayerInfo> getPlayers(ServerInfo serverInfo) {
-        ArrayList<PlayerInfo> copy = new ArrayList<PlayerInfo>(serverInfo.getPlayerInfos());
-        
-        //Remove all players with score 0
-        for (Iterator<PlayerInfo> iterator = copy.iterator(); iterator.hasNext();) {
-            if (iterator.next().getScore() == 0)
+    private void prepareMatricesOverlayAndX(List<Pair<PlayerInfo, PlayerInfo>> pairs) {
+    	sortedPlayerPairs = new ArrayList<Pair<PlayerInfo,PlayerInfo>>();
+    	Collections.copy(sortedPlayerPairs, pairs);
+    	
+    	//Remove all players with score 0
+        for (Iterator<Pair<PlayerInfo, PlayerInfo>> iterator = sortedPlayerPairs.iterator(); iterator.hasNext();) {
+            if (iterator.next().getSecond().getScore() == 0)
                 iterator.remove();
         }
         
         //Sort by score descending
-        Collections.sort(copy, new Comparator<PlayerInfo> (
+        Collections.sort(sortedPlayerPairs, new Comparator<Pair<PlayerInfo, PlayerInfo>> (
                 ){
             
                     /**
@@ -200,10 +176,10 @@ public class TeamAssignPersister extends ScorebotPersister {
                      * @return
                      */
                     @Override
-                    public int compare(PlayerInfo o1, PlayerInfo o2) {
+                    public int compare(Pair<PlayerInfo, PlayerInfo> o1, Pair<PlayerInfo, PlayerInfo> o2) {
                         
-                        int s1 = o1.getScore();
-                        int s2 = o2.getScore();
+                        int s1 = o1.getSecond().getScore();
+                        int s2 = o2.getSecond().getScore();
                         
                         if (s1 >= 0 && s2 >= 0)
                             return s2 - s1;
@@ -218,7 +194,38 @@ public class TeamAssignPersister extends ScorebotPersister {
                     }
                 });
         
-        return copy;
+        ArrayList<Integer> playerScores = new ArrayList<Integer>();
+        TwoRowMatrix templateMatrix = new TwoRowMatrix();
+        
+        for (Pair<PlayerInfo, PlayerInfo> pair : sortedPlayerPairs) {
+            playerScores.add(pair.getSecond().getScore());
+            templateMatrix.getFirstRow().add(pair.getFirst().getTeamKey() == TeamKey.RED_TEAM ? 1 : 0);
+            templateMatrix.getSecondRow().add(pair.getFirst().getTeamKey() == TeamKey.BLUE_TEAM ? 1 : 0);
+        }
+        
+        solver.setX(playerScores);
+        solver.setTemplateMatrix(templateMatrix);
     }
+    
+    /**
+     * Checks if actual solution matches template matrix.
+     * Match means that for every element equals to 1 in template matrix - exact element in solution matrix must be equal to 1 too.
+     * @return
+     */
+    private boolean matchesTemplateMatrix (TwoRowMatrix templateMatrix, TwoRowMatrix matrix) {
+        //If there is no overlap matrix every solution is acceptable.
+        if (templateMatrix == null)
+            return true;
+        
+        //Check each element
+        for (int i = 0 ; i < 2 ; i++)
+            for (int j = 0 ; j < templateMatrix.getFirstRow().size() ; j ++){
+                if (templateMatrix.getRow(i).get(j) == 1 && matrix.getRow(i).get(j) != 1)
+                    return false;
+            }
+        
+        return true;
+    }
+    
     
 }

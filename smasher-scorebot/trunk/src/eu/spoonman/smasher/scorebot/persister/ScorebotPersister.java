@@ -20,6 +20,8 @@ package eu.spoonman.smasher.scorebot.persister;
 
 import java.util.List;
 
+import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
@@ -35,6 +37,10 @@ import eu.spoonman.smasher.serverinfo.TeamInfo;
  */
 public abstract class ScorebotPersister {
 	
+	public void prePersist(Scorebot scorebot) {}
+	
+	public void persist(List<Pair<PlayerInfo, PlayerInfo>> playerPairs) {}
+	
 	public void persist(List<PlayerInfo> left, List<PlayerInfo> right) {}
 	
 	public void persist(PlayerInfo left, PlayerInfo right) {}
@@ -46,5 +52,7 @@ public abstract class ScorebotPersister {
 	public void persist(ServerInfo left, ServerInfo right) {}
 	
 	public void persist(ProgressInfo left, ProgressInfo right) {}
+	
+	public void postPersist(Scorebot scorebot) {}
 		
 }

@@ -20,6 +20,9 @@ package eu.spoonman.smasher.scorebot.persister;
 
 import org.joda.time.Period;
 
+import eu.spoonman.smasher.serverinfo.ProgressInfo;
+import eu.spoonman.smasher.serverinfo.RoundInfo;
+
 /**
  * @author Tomasz Kalkosiński
  *
@@ -27,5 +30,33 @@ import org.joda.time.Period;
 public class Quake3TimeInfoPersister extends ScorebotPersister {
     
     private Period oldPeriod;
+    
+    /**
+     * Quake 3 doesn't record how many time it's left in timeouts. Copy these values from previous time states.
+     */
+    @Override
+    public void persist(ProgressInfo left, ProgressInfo right) {
+    	super.persist(left, right);
+    }
+    
+    /*
+     *   //Quake 3 doesn't record how many time it's left in timeouts.
+        //Copy these values from previous time states.
+        if (this->currentMatchState->progressStatus->flags & (TIME_STATUS_TIMEOUT_RED | TIME_STATUS_TIMEOUT_BLUE | TIME_STATUS_TIMEOUT_ANY | TIME_STATUS_FRAGLIMIT | TIME_STATUS_CAPTURELIMIT))
+            this->UpgradeCurrentProgressStatusToTimeStatus (this->previousMatchState->progressStatus);
+
+        //Countdown between rounds forgets about current round status. Retreive it.
+        if (this->currentMatchState->progressStatus->type == PROGRESS_STATUS &&
+            this->currentMatchState->progressStatus->flags & (TIME_STATUS_COUNTDOWN) &&
+            this->previousMatchState->progressStatus->type == ROUND_STATUS)
+        {
+            RoundStatus* oldRoundStatus = dynamic_cast<RoundStatus*> (this->previousMatchState->progressStatus);
+
+            RoundStatus* newRoundStatus = new RoundStatus (oldRoundStatus->round, oldRoundStatus->roundLimit, this->currentMatchState->progressStatus->flags);
+            delete this->currentMatchState->progressStatus;
+
+            this->currentMatchState->progressStatus = newRoundStatus;
+        }
+     */
     
 }

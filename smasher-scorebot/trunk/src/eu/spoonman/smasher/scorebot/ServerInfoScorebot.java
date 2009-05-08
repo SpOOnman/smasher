@@ -226,6 +226,9 @@ public class ServerInfoScorebot extends Scorebot {
 
 		List<Pair<PlayerInfo, PlayerInfo>> pairs = lcs.getLCSPairs();
 		reviseLCSPlayerPairs(pairs);
+		
+		for (ScorebotPersister persister : persisters)
+			persister.persist(pairs);
 
 		for (Pair<PlayerInfo, PlayerInfo> pair : pairs) {
 			differencePlayerInfo(pair);
@@ -287,6 +290,12 @@ public class ServerInfoScorebot extends Scorebot {
 		assert (currentServerInfo != null);
 		
 		differenceStartEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
+		
+		for (ScorebotPersister persister : persisters)
+			persister.prePersist(this);
+		
+		for (ScorebotPersister persister : persisters)
+			persister.persist(previousServerInfo, currentServerInfo);
 
 		//Please ensure that game info is differenced first so in case of change we can change
 		//display rules before any other changes are differenced.
@@ -295,7 +304,11 @@ public class ServerInfoScorebot extends Scorebot {
 		differenceTeamInfos();
 		differencePlayerInfos();
 		
+		for (ScorebotPersister persister : persisters)
+			persister.postPersist(this);
+		
 		differenceStopEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
+		
 	}
 
 	//Needed for tests
