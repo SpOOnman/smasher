@@ -143,7 +143,7 @@ public class ServerInfoScorebot extends Scorebot {
 		log.info(String.format("Scorebot %s has stopped.", getId()));
 	}
 
-	private void differenceGameInfo() {
+	protected void differenceGameInfo() {
 		GameInfo prevGameInfo = previousServerInfo == null ? null : previousServerInfo.getGameInfo();
 
 		if (prevGameInfo == null && currentServerInfo.getGameInfo() != null) {
@@ -156,7 +156,7 @@ public class ServerInfoScorebot extends Scorebot {
 					currentServerInfo.getGameInfo()));
 	}
 
-	private void differenceProgressInfo() {
+	protected void differenceProgressInfo() {
 		ProgressInfo prevProgressInfo = previousServerInfo == null ? null : previousServerInfo
 				.getProgressInfo();
 		
@@ -174,7 +174,7 @@ public class ServerInfoScorebot extends Scorebot {
 					.getProgressInfo(), currentServerInfo.getProgressInfo()));
 	}
 	
-	private void differenceTeamInfos() {
+	protected void differenceTeamInfos() {
 		
 		for(TeamKey key : TeamKey.values()) {
 			TeamInfo left = previousServerInfo == null || previousServerInfo.getTeamInfos() == null ? null : previousServerInfo.getTeamInfos().get(key);
@@ -197,7 +197,7 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 	}
 
-	private void differenceTeamInfo(Pair<TeamInfo, TeamInfo> pair) {
+	protected void differenceTeamInfo(Pair<TeamInfo, TeamInfo> pair) {
 		if (!(pair.getFirst().getName().equals(pair.getSecond().getName()))) {
 			teamNameChangedEvent.notifyAll(pair);
 		}
@@ -207,7 +207,7 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 	}
 
-	private void differencePlayerInfos() {
+	protected void differencePlayerInfos() {
 		List<PlayerInfo> left = previousServerInfo == null ? new ArrayList<PlayerInfo>() : previousServerInfo
 				.getPlayerInfos();
 		
@@ -235,7 +235,7 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 	}
 
-	private void differencePlayerInfo(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void differencePlayerInfo(Pair<PlayerInfo, PlayerInfo> pair) {
 		
 		for (ScorebotPersister persister : persisters)
 			persister.persist(pair.getFirst(), pair.getSecond());
@@ -299,16 +299,31 @@ public class ServerInfoScorebot extends Scorebot {
 
 		//Please ensure that game info is differenced first so in case of change we can change
 		//display rules before any other changes are differenced.
-		differenceGameInfo();
-		differenceProgressInfo();
-		differenceTeamInfos();
-		differencePlayerInfos();
+		differenceFirst();
+		differenceSecond();
+		differenceThird();
+		differenceFourth();
 		
 		for (ScorebotPersister persister : persisters)
 			persister.postPersist();
 		
 		differenceStopEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
-		
+	}
+	
+	protected void differenceFirst() {
+		differenceGameInfo();
+	}
+	
+	protected void differenceSecond() {
+		differenceProgressInfo();
+	}
+	
+	protected void differenceThird() {
+		differenceTeamInfos();
+	}
+	
+	protected void differenceFourth() {
+		differencePlayerInfos();
 	}
 
 	//Needed for tests

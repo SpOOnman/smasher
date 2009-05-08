@@ -119,5 +119,15 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 			httpQueryNeeded = true;
 		}
 	}
+	
+	@Override
+	protected void differenceThird() {
+		super.differencePlayerInfos();
+	}
+	
+	@Override
+	protected void differenceFourth() {
+		super.differenceTeamInfos();
+	}
 
 }
