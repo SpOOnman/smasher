@@ -53,7 +53,7 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 	/**
 	 * Flag that indicates if HTTP query is needed to obtain things.
 	 */
-	private boolean httpQueryNeeded = false;
+	private Boolean httpQueryNeeded = false;
 	
 
 	public QuakeLiveScorebot(String id, ServerQuery serverQuery) {
@@ -112,6 +112,12 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 		Integer gametype = Integer.valueOf(currentServerInfo.getNamedAttributes().get(GAMETYPE_KEY));
 		
 		httpQuery = ServerQueryManager.createQuakeLiveHTTPQuery(matchId, gametype);
+	}
+	
+	public void forceToHTTPQuery() {
+		synchronized (httpQueryNeeded) {
+			httpQueryNeeded = true;
+		}
 	}
 
 }
