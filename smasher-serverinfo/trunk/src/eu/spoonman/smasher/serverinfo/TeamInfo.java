@@ -26,7 +26,7 @@ public class TeamInfo {
     
     private TeamKey key;
     private String name;
-    private int score;
+    private Integer score;
     
     /**
      * @param key
@@ -83,14 +83,14 @@ public class TeamInfo {
     /**
      * @return the score
      */
-    public int getScore() {
+    public Integer getScore() {
         return score;
     }
 
     /**
      * @param score the score to set
      */
-    public void setScore(int score) {
+    public void setScore(Integer score) {
         this.score = score;
     }
 
