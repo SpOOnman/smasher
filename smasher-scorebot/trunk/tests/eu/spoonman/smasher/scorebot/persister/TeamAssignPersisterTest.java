@@ -42,7 +42,7 @@ public class TeamAssignPersisterTest {
         return pairs;
 
     }
-
+    
     @Test
     public void testPersist() {
         ServerInfo serverInfo = getServerInfo();
@@ -74,27 +74,39 @@ public class TeamAssignPersisterTest {
     @Test
     public void testPersistTwo() {
         
-        ServerInfo serverInfo = getServerInfo();
+    	ServerInfo serverInfo = getServerInfo();
         
         TeamAssignPersister persister = new TeamAssignPersister();
         persister.persist(null, serverInfo);
         
+        List<Pair<PlayerInfo,PlayerInfo>> pairs = getLCSPairs();
+        
+        for (Pair<PlayerInfo, PlayerInfo> pair : pairs) {
+			pair.setFirst(null);
+		}
+        
+        persister.persist(pairs);
+        
         ServerInfo serverInfo2 = getServerInfo();
-        serverInfo2.getPlayerInfos().get(3).setScore(1);
         serverInfo2.getTeamInfos().get(TeamKey.RED_TEAM).setScore(23);
         serverInfo2.getTeamInfos().get(TeamKey.BLUE_TEAM).setScore(5);
         
         persister.persist(serverInfo, serverInfo2);
         
-        assertNull(serverInfo2.getPlayerInfos().get(0).getTeamKey());
-        assertNull(serverInfo2.getPlayerInfos().get(1).getTeamKey());
-        assertEquals(TeamKey.RED_TEAM, serverInfo2.getPlayerInfos().get(2).getTeamKey());
-        assertEquals(TeamKey.BLUE_TEAM, serverInfo2.getPlayerInfos().get(3).getTeamKey());
-        assertNull(serverInfo2.getPlayerInfos().get(4).getTeamKey());
-        assertEquals(TeamKey.RED_TEAM, serverInfo2.getPlayerInfos().get(5).getTeamKey());
-        assertNull(serverInfo2.getPlayerInfos().get(6).getTeamKey());
-        assertEquals(TeamKey.RED_TEAM, serverInfo2.getPlayerInfos().get(7).getTeamKey());
-        assertNull(serverInfo2.getPlayerInfos().get(8).getTeamKey());
+        pairs = getLCSPairs();
+        pairs.get(3).getSecond().setScore(1);
+        
+        persister.persist(pairs);
+        
+        assertNull(pairs.get(0).getSecond().getTeamKey());
+        assertNull(pairs.get(1).getSecond().getTeamKey());
+        assertEquals(TeamKey.RED_TEAM, pairs.get(2).getSecond().getTeamKey());
+        assertEquals(TeamKey.BLUE_TEAM, pairs.get(3).getSecond().getTeamKey());
+        assertNull(pairs.get(4).getSecond().getTeamKey());
+        assertEquals(TeamKey.RED_TEAM, pairs.get(5).getSecond().getTeamKey());
+        assertNull(pairs.get(6).getSecond().getTeamKey());
+        assertEquals(TeamKey.RED_TEAM, pairs.get(7).getSecond().getTeamKey());
+        assertNull(pairs.get(8).getSecond().getTeamKey());
         
     }
 
