@@ -156,8 +156,7 @@ public class TeamAssignPersister extends ScorebotPersister {
     }
     
     private void prepareMatricesOverlayAndX(List<Pair<PlayerInfo, PlayerInfo>> pairs) {
-    	sortedPlayerPairs = new ArrayList<Pair<PlayerInfo,PlayerInfo>>();
-    	Collections.copy(sortedPlayerPairs, pairs);
+    	sortedPlayerPairs = new ArrayList<Pair<PlayerInfo,PlayerInfo>>(pairs);
     	
     	//Remove all players with score 0
         for (Iterator<Pair<PlayerInfo, PlayerInfo>> iterator = sortedPlayerPairs.iterator(); iterator.hasNext();) {
@@ -199,8 +198,8 @@ public class TeamAssignPersister extends ScorebotPersister {
         
         for (Pair<PlayerInfo, PlayerInfo> pair : sortedPlayerPairs) {
             playerScores.add(pair.getSecond().getScore());
-            templateMatrix.getFirstRow().add(pair.getFirst().getTeamKey() == TeamKey.RED_TEAM ? 1 : 0);
-            templateMatrix.getSecondRow().add(pair.getFirst().getTeamKey() == TeamKey.BLUE_TEAM ? 1 : 0);
+            templateMatrix.getFirstRow().add(pair.getFirst() != null && pair.getFirst().getTeamKey() == TeamKey.RED_TEAM ? 1 : 0);
+            templateMatrix.getSecondRow().add(pair.getFirst() != null && pair.getFirst().getTeamKey() == TeamKey.BLUE_TEAM ? 1 : 0);
         }
         
         solver.setX(playerScores);
