@@ -62,6 +62,17 @@ public class QuakeLiveSuspiciousPersister extends ScorebotPersister {
 			forceQLScorebot("Plyerlists count differ");
 	}
 	
+	/* (non-Javadoc)
+	 * @see eu.spoonman.smasher.scorebot.persister.ScorebotPersister#persist(eu.spoonman.smasher.serverinfo.PlayerInfo, eu.spoonman.smasher.serverinfo.PlayerInfo)
+	 */
+	@Override
+	public void persist(PlayerInfo left, PlayerInfo right) {
+		super.persist(left, right);
+		
+		if (left.getScore() > 1 && right.getScore() == 0)
+			forceQLScorebot(String.format("Probably player switched teams", right.getName()));
+	}
+	
 	
 	
 	
