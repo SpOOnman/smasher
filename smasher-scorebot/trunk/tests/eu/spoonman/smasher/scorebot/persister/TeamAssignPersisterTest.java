@@ -47,7 +47,7 @@ public class TeamAssignPersisterTest {
     public void testPersist() {
         ServerInfo serverInfo = getServerInfo();
         
-        TeamAssignPersister persister = new TeamAssignPersister();
+        TeamAssignPersister persister = new TeamAssignPersister(null);
         persister.persist(null, serverInfo);
         
         List<Pair<PlayerInfo,PlayerInfo>> pairs = getLCSPairs();
@@ -76,7 +76,7 @@ public class TeamAssignPersisterTest {
         
     	ServerInfo serverInfo = getServerInfo();
         
-        TeamAssignPersister persister = new TeamAssignPersister();
+        TeamAssignPersister persister = new TeamAssignPersister(null);
         persister.persist(null, serverInfo);
         
         List<Pair<PlayerInfo,PlayerInfo>> pairs = getLCSPairs();
