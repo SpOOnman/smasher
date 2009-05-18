@@ -64,7 +64,12 @@ public class ScorebotManager {
 			}
 
 			ServerQuery serverQuery = ServerQueryManager.createServerQuery(game, address, port);
-			ServerInfoScorebot scorebot = new ServerInfoScorebot(createUniqueId(), serverQuery);
+			ServerInfoScorebot scorebot = null;
+			
+			if (game == Games.QUAKELIVE)
+				scorebot = new QuakeLiveScorebot(createUniqueId(), serverQuery);
+			else
+				scorebot = new ServerInfoScorebot(createUniqueId(), serverQuery);
 
 			scorebots.add(scorebot);
 			runScorebot(scorebot);
