@@ -16,6 +16,7 @@ import eu.spoonman.smasher.serverinfo.header.Header;
 import eu.spoonman.smasher.serverinfo.header.Quake3EngineHeader;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.QuakeLiveGameInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.playerinfo.Quake3OSPPlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.playerinfo.QuakeLiveJSONPlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.teaminfo.TeamNameParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.QuakeLiveTimeInfoParser;
@@ -50,6 +51,7 @@ public class QuakeLiveBuilder extends BuilderFactory implements Builder {
     public List<ServerInfoParser> getParserList(ServerInfo serverInfo) {
         List<ServerInfoParser> list = new ArrayList<ServerInfoParser>();
         list.add(new QuakeLiveTimeInfoParser());
+        list.add(new Quake3OSPPlayerInfoParser());
         list.add(new TeamNameParser(TeamKey.RED_TEAM, "g_redteam"));
         list.add(new TeamNameParser(TeamKey.BLUE_TEAM, "g_blueteam"));
         list.add(new QuakeLiveGameInfoParser());
