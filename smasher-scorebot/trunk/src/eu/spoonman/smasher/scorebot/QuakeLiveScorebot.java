@@ -91,20 +91,21 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 		
 		//It it's first time - create HTTP query.
 		if (currentServerInfo == null) {
+			currentServerInfo = serverQuery.query();
+			httpQueryNeeded = true;
 			startHTTPQuery();
 		}
 		
-		if (serverQueryCounter + 1 == QUERY_PERIOD || httpQueryNeeded == true || currentServerInfo == null) {
+		if (serverQueryCounter + 1 == QUERY_PERIOD || httpQueryNeeded == true) {
 			
 			serverQueryCounter = 0;
 			httpQueryNeeded = false;
 			
 			return httpQuery.query();
-		} else {
-			
-			serverQueryCounter++;
-			return serverQuery.query();
 		}
+		
+		serverQueryCounter++;
+		return serverQuery.query();
 	}
 	
 	private void startHTTPQuery() {
