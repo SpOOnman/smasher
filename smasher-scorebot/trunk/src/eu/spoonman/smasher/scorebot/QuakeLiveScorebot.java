@@ -62,6 +62,8 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 	
 	@Override
 	protected void internalStart() {
+		
+		httpQueryNeeded = true;
 
 		while (isRunning()) {
 
@@ -89,14 +91,11 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 	
 	private ServerInfo internalQuery() {
 		
-		//It it's first time - create HTTP query.
-		if (currentServerInfo == null) {
-			currentServerInfo = serverQuery.query();
-			httpQueryNeeded = true;
-			startHTTPQuery();
-		}
-		
-		if (serverQueryCounter + 1 == QUERY_PERIOD || httpQueryNeeded == true) {
+		if (currentServerInfo != null && currentServerInfo.getStatus() == ServerInfoStatus.OK &&
+				(serverQueryCounter + 1 == QUERY_PERIOD || httpQueryNeeded == true)) {
+			
+			if (httpQuery == null)
+				startHTTPQuery();
 			
 			serverQueryCounter = 0;
 			httpQueryNeeded = false;
@@ -109,6 +108,7 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 	}
 	
 	private void startHTTPQuery() {
+		log.debug(currentServerInfo.toString());
 		Integer matchId = Integer.valueOf(currentServerInfo.getNamedAttributes().get(MATCHID_KEY));
 		Integer gametype = Integer.valueOf(currentServerInfo.getNamedAttributes().get(GAMETYPE_KEY));
 		
