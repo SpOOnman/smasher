@@ -82,6 +82,8 @@ public class QuakeLiveHTTPService {
 
     String httpQuery(String method, String urlString, String parameters) throws LoginException, IOException {
         try {
+            
+            log.debug(String.format("Querying %s", urlString));
 
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
