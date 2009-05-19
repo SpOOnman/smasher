@@ -116,7 +116,7 @@ public class ServerInfoScorebot extends Scorebot {
 
 		while (isRunning()) {
 
-			currentServerInfo = serverQuery.query();
+			currentServerInfo = internalQuery();
 			log.info(currentServerInfo);
 			
 			//Don't difference when response is not valid.
@@ -141,6 +141,10 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 		
 		log.info(String.format("Scorebot %s has stopped.", getId()));
+	}
+	
+	protected ServerInfo internalQuery() {
+		return serverQuery.query();
 	}
 
 	protected void differenceGameInfo() {

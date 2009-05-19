@@ -64,32 +64,12 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 	protected void internalStart() {
 		
 		httpQueryNeeded = true;
-
-		while (isRunning()) {
-
-			currentServerInfo = internalQuery();
-			log.info(currentServerInfo);
-						
-			//Don't difference when response is not valid.
-			if (currentServerInfo.getStatus() == ServerInfoStatus.OK) {
-				difference();
-	
-				previousServerInfo = currentServerInfo;
-			}
-
-			count++;
-
-			try {
-				Thread.sleep(interval);
-			} catch (InterruptedException e) {
-				log.error("Scorebot thread unexpectedly interrupted.", e);
-			}
-		}
 		
-		log.info(String.format("Scorebot %s has stopped.", getId()));
+		super.internalStart();
 	}
 	
-	private ServerInfo internalQuery() {
+	@Override
+	protected ServerInfo internalQuery() {
 		
 		if (currentServerInfo != null && currentServerInfo.getStatus() == ServerInfoStatus.OK &&
 				(serverQueryCounter + 1 == QUERY_PERIOD || httpQueryNeeded == true)) {
