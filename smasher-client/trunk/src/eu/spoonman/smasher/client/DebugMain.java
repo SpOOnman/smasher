@@ -27,7 +27,7 @@ import eu.spoonman.smasher.scorebot.ScorebotManager;
  */
 public class DebugMain {
 	
-	private static String commands = ""; 
+	private static String commands = "start ql 91.198.152.225:27004\n"; 
 	
 	private static final Logger log = Logger.getLogger(DebugMain.class);
 	
@@ -35,11 +35,10 @@ public class DebugMain {
 		
 		log.debug("Starting debug QScorebot.");
 		
-		String line = null;
 		Client client = ClientBuilder.getInstance().getConsoleClient();
 		
 		String[] split = commands.split("\n");
-		for (String string : split) {
+		for (String line : split) {
 			try {
 				CommandLineParser.getInstance().parseAndExecute(client, line);
 			} catch (ClientException e) {
