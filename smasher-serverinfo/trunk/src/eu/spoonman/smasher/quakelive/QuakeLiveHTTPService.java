@@ -83,7 +83,7 @@ public class QuakeLiveHTTPService {
     String httpQuery(String method, String urlString, String parameters) throws LoginException, IOException {
         try {
             
-            log.debug(String.format("Querying %s", urlString));
+            log.debug(String.format("Querying %s with parameters", urlString, parameters));
 
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -142,7 +142,7 @@ public class QuakeLiveHTTPService {
         try {
 
             String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
-            /*String content = */httpQuery("POST", QUAKELIVE_URL_LOGIN_STRING, parameters);
+            httpQuery("POST", QUAKELIVE_URL_LOGIN_STRING, parameters);
 
         } catch (MalformedURLException e) {
             log.error("URL", e);
@@ -182,6 +182,10 @@ public class QuakeLiveHTTPService {
         QuakeLiveHTTPService qls = new QuakeLiveHTTPService();
         qls.getMatchDetails(9865953, 1);
         qls.getMatchDetails(5793181, 4);
+        qls.login("", "");
+        qls.httpQuery("GET", "http://www.quakelive.com/stats/overall", null);
+        qls.httpQuery("GET", "http://www.quakelive.com/stats/recordstats/2027763", null);
+        qls.httpQuery("GET", "http://www.quakelive.com/stats/playerdetails/2027763", null);
 
     }
 
