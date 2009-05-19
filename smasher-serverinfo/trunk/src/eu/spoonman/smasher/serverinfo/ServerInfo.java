@@ -145,8 +145,6 @@ public class ServerInfo {
     public void setPlayerInfos(List<PlayerInfo> playerInfos) {
         this.playerInfos = playerInfos;
     }
-    
-    
 
     /**
      * @return the teamInfos
@@ -174,20 +172,6 @@ public class ServerInfo {
      */
     public void setGameInfo(GameInfo gameInfo) {
         this.gameInfo = gameInfo;
-    }
-
-    /**
-     * @return the game
-     */
-    public Games getGame() {
-        return game;
-    }
-
-    /**
-     * @param game the game to set
-     */
-    public void setGame(Games game) {
-        this.game = game;
     }
 
     /**
