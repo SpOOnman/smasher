@@ -75,6 +75,9 @@ public class QuakeLiveGameInfoParser extends QuakeEngineGameInfoParser {
             
         case 3:
             return GameTypes.TEAM_DEATHMATCH;
+            
+        case 4:
+            return GameTypes.CLAN_ARENA;
 
         case 5:
             return GameTypes.CAPTURE_THE_FLAG;
