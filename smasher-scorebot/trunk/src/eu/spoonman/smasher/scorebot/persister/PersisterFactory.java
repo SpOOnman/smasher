@@ -34,7 +34,7 @@ public class PersisterFactory {
 	 * @param game
 	 * @param modVersion
 	 */
-	public static List<ScorebotPersister> getPersisters(Scorebot scorebot, Games game, Version modVersion) {
+	public static List<ScorebotPersister> getPersisters(Scorebot scorebot, Games game, Version gameVersion, Version modVersion) {
 
 		List<ScorebotPersister> persisters = new ArrayList<ScorebotPersister>();
 

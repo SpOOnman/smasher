@@ -124,7 +124,7 @@ public class ServerInfoScorebot extends Scorebot {
 				
 				//Create persisters right after first good query. 
 				if (persisters == null)
-					PersisterFactory.getPersisters(this, currentServerInfo.getGame(), currentServerInfo.getModVersion());
+					PersisterFactory.getPersisters(this, serverQuery.getGame(), currentServerInfo.getGameVersion(), currentServerInfo.getModVersion());
 				
 				difference();
 	
