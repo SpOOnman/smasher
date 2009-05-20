@@ -48,7 +48,7 @@ public class QuakeLiveJSONGameInfoParser extends QuakeLiveGameInfoParser {
         GameInfo gameInfo = new GameInfo();
         
         gameInfo.setHostName((String)serverInfo.getJson().get(JSON_HOSTNAME_KEY));
-        gameInfo.setPlayerMaxCount((Integer)serverInfo.getJson().get(JSON_MAX_PLAYERS_KEY));
+        gameInfo.setPlayerMaxCount(((Long)serverInfo.getJson().get(JSON_MAX_PLAYERS_KEY)).intValue());
         gameInfo.setMap((String)serverInfo.getJson().get(JSON_MAP_KEY));
         gameInfo.setPassworded(false);
 
