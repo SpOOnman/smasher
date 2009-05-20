@@ -73,6 +73,9 @@ public class QuakeLiveGameInfoParser extends QuakeEngineGameInfoParser {
         case 0:
             return GameTypes.FREE_FOR_ALL;
             
+        case 1:
+            return GameTypes.DUEL;
+            
         case 3:
             return GameTypes.TEAM_DEATHMATCH;
             
