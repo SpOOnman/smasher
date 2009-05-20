@@ -52,6 +52,10 @@ public class QuakeLiveHTTPService {
     private final static String QUAKELIVE_URL_STATS_FORMAT = "http://www.quakelive.com/stats/matchdetails/%d/%s";
     private final static String QUAKELIVE_URL_MATCH_FORMAT = "http://www.quakelive.com/home/matchdetails/%d";
 
+    private final static String JSON_ERROR_CODE = "ECODE";
+    private final static String JSON_ERROR_MSG = "MSG";
+    private final static String JSON_NOT_LOGGED_IN = "-1";
+    
     private final static String QUAKELIVE_PARAMETERS = "u=%s&p=%s&r=0";
     
     private final static Map<Integer, String> gametypeAddressMap;
@@ -80,8 +84,34 @@ public class QuakeLiveHTTPService {
         
         this.cookies = sb.toString();
     }
+    
+    JSONObject jsonQuery(String method, String urlString, String parameters, boolean reLogin) throws IOException {
+        String content = httpQuery(method, urlString, parameters);
+        
+        Object parsed = JSONValue.parse(content);
+        
+        if (parsed != null) {
+            JSONObject json = (JSONObject)parsed;
+            
+            Object error = json.get(JSON_ERROR_CODE);
+            if (error != null && Integer.parseInt(error.toString()) < 0) {
+                log.error(String.format("JSON response error: %s : %s", error.toString(), json.get(JSON_ERROR_MSG)));
+                if (error.toString().equals(JSON_NOT_LOGGED_IN) && reLogin) {
+                    log.debug("Logging in");
+                    login("tomasz2k@poczta.onet.pl", "");
+                    return jsonQuery(method, urlString, parameters, false);
+                }
+            }
+            
+            log.debug(json.toJSONString());
+            
+            return json;
+        }
+        
+        return null;
+    }
 
-    String httpQuery(String method, String urlString, String parameters) throws LoginException, IOException {
+    String httpQuery(String method, String urlString, String parameters) throws IOException {
         try {
             
             log.debug(String.format("Querying %s with parameters %s", urlString, parameters));
@@ -139,7 +169,7 @@ public class QuakeLiveHTTPService {
 
     }
 
-    public void login(String username, String password) throws LoginException, IOException, XMPPException {
+    public void login(String username, String password) throws IOException {
         try {
 
             String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
@@ -150,27 +180,12 @@ public class QuakeLiveHTTPService {
         } catch (ProtocolException e) {
             log.error("Protocol", e);
         }
-
     }
     
     public JSONObject getMatchDetails(Integer matchId, Integer gametype) {
         String url = String.format(QUAKELIVE_URL_MATCH_FORMAT, matchId);
-        String content;
         try {
-            content = httpQuery("GET", url, null);
-            
-            Object parsed = JSONValue.parse(content);
-            
-            if (parsed == null)
-                throw new IOException("Cannot parse QuakeLive response to JSON.");
-            
-            JSONObject json = (JSONObject)parsed;
-            
-            log.debug(json);
-            
-            return json;
-        } catch (LoginException e) {
-            log.error(e);
+            return jsonQuery("GET", url, null, true);
         } catch (IOException e) {
             log.error(e);
         }
@@ -181,22 +196,9 @@ public class QuakeLiveHTTPService {
     
     public JSONObject getStatsDetails(Integer matchId, Integer gametype) {
         String url = String.format(QUAKELIVE_URL_STATS_FORMAT, matchId, gametypeAddressMap.get(gametype));
-        String content;
+        
         try {
-            content = httpQuery("GET", url, null);
-            
-            Object parsed = JSONValue.parse(content);
-            
-            if (parsed == null)
-                 throw new IOException("Cannot parse QuakeLive response to JSON.");
-                        
-            JSONObject json = (JSONObject)parsed;
-            
-            log.debug(json);
-             
-            return json;
-        } catch (LoginException e) {
-            log.error(e);
+            return jsonQuery("GET", url, null, true);
         } catch (IOException e) {
             log.error(e);
         }
