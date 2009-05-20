@@ -17,7 +17,7 @@ import eu.spoonman.smasher.serverinfo.header.Quake3EngineHeader;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.QuakeLiveGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.playerinfo.Quake3OSPPlayerInfoParser;
-import eu.spoonman.smasher.serverinfo.parser.playerinfo.QuakeLiveJSONPlayerInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.playerinfo.QuakeLiveJSONStatsPlayerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.teaminfo.TeamNameParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.QuakeLiveTimeInfoParser;
 import eu.spoonman.smasher.serverinfo.reader.QuakeLiveReader;

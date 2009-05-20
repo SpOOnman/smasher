@@ -64,7 +64,7 @@ public class QuakeLiveHTTPService {
         gametypeAddressMap = new HashMap<Integer, String>();
         gametypeAddressMap.put(1, "Tourney");
         gametypeAddressMap.put(3, "TDM");
-        gametypeAddressMap.put(4, "CTF");
+        gametypeAddressMap.put(5, "CTF");
     }
 
     private String cookies = null;
@@ -98,7 +98,7 @@ public class QuakeLiveHTTPService {
                 log.error(String.format("JSON response error: %s : %s", error.toString(), json.get(JSON_ERROR_MSG)));
                 if (error.toString().equals(JSON_NOT_LOGGED_IN) && reLogin) {
                     log.debug("Logging in");
-                    login("tomasz2k@poczta.onet.pl", "");
+                    login("", "");
                     return jsonQuery(method, urlString, parameters, false);
                 }
             }

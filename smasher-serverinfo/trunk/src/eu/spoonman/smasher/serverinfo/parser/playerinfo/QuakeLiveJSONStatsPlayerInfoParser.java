@@ -36,7 +36,7 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  * @author Tomasz Kalkosiński
  * 
  */
-public class QuakeLiveJSONPlayerInfoParser implements ServerInfoParser {
+public class QuakeLiveJSONStatsPlayerInfoParser implements ServerInfoParser {
     
     private final String JSONDuelKey = "SCOREBOARD";
     private final String JSONRedKey = "RED_SCOREBOARD";
@@ -50,7 +50,7 @@ public class QuakeLiveJSONPlayerInfoParser implements ServerInfoParser {
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(QuakeLiveJSONPlayerInfoParser.class);
+    private static final Logger log = Logger.getLogger(QuakeLiveJSONStatsPlayerInfoParser.class);
     
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
