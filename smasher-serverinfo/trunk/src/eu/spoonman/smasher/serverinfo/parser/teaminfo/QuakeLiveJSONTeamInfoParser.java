@@ -36,11 +36,11 @@ public class QuakeLiveJSONTeamInfoParser implements ServerInfoParser {
             throw new ParserException("Cannot parse time - no JSON object.");
         
         TeamInfo red = new TeamInfo(TeamKey.RED_TEAM);
-        red.setScore((Integer)serverInfo.getJson().get(JSON_RED_KEY));
+        red.setScore(((Long)serverInfo.getJson().get(JSON_RED_KEY)).intValue());
         serverInfo.getTeamInfos().put(TeamKey.RED_TEAM, red);
         
         TeamInfo blue = new TeamInfo(TeamKey.BLUE_TEAM);
-        blue.setScore((Integer)serverInfo.getJson().get(JSON_BLUE_KEY));
+        blue.setScore(((Long)serverInfo.getJson().get(JSON_BLUE_KEY)).intValue());
         serverInfo.getTeamInfos().put(TeamKey.BLUE_TEAM, blue);
     }
 
