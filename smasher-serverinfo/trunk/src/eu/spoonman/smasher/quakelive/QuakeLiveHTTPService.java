@@ -50,6 +50,7 @@ public class QuakeLiveHTTPService {
 
     private final static String QUAKELIVE_URL_LOGIN_STRING = "http://www.quakelive.com/user/login";
     private final static String QUAKELIVE_URL_STATS_FORMAT = "http://www.quakelive.com/stats/matchdetails/%d/%s";
+    private final static String QUAKELIVE_URL_MATCH_FORMAT = "http://www.quakelive.com/home/matchdetails/%d";
 
     private final static String QUAKELIVE_PARAMETERS = "u=%s&p=%s&r=0";
     
@@ -153,6 +154,32 @@ public class QuakeLiveHTTPService {
     }
     
     public JSONObject getMatchDetails(Integer matchId, Integer gametype) {
+        String url = String.format(QUAKELIVE_URL_MATCH_FORMAT, matchId);
+        String content;
+        try {
+            content = httpQuery("GET", url, null);
+            
+            Object parsed = JSONValue.parse(content);
+            
+            if (parsed == null)
+                throw new IOException("Cannot parse QuakeLive response to JSON.");
+            
+            JSONObject json = (JSONObject)parsed;
+            
+            log.debug(json);
+            
+            return json;
+        } catch (LoginException e) {
+            log.error(e);
+        } catch (IOException e) {
+            log.error(e);
+        }
+        
+        return null;
+        
+    }
+    
+    public JSONObject getStatsDetails(Integer matchId, Integer gametype) {
         String url = String.format(QUAKELIVE_URL_STATS_FORMAT, matchId, gametypeAddressMap.get(gametype));
         String content;
         try {
@@ -180,12 +207,12 @@ public class QuakeLiveHTTPService {
 
     public static void main(String[] args) throws LoginException, IOException, XMPPException {
         QuakeLiveHTTPService qls = new QuakeLiveHTTPService();
-        qls.getMatchDetails(9865953, 1);
-        qls.getMatchDetails(5793181, 4);
-        qls.login("tomasz2k@poczta.onet.pl", "m8lc0lm");
-        qls.httpQuery("GET", "http://www.quakelive.com/stats/overall", null);
-        qls.httpQuery("GET", "http://www.quakelive.com/stats/recordstats/2027763", null);
-        qls.httpQuery("GET", "http://www.quakelive.com/stats/playerdetails/2027763", null);
+        //qls.getMatchDetails(9865953, 1);
+        //qls.getMatchDetails(5793181, 4);
+        qls.login("tomasz2k@poczta.onet.pl", "");
+        //qls.httpQuery("GET", "http://www.quakelive.com/stats/overall", null);
+        qls.httpQuery("GET", "http://www.quakelive.com/stats/recordstats/838199", null);
+        qls.httpQuery("GET", "http://www.quakelive.com/stats/playerdetails/838199", null);
 
     }
 
