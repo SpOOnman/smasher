@@ -61,7 +61,7 @@ public class QuakeLiveJSONGameInfoParser extends QuakeLiveGameInfoParser {
 
         gameInfo.setGameType(parseGametype(gametype.toString()));
         
-        gameInfo.setPlayerCount((Integer)serverInfo.getJson().get(JSON_PLAYERCOUNT_KEY));
+        gameInfo.setPlayerCount(((Long)serverInfo.getJson().get(JSON_PLAYERCOUNT_KEY)).intValue());
 
         serverInfo.setGameInfo(gameInfo);
     }
