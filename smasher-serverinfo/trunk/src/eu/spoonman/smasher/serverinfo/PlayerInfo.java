@@ -25,6 +25,11 @@ import java.util.Map;
 
 public class PlayerInfo
 {
+    //Some common keys
+    public final String PLAYER_CLAN = "clan";
+    public final String PLAYER_RANK = "rank";
+    public final String PLAYER_MODEL = "model";
+    
     private String name;
     private int score;
     private int ping;
