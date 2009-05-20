@@ -35,10 +35,9 @@ public class QuakeLiveJSONTimeInfoParser extends QuakeLiveTimeInfoParser {
         
         if (serverInfo.getJson() == null)
             throw new ParserException("Cannot parse time - no JSON object.");
-        
 
         String gameState = (String) serverInfo.getJson().get(G_GAME_STATE.toLowerCase());
-        String levelStartTime = (String) serverInfo.getNamedAttributes().get(G_LEVEL_START_TIME.toLowerCase());
+        String levelStartTime = (String) (serverInfo.getJson().get(G_LEVEL_START_TIME.toLowerCase()));
         
         parseTime(serverInfo, gameState, levelStartTime);
     }
