@@ -28,6 +28,7 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.QuakeLiveGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.gameinfo.QuakeLiveJSONGameInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.playerinfo.QuakeLiveJSONPlayerInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.teaminfo.QuakeLiveJSONTeamInfoParser;
 import eu.spoonman.smasher.serverinfo.parser.timeinfo.QuakeLiveJSONTimeInfoParser;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
@@ -67,6 +68,7 @@ public class QuakeLiveHTTPBuilder extends BuilderFactory implements Builder {
         
         parsers.add(new QuakeLiveJSONGameInfoParser());
         parsers.add(new QuakeLiveJSONTimeInfoParser());
+        parsers.add(new QuakeLiveJSONTeamInfoParser());
         parsers.add(new QuakeLiveJSONPlayerInfoParser());
         
         return parsers;
