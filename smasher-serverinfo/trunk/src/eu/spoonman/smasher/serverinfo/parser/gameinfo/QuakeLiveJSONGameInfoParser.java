@@ -52,14 +52,14 @@ public class QuakeLiveJSONGameInfoParser extends QuakeLiveGameInfoParser {
         gameInfo.setMap((String)serverInfo.getJson().get(JSON_MAP_KEY));
         gameInfo.setPassworded(false);
 
-        String gametype = (String)serverInfo.getJson().get(JSON_GAMETYPE_KEY);
+        Long gametype = (Long)serverInfo.getJson().get(JSON_GAMETYPE_KEY);
 
-        log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_gametype", gametype));
+        log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_gametype", gametype.toString()));
 
         if (gametype == null)
             throw new AttributeNotFoundException("g_gametype");
 
-        gameInfo.setGameType(parseGametype(gametype));
+        gameInfo.setGameType(parseGametype(gametype.toString()));
         
         gameInfo.setPlayerCount((Integer)serverInfo.getJson().get(JSON_PLAYERCOUNT_KEY));
 
