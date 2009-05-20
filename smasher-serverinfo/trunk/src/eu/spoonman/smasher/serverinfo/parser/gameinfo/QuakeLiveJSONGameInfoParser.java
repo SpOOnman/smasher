@@ -21,32 +21,38 @@ package eu.spoonman.smasher.serverinfo.parser.gameinfo;
 import org.apache.log4j.Logger;
 
 import eu.spoonman.smasher.serverinfo.GameInfo;
-import eu.spoonman.smasher.serverinfo.GameTypes;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.parser.AttributeNotFoundException;
 import eu.spoonman.smasher.serverinfo.parser.ParserException;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
 
-/**
- * GameInfo parser for Quake 3 Arena OSP and CPMA mods.
- * @author Tomasz Kalkosiński
- * 
- */
-public class QuakeLiveGameInfoParser extends QuakeEngineGameInfoParser {
-
+public class QuakeLiveJSONGameInfoParser extends QuakeLiveGameInfoParser {
+    
+    public final String JSON_HOSTNAME_KEY = "host_name";
+    public final String JSON_MAX_PLAYERS_KEY = "max_clients";
+    public final String JSON_MAP_KEY = "map"; 
+    public final String JSON_GAMETYPE_KEY = "game_type"; 
+    public final String JSON_PLAYERCOUNT_KEY = "num_clients";
+    
     /**
      * Logger for this class
      */
-    private static final Logger log = Logger.getLogger(QuakeLiveGameInfoParser.class);
-
-    /**
-     * This method should be called after playerInfos has been parsed.
-     */
+    private static final Logger log = Logger.getLogger(QuakeLiveJSONGameInfoParser.class);
+    
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
-        GameInfo gameInfo = parseGameInfo(serverInfo);
+        
+        if (serverInfo.getJson() == null)
+            throw new ParserException("Cannot parse game - no JSON object.");
+        
+        GameInfo gameInfo = new GameInfo();
+        
+        gameInfo.setHostName((String)serverInfo.getJson().get(JSON_HOSTNAME_KEY));
+        gameInfo.setPlayerMaxCount((Integer)serverInfo.getJson().get(JSON_MAX_PLAYERS_KEY));
+        gameInfo.setMap((String)serverInfo.getJson().get(JSON_MAP_KEY));
+        gameInfo.setPassworded(false);
 
-        String gametype = serverInfo.getNamedAttributes().get("g_gametype");
+        String gametype = (String)serverInfo.getJson().get(JSON_GAMETYPE_KEY);
 
         log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_gametype", gametype));
 
@@ -55,36 +61,9 @@ public class QuakeLiveGameInfoParser extends QuakeEngineGameInfoParser {
 
         gameInfo.setGameType(parseGametype(gametype));
         
-        gameInfo.setPlayerCount(serverInfo.getPlayerInfos().size());
+        gameInfo.setPlayerCount((Integer)serverInfo.getJson().get(JSON_PLAYERCOUNT_KEY));
 
         serverInfo.setGameInfo(gameInfo);
-
     }
 
-    /**
-     * @param gametype
-     * @return
-     */
-    protected GameTypes parseGametype(String gametype) {
-        int type = Integer.parseInt(gametype);
-
-        switch (type) {
-        
-        case 0:
-            return GameTypes.FREE_FOR_ALL;
-            
-        case 3:
-            return GameTypes.TEAM_DEATHMATCH;
-            
-        case 4:
-            return GameTypes.CLAN_ARENA;
-
-        case 5:
-            return GameTypes.CAPTURE_THE_FLAG;
-
-        default:
-            return GameTypes.UNKNOWN;
-
-        }
-    }
 }
