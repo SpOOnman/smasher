@@ -36,6 +36,9 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  * 
  */
 public class QuakeLiveTimeInfoParser implements ServerInfoParser {
+    
+    public static final String G_LEVEL_START_TIME = "g_levelStartTime";
+    public static final String G_GAME_STATE = "g_gameState";
     /**
      * Logger for this class
      */
@@ -44,21 +47,25 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
 
-        String gameState = serverInfo.getNamedAttributes().get("g_gameState");
-        String levelStartTime = serverInfo.getNamedAttributes().get("g_levelStartTime");
+        String gameState = serverInfo.getNamedAttributes().get(G_GAME_STATE);
+        String levelStartTime = serverInfo.getNamedAttributes().get(G_LEVEL_START_TIME);
         
+        parseTime(serverInfo, gameState, levelStartTime);
+    }
+
+    protected void parseTime(ServerInfo serverInfo, String gameState, String levelStartTime) throws AttributeNotFoundException {
         if (log.isDebugEnabled()) {
-        log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_gameState", gameState));
-        log.debug(String.format(ServerInfoParser.fieldLogFormat, "g_levelStartTime", levelStartTime));
+            log.debug(String.format(ServerInfoParser.fieldLogFormat, G_GAME_STATE, gameState));
+            log.debug(String.format(ServerInfoParser.fieldLogFormat, G_LEVEL_START_TIME, levelStartTime));
         }
         
         TimePeriodInfo timePeriodInfo = new TimePeriodInfo(gameState + levelStartTime);
 
         if (gameState == null)
-            throw new AttributeNotFoundException("g_gameState");
+            throw new AttributeNotFoundException(G_GAME_STATE);
         
         if (levelStartTime == null)
-            throw new AttributeNotFoundException("g_levelStartTime");
+            throw new AttributeNotFoundException(G_LEVEL_START_TIME);
         
         if (gameState.equals("IN_PROGRESS"))
             timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.IN_PLAY);

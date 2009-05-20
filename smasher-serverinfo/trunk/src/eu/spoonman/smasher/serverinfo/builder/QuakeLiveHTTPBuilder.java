@@ -17,6 +17,7 @@
  */
 package eu.spoonman.smasher.serverinfo.builder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.spoonman.smasher.serverinfo.Games;
@@ -24,6 +25,8 @@ import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.Version;
 import eu.spoonman.smasher.serverinfo.header.Header;
 import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.playerinfo.QuakeLiveJSONPlayerInfoParser;
+import eu.spoonman.smasher.serverinfo.parser.timeinfo.QuakeLiveJSONTimeInfoParser;
 import eu.spoonman.smasher.serverinfo.reader.Reader;
 
 /**
@@ -58,8 +61,12 @@ public class QuakeLiveHTTPBuilder extends BuilderFactory implements Builder {
 
     @Override
     public List<ServerInfoParser> getParserList(ServerInfo serverInfo) {
-        // TODO Auto-generated method stub
-        return null;
+        List<ServerInfoParser> parsers = new ArrayList<ServerInfoParser>();
+        
+        parsers.add(new QuakeLiveJSONTimeInfoParser());
+        parsers.add(new QuakeLiveJSONPlayerInfoParser());
+        
+        return parsers;
     }
 
     @Override
