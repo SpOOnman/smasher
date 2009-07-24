@@ -57,19 +57,14 @@ public class ScorebotManager {
 	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port, List<String> args) {
 
 		synchronized (scorebots) {
-			AbstractQuery serverQuery = ServerQueryManager.createServerQuery(game, address, port, args);
+			AbstractQuery abstractQuery = ServerQueryManager.createServerQuery(game, address, port, args);
 			
 			for (ServerInfoScorebot scorebot : scorebots) {
-				if (scorebot.getServerQuery().equals(serverQuery))
+				if (scorebot.getServerQuery().equals(abstractQuery))
 					return scorebot;
 			}
 
-			ServerInfoScorebot scorebot = null;
-			
-			if (game == Games.QUAKELIVE)
-				scorebot = new QuakeLiveScorebot(createUniqueId(), serverQuery);
-			else
-				scorebot = new ServerInfoScorebot(createUniqueId(), (ServerQuery) serverQuery);
+			ServerInfoScorebot scorebot = new ServerInfoScorebot(createUniqueId(), abstractQuery);
 
 			scorebots.add(scorebot);
 			runScorebot(scorebot);
