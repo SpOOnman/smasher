@@ -44,7 +44,7 @@ import eu.spoonman.smasher.serverinfo.reader.ReaderException;
  * @author Tomasz Kalkosiński
  * 
  */
-public class ServerQuery {
+public class ServerQuery extends AbstractQuery {
     /**
      * Logger for this class
      */
@@ -237,5 +237,4 @@ public class ServerQuery {
     public Games getGame() {
         return builder.getGame();
     }
-
 }

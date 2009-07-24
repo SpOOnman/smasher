@@ -32,7 +32,7 @@ import eu.spoonman.smasher.serverinfo.parser.ServerInfoParser;
  * @author Tomasz Kalkosiński
  * 
  */
-public class QuakeLiveHTTPQuery {
+public class QuakeLiveHTTPQuery extends AbstractQuery {
 
     private static final Logger log = Logger.getLogger(QuakeLiveHTTPQuery.class);
 
@@ -61,6 +61,7 @@ public class QuakeLiveHTTPQuery {
         alreadyBuilded = true;
     }
 
+    @Override
     public ServerInfo query() {
         ServerInfo serverInfo = new ServerInfo();
         try {
