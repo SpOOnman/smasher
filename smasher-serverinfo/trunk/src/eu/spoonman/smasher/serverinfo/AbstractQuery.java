@@ -18,6 +18,8 @@
 
 package eu.spoonman.smasher.serverinfo;
 
+import java.io.IOException;
+
 /**
  * @author spoonman
  *
@@ -25,5 +27,11 @@ package eu.spoonman.smasher.serverinfo;
 public abstract class AbstractQuery {
     
     public abstract ServerInfo query();
+
+    abstract byte[] queryBytes() throws IOException;
+    
+    public abstract Games getGame();
+    
+    public abstract String getIdentification();
 
 }

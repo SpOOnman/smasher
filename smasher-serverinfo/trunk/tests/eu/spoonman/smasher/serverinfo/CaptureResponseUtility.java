@@ -50,13 +50,13 @@ public class CaptureResponseUtility {
     }
 
     private static void query(InetAddress address, int port) throws IOException {
-        ServerQuery serverQuery = ServerQueryManager.createServerQuery(Games.QUAKELIVE, address, port);
+        AbstractQuery serverQuery = ServerQueryManager.createServerQuery(Games.QUAKELIVE, address, port, null);
 
         String captured = captureResponse(serverQuery);
         System.out.println(captured);
     }
 
-    public static String captureResponse(ServerQuery serverQuery) throws IOException {
+    public static String captureResponse(AbstractQuery serverQuery) throws IOException {
         byte[] bytes = serverQuery.queryBytes();
         return toJavaString(bytes);
     }

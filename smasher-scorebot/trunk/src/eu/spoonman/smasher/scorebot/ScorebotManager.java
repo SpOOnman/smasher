@@ -24,6 +24,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import eu.spoonman.smasher.serverinfo.AbstractQuery;
 import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.ServerQuery;
 import eu.spoonman.smasher.serverinfo.ServerQueryManager;
@@ -56,18 +57,19 @@ public class ScorebotManager {
 	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port, List<String> args) {
 
 		synchronized (scorebots) {
+			AbstractQuery serverQuery = ServerQueryManager.createServerQuery(game, address, port, args);
+			
 			for (ServerInfoScorebot scorebot : scorebots) {
-				if (scorebot.equals(game, address, port, args))
+				if (scorebot.getServerQuery().equals(serverQuery))
 					return scorebot;
 			}
 
-			ServerQuery serverQuery = ServerQueryManager.createServerQuery(game, address, port);
 			ServerInfoScorebot scorebot = null;
 			
 			if (game == Games.QUAKELIVE)
 				scorebot = new QuakeLiveScorebot(createUniqueId(), serverQuery);
 			else
-				scorebot = new ServerInfoScorebot(createUniqueId(), serverQuery);
+				scorebot = new ServerInfoScorebot(createUniqueId(), (ServerQuery) serverQuery);
 
 			scorebots.add(scorebot);
 			runScorebot(scorebot);

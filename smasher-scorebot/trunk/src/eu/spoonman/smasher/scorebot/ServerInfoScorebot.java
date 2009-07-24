@@ -30,6 +30,7 @@ import eu.spoonman.smasher.common.LCS;
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.scorebot.persister.PersisterFactory;
 import eu.spoonman.smasher.scorebot.persister.ScorebotPersister;
+import eu.spoonman.smasher.serverinfo.AbstractQuery;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.Games;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
@@ -55,13 +56,13 @@ public class ServerInfoScorebot extends Scorebot {
 
 	private Boolean running = false;
 
-	protected ServerQuery serverQuery;
+	protected AbstractQuery serverQuery;
 	protected ServerInfo previousServerInfo;
 	protected ServerInfo currentServerInfo;
 	
 	protected List<ScorebotPersister> persisters;
 	
-	public ServerInfoScorebot(String id, ServerQuery serverQuery) {
+	public ServerInfoScorebot(String id, AbstractQuery serverQuery) {
 		super(id);
 		this.serverQuery = serverQuery;
 	}
@@ -72,15 +73,10 @@ public class ServerInfoScorebot extends Scorebot {
 	}
 	
 	@Override
-	public InetAddress getInetAddress() {
-		return serverQuery.getAddress();
+	public String getIdentification() {
+		return serverQuery.getIdentification();
 	}
 	
-	@Override
-	public int getPort() {
-		return serverQuery.getPort();
-	}
-
 	@Override
 	public void start() {
 		
@@ -347,13 +343,7 @@ public class ServerInfoScorebot extends Scorebot {
 		this.currentServerInfo = currentServerInfo;
 	}
 	
-	ServerQuery getServerQuery() {
+	AbstractQuery getServerQuery() {
 		return serverQuery;
-	}
-	
-	public boolean equals(Games game, InetAddress address, int port, List<String> args) {
-		return (getServerQuery().getGame().equals(game) &&
-				getServerQuery().getAddress().equals(address) &&
-				getServerQuery().getPort() == port);
 	}
 }

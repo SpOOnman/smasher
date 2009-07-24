@@ -57,7 +57,7 @@ public class ConsoleFormatter {
 		public String format();
 	}
 	
-	private final String SCOREBOT_START = "%s%s%s. Starting %s%s%s scorebot on %s:%d.";
+	private final String SCOREBOT_START = "%s%s%s. Starting %s%s%s scorebot on %s.";
 	private final String SCOREBOT_STOP = "%s%s%s. Scorebot stopped";
 
 	private final String PLAYER_CONNECTED_EVENT = "Player %s connected";
@@ -181,8 +181,7 @@ public class ConsoleFormatter {
 			beforeMainLines.add(String.format(SCOREBOT_START,
 					colors.getBold(), scorebot.getId(), colors.getReset(),
 					colors.getBold(), scorebot.getGame().getFullName(), colors.getReset(),
-					scorebot.getInetAddress().toString().replaceFirst("^/", ""), scorebot.getPort()
-					));
+					scorebot.getIdentification().toString().replaceFirst("^/", "")));
 		}
 	}
 	

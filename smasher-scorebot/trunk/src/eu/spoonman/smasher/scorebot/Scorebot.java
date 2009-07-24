@@ -73,9 +73,9 @@ public abstract class Scorebot {
 	
 	public abstract void stop();
 	
-	public abstract InetAddress getInetAddress();
 	public abstract Games getGame();
-	public abstract int getPort();
+	
+	public abstract String getIdentification();
 	
 	public abstract ServerInfo getCurrentServerInfo();
 	

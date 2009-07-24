@@ -19,6 +19,7 @@ package eu.spoonman.smasher.serverinfo;
 
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -80,6 +81,11 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
         }
         return serverInfo;
     }
+    
+    @Override
+    byte[] queryBytes() throws IOException {
+        throw new IOException("Not implemented");
+    }
 
     private void parseData(ServerInfo serverInfo) {
         for (ServerInfoParser parser : parserList) {
@@ -89,5 +95,37 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
                 log.error("Parsing error", e);
             }
         }
+    }
+    
+    @Override
+    public Games getGame() {
+        return builder.getGame();
+    }
+    
+    @Override
+    public String getIdentification() {
+        return Integer.toString(matchId);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + matchId;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof QuakeLiveHTTPQuery))
+            return false;
+        QuakeLiveHTTPQuery other = (QuakeLiveHTTPQuery) obj;
+        if (matchId != other.matchId)
+            return false;
+        return true;
     }
 }

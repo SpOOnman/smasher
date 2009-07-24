@@ -20,10 +20,10 @@ package eu.spoonman.smasher.scorebot;
 
 import org.apache.log4j.Logger;
 
+import eu.spoonman.smasher.serverinfo.AbstractQuery;
 import eu.spoonman.smasher.serverinfo.QuakeLiveHTTPQuery;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfoStatus;
-import eu.spoonman.smasher.serverinfo.ServerQuery;
 import eu.spoonman.smasher.serverinfo.ServerQueryManager;
 
 /**
@@ -56,7 +56,7 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 	private Boolean httpQueryNeeded = false;
 	
 
-	public QuakeLiveScorebot(String id, ServerQuery serverQuery) {
+	public QuakeLiveScorebot(String id, AbstractQuery serverQuery) {
 		super(id, serverQuery);
 	}
 	
@@ -92,7 +92,7 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 		Integer matchId = Integer.valueOf(currentServerInfo.getNamedAttributes().get(MATCHID_KEY));
 		Integer gametype = Integer.valueOf(currentServerInfo.getNamedAttributes().get(GAMETYPE_KEY));
 		
-		httpQuery = ServerQueryManager.createQuakeLiveHTTPQuery(matchId, gametype);
+		//httpQuery = ServerQueryManager.createQuakeLiveHTTPQuery(matchId, gametype);
 	}
 	
 	public void forceToHTTPQuery() {

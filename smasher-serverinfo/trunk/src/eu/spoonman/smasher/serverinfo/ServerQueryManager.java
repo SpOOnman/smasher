@@ -19,13 +19,17 @@
 package eu.spoonman.smasher.serverinfo;
 
 import java.net.InetAddress;
+import java.util.List;
 
 import eu.spoonman.smasher.serverinfo.builder.Builder;
 import eu.spoonman.smasher.serverinfo.builder.BuilderFactory;
 
 public class ServerQueryManager {
 
-    public static ServerQuery createServerQuery(Games game, InetAddress inetAddress, int port) {
+    public static AbstractQuery createServerQuery(Games game, InetAddress inetAddress, int port, List<String> args) {
+        
+        if (game == Games.QUAKELIVE)
+            return createQuakeLiveHTTPQuery(args);
 
         Builder builder = BuilderFactory.createBuilder(game);
         
@@ -37,8 +41,8 @@ public class ServerQueryManager {
         return serverQuery;
     }
     
-    public static QuakeLiveHTTPQuery createQuakeLiveHTTPQuery(int matchId, int gametype) {
-        QuakeLiveHTTPQuery quakeLiveHTTPQuery = new QuakeLiveHTTPQuery(BuilderFactory.createQuakeLiveHTTPBuilder(), matchId, gametype);
+    private static QuakeLiveHTTPQuery createQuakeLiveHTTPQuery(List<String> args) {
+        QuakeLiveHTTPQuery quakeLiveHTTPQuery = new QuakeLiveHTTPQuery(BuilderFactory.createQuakeLiveHTTPBuilder(), 0, 1);
         
         return quakeLiveHTTPQuery;
         
