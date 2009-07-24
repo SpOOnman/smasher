@@ -351,6 +351,9 @@ public class ServerInfoScorebot extends Scorebot {
 		return serverQuery;
 	}
 	
-	
-
+	public boolean equals(Games game, InetAddress address, int port, List<String> args) {
+		return (getServerQuery().getGame().equals(game) &&
+				getServerQuery().getAddress().equals(address) &&
+				getServerQuery().getPort() == port);
+	}
 }

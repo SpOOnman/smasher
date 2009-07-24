@@ -53,13 +53,11 @@ public class ScorebotManager {
 		return scorebotManager;
 	}
 
-	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port) {
+	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port, List<String> args) {
 
 		synchronized (scorebots) {
 			for (ServerInfoScorebot scorebot : scorebots) {
-				if (scorebot.getServerQuery().getGame().equals(game)
-						&& scorebot.getServerQuery().getAddress().equals(address)
-						&& scorebot.getServerQuery().getPort() == port)
+				if (scorebot.equals(game, address, port, args))
 					return scorebot;
 			}
 
