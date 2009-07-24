@@ -136,7 +136,7 @@ public class CommandLineParser {
 			if (data.game == null)
 				throw new ClientException("I don't know what game to use.");
 			
-			Scorebot scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port);
+			Scorebot scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port, data.args);
 			SubscriptionManager.getInstance().subscribe(client, scorebot);
 			
 			break;
