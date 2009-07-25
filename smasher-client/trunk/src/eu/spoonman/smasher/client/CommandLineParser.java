@@ -176,6 +176,8 @@ public class CommandLineParser {
 	private InetAddress searchForIP(String word) {
 		try {
 			String addr = word.split(":")[0];
+			if (!addr.contains("."))
+				return null;
 			InetAddress address = InetAddress.getByName(addr);
 			
 			log.debug("Parsed IP: " + address.toString());
