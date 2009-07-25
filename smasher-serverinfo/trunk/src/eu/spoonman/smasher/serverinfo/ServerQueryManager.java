@@ -28,11 +28,18 @@ public class ServerQueryManager {
 
     public static AbstractQuery createServerQuery(Games game, InetAddress inetAddress, int port, List<String> args) {
         
-        if (game == Games.QUAKELIVE)
-            return createQuakeLiveHTTPQuery(args);
-
         Builder builder = BuilderFactory.createBuilder(game);
         
+        switch (game) {
+            case QUAKELIVE:
+                return getQuakeLiveHTTPQuery(args, builder);
+                
+                default:
+                    return getServerQuery(inetAddress, port, builder);
+        }
+    }
+
+    private static ServerQuery getServerQuery(InetAddress inetAddress, int port, Builder builder) {
         ServerQuery serverQuery = new ServerQuery(builder);
 
         serverQuery.setAddress(inetAddress);
@@ -41,8 +48,8 @@ public class ServerQueryManager {
         return serverQuery;
     }
     
-    private static QuakeLiveHTTPQuery createQuakeLiveHTTPQuery(List<String> args) {
-        QuakeLiveHTTPQuery quakeLiveHTTPQuery = new QuakeLiveHTTPQuery(BuilderFactory.createQuakeLiveHTTPBuilder(), 0, 1);
+    private static QuakeLiveHTTPQuery getQuakeLiveHTTPQuery(List<String> args, Builder builder) {
+        QuakeLiveHTTPQuery quakeLiveHTTPQuery = new QuakeLiveHTTPQuery(builder, Integer.parseInt(args.get(0)), 4);
         
         return quakeLiveHTTPQuery;
         
