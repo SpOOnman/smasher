@@ -38,4 +38,9 @@ public class SmasherPircBot extends PircBot {
 		}
     	
     }
+    
+    @Override
+    public void log(String line) {
+    	log.debug(line);
+    }
 }
