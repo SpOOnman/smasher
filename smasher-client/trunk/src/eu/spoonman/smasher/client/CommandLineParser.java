@@ -130,11 +130,11 @@ public class CommandLineParser {
 		
 		switch (data.command) {
 		case START:
-			if (data.address == null)
-				throw new ClientException("I don't have IP.");
-			
-			if (data.game == null)
-				throw new ClientException("I don't know what game to use.");
+//			if (data.address == null)
+//				throw new ClientException("I don't have IP.");
+//			
+//			if (data.game == null)
+//				throw new ClientException("I don't know what game to use.");
 			
 			Scorebot scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port, data.args);
 			SubscriptionManager.getInstance().subscribe(client, scorebot);

@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/smasher-scorebot"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/smasher-serverinfo"/>
 	<classpathentry kind="lib" path="/smasher-scorebot/lib/joda-time-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/pircbot.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -15,40 +15,36 @@
  * You should have received a copy of the GNU General Public License
  * along with Smasher.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.spoonman.smasher.client;
 
-import org.apache.log4j.Logger;
+package eu.spoonman.smasher.client.pircbot;
 
-import eu.spoonman.smasher.scorebot.ScorebotManager;
+import java.util.List;
+
+import eu.spoonman.smasher.client.Client;
 
 /**
  * @author Tomasz Kalkosiński
  *
  */
-public class DebugMain {
+public class PircBotClient extends Client {
 	
-	private static String commands = "start ql 699361\n"; 
-	
-	private static final Logger log = Logger.getLogger(DebugMain.class);
-	
-	public static void main(String[] args) throws InterruptedException {
+	SmasherPircBot parent;
+	String channelName;
+
+	public PircBotClient(SmasherPircBot parent, String channelName) {
+		super(String.format("PIRCBOT-%s", channelName));
 		
-		log.debug("Starting debug QScorebot.");
-		
-		Client client = ClientBuilder.getInstance().getConsoleClient();
-		
-		String[] split = commands.split("\n");
-		for (String line : split) {
-			try {
-				CommandLineParser.getInstance().parseAndExecute(client, line);
-			} catch (ClientException e) {
-				log.info("Client exception", e);
-				log.error(e);
-			}
-		}
-		
-		Thread.currentThread().wait();
+		this.parent = parent;
+		this.channelName = channelName;
 	}
+	
+	@Override
+	public void print(List<String> lines) {
+		for (String line : lines) {
+			parent.sendMessage(channelName, line);
+		}
+	}
+	
 	
 
 }
