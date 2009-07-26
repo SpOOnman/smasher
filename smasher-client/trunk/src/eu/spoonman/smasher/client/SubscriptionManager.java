@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.spoonman.smasher.client.pircbot.PircBotColors;
 import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.scorebot.Scorebot;
 
@@ -54,7 +55,7 @@ public class SubscriptionManager {
 		if (subscription != null)
 			log.info(String.format("Scorebot %s is already subscribed to client %s.", scorebot.getId(), client.getName() ));
 		
-		subscription = getConsoleSubscription(client, scorebot);
+		subscription = getSubscription(client, scorebot);
 		subscription.register();
 		subscriptions.add(subscription);
 		
@@ -83,23 +84,17 @@ public class SubscriptionManager {
 		return null;
 	}
 	
-	private Subscription getIRCSubscription(Client client, Scorebot scorebot) {
-		return getConsoleSubscription(client, scorebot);
-	}
-	
-	private Subscription getConsoleSubscription(Client client, Scorebot scorebot) {
-		
-		// Color scheme
-		ConsoleColors consoleColors = new ConsoleColors();
+	private Subscription getSubscription(Client client, Scorebot scorebot) {
 		
 		// Formatting theme
-		ConsoleFormatter consoleFormatter = new ConsoleFormatter(consoleColors, new OutputConfiguration());
+		ConsoleFormatter consoleFormatter = new ConsoleFormatter(client.getColors(), new OutputConfiguration());
 		
 		// Client is console based - lines with ASCII characters.
 		Subscription subscription = new ConsoleSubscription(scorebot, client, consoleFormatter);
 		consoleFormatter.setSubscription(subscription);
 		
 		return subscription;
+		
 	}
 	
 	

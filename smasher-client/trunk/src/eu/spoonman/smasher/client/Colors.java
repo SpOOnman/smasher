@@ -16,36 +16,20 @@
  * along with Smasher.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.spoonman.smasher.client.pircbot;
-
-import java.util.List;
-
-import eu.spoonman.smasher.client.Client;
+package eu.spoonman.smasher.client;
 
 /**
  * @author Tomasz Kalkosiński
  *
  */
-public class PircBotClient extends Client {
+public abstract class Colors {
 	
-	SmasherPircBot parent;
-	String channelName;
-
-	public PircBotClient(SmasherPircBot parent, String channelName) {
-		super(String.format("PIRCBOT-%s", channelName));
-		
-		this.parent = parent;
-		this.channelName = channelName;
-		this.colors = new PircBotColors();
-	}
+	public abstract String getBold();
 	
-	@Override
-	public void print(List<String> lines) {
-		for (String line : lines) {
-			parent.sendMessage(channelName, line);
-		}
-	}
+	public abstract String getReset();
 	
+	public abstract String getRed();
 	
+	public abstract String getBlue();
 
 }

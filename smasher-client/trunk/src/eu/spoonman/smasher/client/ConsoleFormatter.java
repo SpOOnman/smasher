@@ -76,7 +76,7 @@ public class ConsoleFormatter {
 	
 	private final static String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%s) %s%d%s  vs  %s%d%s (%s)  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
 
-	private final ConsoleColors colors;
+	private final Colors colors;
 	private OutputConfiguration outputConfiguration;
 
 	private Boolean formatMainLine;
@@ -94,7 +94,7 @@ public class ConsoleFormatter {
 	/**
 	 * @param colors
 	 */
-	public ConsoleFormatter(ConsoleColors colors, OutputConfiguration outputConfiguration) {
+	public ConsoleFormatter(Colors colors, OutputConfiguration outputConfiguration) {
 		this.colors = colors;
 		this.outputConfiguration = outputConfiguration;
 		

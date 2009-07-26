@@ -27,9 +27,11 @@ import java.util.List;
 public class Client {
 	
 	private final String name;
+	protected Colors colors;
 	
 	public Client(String name) {
 		this.name = name;
+		colors = new ConsoleColors();
 	}
 	
 	public void print(List<String> lines) {
@@ -45,6 +47,7 @@ public class Client {
 		return name;
 	}
 	
-	
-
+	public Colors getColors() {
+		return colors;
+	}
 }

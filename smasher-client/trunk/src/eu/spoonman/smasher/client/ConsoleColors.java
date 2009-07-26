@@ -22,7 +22,7 @@ package eu.spoonman.smasher.client;
  * @author Tomasz Kalkosińśki
  *
  */
-public class ConsoleColors {
+public class ConsoleColors extends Colors{
 	
 	private final String UNIX_FORMAT = "\033[%sm";
 	

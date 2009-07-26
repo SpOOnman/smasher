@@ -18,34 +18,32 @@
 
 package eu.spoonman.smasher.client.pircbot;
 
-import java.util.List;
-
-import eu.spoonman.smasher.client.Client;
+import eu.spoonman.smasher.client.Colors;
 
 /**
  * @author Tomasz Kalkosiński
  *
  */
-public class PircBotClient extends Client {
-	
-	SmasherPircBot parent;
-	String channelName;
+public class PircBotColors extends Colors {
 
-	public PircBotClient(SmasherPircBot parent, String channelName) {
-		super(String.format("PIRCBOT-%s", channelName));
-		
-		this.parent = parent;
-		this.channelName = channelName;
-		this.colors = new PircBotColors();
-	}
-	
 	@Override
-	public void print(List<String> lines) {
-		for (String line : lines) {
-			parent.sendMessage(channelName, line);
-		}
+	public String getBlue() {
+		return org.jibble.pircbot.Colors.BLUE;
 	}
-	
-	
+
+	@Override
+	public String getBold() {
+		return org.jibble.pircbot.Colors.BOLD;
+	}
+
+	@Override
+	public String getRed() {
+		return org.jibble.pircbot.Colors.RED;
+	}
+
+	@Override
+	public String getReset() {
+		return org.jibble.pircbot.Colors.NORMAL;
+	}
 
 }
