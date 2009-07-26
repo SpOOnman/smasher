@@ -87,6 +87,10 @@ public class QuakeLiveHTTPService {
     
     JSONObject jsonQuery(String method, String urlString, String parameters, boolean reLogin) throws IOException {
         String content = httpQuery(method, urlString, parameters);
+        log.debug(content);
+        
+        if (content == null || content.trim().length() == 0 || content.equals("[]"))
+            return null;
         
         Object parsed = JSONValue.parse(content);
         
