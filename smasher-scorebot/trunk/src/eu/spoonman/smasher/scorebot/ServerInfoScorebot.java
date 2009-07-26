@@ -198,7 +198,9 @@ public class ServerInfoScorebot extends Scorebot {
 	}
 
 	protected void differenceTeamInfo(Pair<TeamInfo, TeamInfo> pair) {
-		if (!(pair.getFirst().getName().equals(pair.getSecond().getName()))) {
+		if (pair.getFirst().getName() == null && pair.getSecond().getName() != null ||
+				pair.getFirst().getName() != null && pair.getSecond().getName() == null ||
+				!(pair.getFirst().getName().equals(pair.getSecond().getName()))) {
 			teamNameChangedEvent.notifyAll(pair);
 		}
 		
