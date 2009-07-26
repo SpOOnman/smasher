@@ -19,8 +19,10 @@ package eu.spoonman.smasher.serverinfo;
 
 import org.apache.log4j.Logger;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 import org.json.simple.JSONObject;
 
@@ -47,6 +49,9 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
     private QuakeLiveHTTPService httpService;
     
     private boolean alreadyBuilded;
+    
+    private String username;
+    private String password;
 
     public QuakeLiveHTTPQuery(Builder builder, int matchId, int gametype) {
         this.builder = builder;
@@ -55,6 +60,20 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
         this.gametype = gametype;
         
         alreadyBuilded = false;
+    }
+    
+    private void login() {
+        try {
+            Properties properties = new Properties();
+            properties.load(new FileInputStream("quakelive.properties"));
+            username = (String) properties.get("username");
+            password = (String) properties.get("password");
+            
+            httpService.login(username, password);
+            
+        } catch (IOException e) {
+            log.error(e);
+        }
     }
     
     private void buildParsers(ServerInfo serverInfo) {
@@ -67,8 +86,10 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
         ServerInfo serverInfo = new ServerInfo();
         try {
             
-            if (!alreadyBuilded)
+            if (!alreadyBuilded) {
                 buildParsers(serverInfo);
+                login();
+            }
             
             JSONObject json = httpService.getMatchDetails(matchId, gametype);
             serverInfo.setJson(json);
