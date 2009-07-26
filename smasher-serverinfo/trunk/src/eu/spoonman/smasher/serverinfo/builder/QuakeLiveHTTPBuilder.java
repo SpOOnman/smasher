@@ -40,8 +40,7 @@ public class QuakeLiveHTTPBuilder extends BuilderFactory implements Builder {
 
     @Override
     public Games getGame() {
-        // TODO Auto-generated method stub
-        return null;
+        return Games.QUAKELIVE;
     }
 
     @Override
