@@ -92,14 +92,21 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
             }
             
             JSONObject json = httpService.getMatchDetails(matchId, gametype);
-            serverInfo.setJson(json);
             
-            parseData(serverInfo);
+            if (json == null) {
+                serverInfo.setStatus(ServerInfoStatus.FATAL_RESPONSE);
+            } else {
+                serverInfo.setJson(json);
+                
+                parseData(serverInfo);
+                
+                serverInfo.setStatus(ServerInfoStatus.OK);
+            }
             
-            serverInfo.setStatus(ServerInfoStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
+        
         return serverInfo;
     }
     
