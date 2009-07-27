@@ -17,11 +17,10 @@
  */
 package eu.spoonman.smasher.client;
 
-import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.joda.time.Seconds;
 
 import eu.spoonman.smasher.common.Pair;
@@ -33,6 +32,8 @@ import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.RoundInfo;
+import eu.spoonman.smasher.serverinfo.ServerInfo;
+import eu.spoonman.smasher.serverinfo.ServerInfoStatus;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
 import eu.spoonman.smasher.serverinfo.TimePeriodInfo;
@@ -327,8 +328,22 @@ public class ConsoleFormatter {
 			throw new RuntimeException("Cannot draw line with scorebot different than ServerInfoScorebot");
 		
 		ServerInfoScorebot serverInfoScorebot = (ServerInfoScorebot)scorebot;
-		TeamInfo redTeam = serverInfoScorebot.getCurrentServerInfo().getTeamInfos().get(TeamKey.RED_TEAM);
-		TeamInfo blueTeam = serverInfoScorebot.getCurrentServerInfo().getTeamInfos().get(TeamKey.BLUE_TEAM);
+		ServerInfo serverInfo = null;
+		
+		if (serverInfoScorebot.getCurrentServerInfo().getStatus() == ServerInfoStatus.OK)
+			serverInfo = serverInfoScorebot.getCurrentServerInfo();
+		// When currentServerInfo is not ok and prevoius is ok - use it
+		else if (serverInfoScorebot.getPreviousServerInfo() != null &&
+				serverInfoScorebot.getPreviousServerInfo().getStatus() == ServerInfoStatus.OK)
+			serverInfo = serverInfoScorebot.getPreviousServerInfo();
+		
+		if (serverInfo == null)
+			return null;
+		
+		TeamInfo redTeam = serverInfo.getTeamInfos().get(TeamKey.RED_TEAM);
+		TeamInfo blueTeam = serverInfo.getTeamInfos().get(TeamKey.BLUE_TEAM);
+		ProgressInfo progressInfo = serverInfo.getProgressInfo();
+		GameInfo gameInfo = serverInfo.getGameInfo();
 		
 		if (redTeam == null || blueTeam == null)
 			throw new RuntimeException("There is no red either blue team!");
@@ -355,8 +370,8 @@ public class ConsoleFormatter {
 				colors.getBold(), blueTeam.getScore(), colors.getReset(),
 				formatNet(blueTeam.getScore() - lastPrintedBlueScore),
 				colors.getBlue(), colors.getBold(), blueTeam.getName(), colors.getReset(),
-				formatProgressInfo(serverInfoScorebot.getCurrentServerInfo().getProgressInfo()),
-				serverInfoScorebot.getCurrentServerInfo().getGameInfo().getMap(),
+				formatProgressInfo(progressInfo),
+				gameInfo.getMap(),
 				colors.getBold(), winningColor, colors.getReset(), formatNet(Math.abs(redTeam.getScore() - blueTeam.getScore())), colors.getBold(), winningColor, colors.getReset(),
 				mainLines.toString()
 				);
