@@ -65,7 +65,7 @@ public class QuakeLiveScorebot extends ServerInfoScorebot {
 		
 		httpQueryNeeded = true;
 		
-		super.internalStart();
+		//super.internalStart();
 	}
 	
 	@Override

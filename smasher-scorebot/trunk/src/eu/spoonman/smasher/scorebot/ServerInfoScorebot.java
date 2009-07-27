@@ -86,8 +86,17 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 
 		setRunning(true);
-
-		internalStart();
+		
+		try {
+			internalStart();
+		} catch (ScorebotFatalException e) {
+			log.error(e);
+			setRunning(false);
+		}
+		
+		scorebotStopEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
+		
+		log.info(String.format("Scorebot %s has stopped.", getId()));
 	}
 
 	@Override
@@ -108,7 +117,7 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 	}
 
-	protected void internalStart() {
+	protected void internalStart() throws ScorebotFatalException {
 
 		scorebotStartEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
 		
@@ -116,6 +125,9 @@ public class ServerInfoScorebot extends Scorebot {
 
 			currentServerInfo = internalQuery();
 			log.info(currentServerInfo);
+			
+			if (currentServerInfo.getStatus() == ServerInfoStatus.FATAL_RESPONSE)
+				throw new ScorebotFatalException("Not valid response. Maybe the match was ended already?");
 			
 			//Don't difference when response is not valid.
 			if (currentServerInfo.getStatus() == ServerInfoStatus.OK) {
@@ -137,10 +149,6 @@ public class ServerInfoScorebot extends Scorebot {
 				log.error("Scorebot thread unexpectedly interrupted.", e);
 			}
 		}
-		
-		scorebotStopEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
-		
-		log.info(String.format("Scorebot %s has stopped.", getId()));
 	}
 	
 	protected ServerInfo internalQuery() {
