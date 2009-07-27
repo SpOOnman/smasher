@@ -32,6 +32,9 @@ public abstract class Scorebot {
 	protected GameDelegate<Scorebot> differenceStartEvent;
 	protected GameDelegate<Scorebot> differenceStopEvent;
 	
+	protected GameDelegate<Scorebot> scorebotStartEvent;
+	protected GameDelegate<Scorebot> scorebotStopEvent;
+	
 	protected GameDelegate<GameInfo> gameInfoChange;
 	protected GameDelegate<ProgressInfo> progressInfoChange;
 	protected GameDelegate<PlayerInfo> playerInfoChange;
@@ -53,6 +56,9 @@ public abstract class Scorebot {
 		
 		differenceStartEvent = new GameDelegate<Scorebot>();
 		differenceStopEvent = new GameDelegate<Scorebot>();
+		
+		scorebotStartEvent = new GameDelegate<Scorebot>();
+		scorebotStopEvent = new GameDelegate<Scorebot>();
 		
 		gameInfoChange = new GameDelegate<GameInfo>();
 		progressInfoChange = new GameDelegate<ProgressInfo>();
@@ -129,5 +135,13 @@ public abstract class Scorebot {
 
 	public GameDelegate<Scorebot> getDifferenceStopEvent() {
 		return differenceStopEvent;
+	}
+
+	public GameDelegate<Scorebot> getScorebotStartEvent() {
+		return scorebotStartEvent;
+	}
+
+	public GameDelegate<Scorebot> getScorebotStopEvent() {
+		return scorebotStopEvent;
 	}
 }
