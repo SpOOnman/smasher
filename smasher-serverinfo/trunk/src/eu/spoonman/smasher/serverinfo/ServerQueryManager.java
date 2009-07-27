@@ -49,7 +49,7 @@ public class ServerQueryManager {
     }
     
     private static QuakeLiveHTTPQuery getQuakeLiveHTTPQuery(List<String> args, Builder builder) {
-        QuakeLiveHTTPQuery quakeLiveHTTPQuery = new QuakeLiveHTTPQuery(builder, Integer.parseInt(args.get(0)), 4);
+        QuakeLiveHTTPQuery quakeLiveHTTPQuery = new QuakeLiveHTTPQuery(builder, args.get(0));
         
         return quakeLiveHTTPQuery;
         

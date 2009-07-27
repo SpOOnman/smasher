@@ -28,6 +28,7 @@ import org.json.simple.JSONObject;
 public class ServerInfo {
 	
 	private ServerInfoStatus status;
+	private String message;
     
 	private Games game;
     private Version gameVersion;
@@ -66,7 +67,7 @@ public class ServerInfo {
 	public String toString() {
 		StringBuilder sb = new StringBuilder ();
         
-        sb.append("status\t : " + this.status + "\n");
+        sb.append("status\t : " + this.status + ": " + this.message + "\n");
         
         sb.append(gameVersion);
         sb.append("\n");
@@ -111,7 +112,15 @@ public class ServerInfo {
 		this.status = status;
 	}
 	
-	/**
+	public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    /**
 	 * @return the playerInfos
 	 */
 	public List<PlayerInfo> getPlayerInfos() {

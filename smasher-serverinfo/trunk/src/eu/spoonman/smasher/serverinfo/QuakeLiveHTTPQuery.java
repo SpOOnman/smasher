@@ -39,8 +39,8 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
 
     private static final Logger log = Logger.getLogger(QuakeLiveHTTPQuery.class);
 
-    private int matchId;
-    private int gametype;
+    private int matchId = -1;
+    private String argument;
 
     private List<ServerInfoParser> parserList;
     
@@ -53,11 +53,10 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
     private String username;
     private String password;
 
-    public QuakeLiveHTTPQuery(Builder builder, int matchId, int gametype) {
+    public QuakeLiveHTTPQuery(Builder builder, String argument) {
         this.builder = builder;
         httpService = new QuakeLiveHTTPService();
-        this.matchId = matchId;
-        this.gametype = gametype;
+        this.argument = argument;
         
         alreadyBuilded = false;
     }
@@ -80,6 +79,32 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
         parserList = builder.getParserList(serverInfo);
         alreadyBuilded = true;
     }
+    
+    private boolean ensureMatchId() {
+        
+        if (argument == null)
+            return false;
+        
+        try {
+            matchId = Integer.parseInt(argument);
+            return true;
+        } catch (NumberFormatException e) {
+            log.warn("Cannot parse match id " + argument);
+        }
+        
+        Integer id = httpService.searchForPlayer(argument);
+        if (id == null) {
+            log.warn("Cannot find a player" + argument);
+            return false;
+        }
+        
+        matchId = id;
+        
+        log.info(String.format("Player %s found playing in a game %d", argument, matchId));
+        
+        return true;
+            
+    }
 
     @Override
     public ServerInfo query() {
@@ -89,12 +114,18 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
             if (!alreadyBuilded) {
                 buildParsers(serverInfo);
                 login();
+                
+                if (!ensureMatchId()) {
+                    serverInfo.setStatus(ServerInfoStatus.FATAL_RESPONSE);
+                    serverInfo.setMessage(String.format("Player %s not found playing QuakeLive" , argument));
+                }
             }
             
-            JSONObject json = httpService.getMatchDetails(matchId, gametype);
+            JSONObject json = httpService.getMatchDetails(matchId);
             
             if (json == null) {
                 serverInfo.setStatus(ServerInfoStatus.FATAL_RESPONSE);
+                serverInfo.setMessage(String.format("Match %d is unknown or has already finished.", matchId));
             } else {
                 serverInfo.setJson(json);
                 

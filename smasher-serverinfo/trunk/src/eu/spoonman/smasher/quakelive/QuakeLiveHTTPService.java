@@ -186,7 +186,7 @@ public class QuakeLiveHTTPService {
         }
     }
     
-    public JSONObject getMatchDetails(Integer matchId, Integer gametype) {
+    public JSONObject getMatchDetails(Integer matchId) {
         String url = String.format(QUAKELIVE_URL_MATCH_FORMAT, matchId);
         try {
             return jsonQuery("GET", url, null, true);
