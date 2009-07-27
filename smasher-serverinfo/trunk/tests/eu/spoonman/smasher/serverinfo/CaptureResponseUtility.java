@@ -29,17 +29,18 @@ import java.net.UnknownHostException;
  */
 public class CaptureResponseUtility {
 
-    private static String QL_IP_PL = "79.141.60.101";
-    private static String QL_IP_DE = "94.76.229.6";
-    private static String QL_IP_XX = "91.198.152.225";
+    private static String QL_IP_PL = "79.141.160.101";
+    private static String QL_IP_PL2 = "195.42.112.212";
+    private static String QL_IP_UK = "94.76.229.6";
+    private static String QL_IP_DE = "91.198.152.225";
 
     private static String QL_OLD1 = "92.48.121.75";
     private static String QL_OLD2 = "85.25.86.234";
 
     public static void main(String[] args) throws IOException {
-        InetAddress address = InetAddress.getByName(QL_IP_PL); 
+        InetAddress address = InetAddress.getByName(QL_IP_PL2); 
 
-        for (int port = 27000; port < 27011; port++) {
+        for (int port = 27000; port < 27051; port++) {
 
             try {
                 query(address, port);
