@@ -18,6 +18,7 @@
 package eu.spoonman.smasher.client;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -138,6 +139,12 @@ public class ConsoleFormatter {
 		}
 		
 		output.addAll(afterMainLines);
+
+		// Remove blank lines
+		for (Iterator<String> iterator = output.iterator(); iterator.hasNext();) {
+			if (iterator.next() == null)
+				iterator.remove();
+		}
 						
 		return output;
 	}
