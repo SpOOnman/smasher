@@ -32,7 +32,10 @@ public class CaptureResponseUtility {
     private static String QL_IP_PL = "79.141.160.101";
     private static String QL_IP_PL2 = "195.42.112.212";
     private static String QL_IP_UK = "94.76.229.6";
+    private static String QL_IP_UK2 = "94.76.229.31";
     private static String QL_IP_DE = "91.198.152.225";
+    private static String QL_IP_DE2 = "91.198.152.225";
+    private static String QL_IP_DE3 = "94.76.229.6";
 
     private static String QL_OLD1 = "92.48.121.75";
     private static String QL_OLD2 = "85.25.86.234";
