@@ -23,6 +23,6 @@ public enum ServerInfoStatus {
 	TIMED_OUT,
 	UNKNOWN_HOST,
 	IO_EXCEPTION,
-    NOT_VALID_RESPONSE
-
+    NOT_VALID_RESPONSE,
+    FATAL_RESPONSE;
 }
