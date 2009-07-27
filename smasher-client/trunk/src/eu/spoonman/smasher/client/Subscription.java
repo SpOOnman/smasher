@@ -46,6 +46,8 @@ public abstract class Subscription {
 	private Observer<Pair<PlayerInfo, PlayerInfo>> playerScoreChangeEventObserver;
 	private Observer<Pair<Scorebot, Scorebot>> differenceStartEventObserver;
 	private Observer<Pair<Scorebot, Scorebot>> differenceStopEventObserver;
+	private Observer<Pair<Scorebot, Scorebot>> scorebotStartEventObserver;
+	private Observer<Pair<Scorebot, Scorebot>> scorebotStopEventObserver;
 	
 	private Scorebot scorebot;
 	private Client client;
@@ -72,6 +74,9 @@ public abstract class Subscription {
 		
 		registerOnDifferenceStartEvent(scorebot);
 		registerOnDifferenceStopEvent(scorebot);
+		
+		registerOnScorebotStartEvent(scorebot);
+		registerOnScorebotStopEvent(scorebot);
 		
 		registerOnGameInfoChange(scorebot);
 
@@ -100,6 +105,9 @@ public abstract class Subscription {
 		scorebot.getDifferenceStartEvent().unregister(differenceStartEventObserver);
 		scorebot.getDifferenceStopEvent().unregister(differenceStopEventObserver);
 		
+		scorebot.getScorebotStartEvent().unregister(scorebotStartEventObserver);
+		scorebot.getScorebotStopEvent().unregister(scorebotStopEventObserver);
+		
 		scorebot.getGameInfoChange().unregister(gameInfoChangeObserver);
 		
 		scorebot.getProgressInfoChange().unregister(progressInfoChangeObserver);
@@ -115,6 +123,8 @@ public abstract class Subscription {
 		
 		differenceStartEventObserver = null;
 		differenceStopEventObserver = null;
+		scorebotStartEventObserver = null;
+		scorebotStopEventObserver = null;
 		gameInfoChangeObserver = null;
 		progressInfoChangeObserver = null;
 		teamNameChangeEventObserver = null;
@@ -239,6 +249,26 @@ public abstract class Subscription {
 		
 		scorebot.getDifferenceStopEvent().register(differenceStopEventObserver);
 	}
+	
+	protected void registerOnScorebotStartEvent(Scorebot scorebot) {
+		scorebotStartEventObserver = new Observer<Pair<Scorebot, Scorebot>>() {
+			public void notify(eu.spoonman.smasher.common.Pair<Scorebot, Scorebot> pair) {
+				onScorebotStartEvent(pair);
+			}
+		};
+		
+		scorebot.getScorebotStartEvent().register(scorebotStartEventObserver);
+	}
+	
+	protected void registerOnScorebotStopEvent(Scorebot scorebot) {
+		scorebotStopEventObserver = new Observer<Pair<Scorebot, Scorebot>>() {
+			public void notify(eu.spoonman.smasher.common.Pair<Scorebot, Scorebot> pair) {
+				onScorebotStopEvent(pair);
+			}
+		};
+		
+		scorebot.getScorebotStopEvent().register(scorebotStopEventObserver);
+	}
 
 	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
 		logEvent("GameInfo", pair);
@@ -282,6 +312,14 @@ public abstract class Subscription {
 	
 	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
 		logEvent("DifferenceStop", pair);
+	}
+	
+	protected void onScorebotStartEvent(Pair<Scorebot, Scorebot> pair) {
+		logEvent("ScorebotStart", pair);
+	}
+	
+	protected void onScorebotStopEvent(Pair<Scorebot, Scorebot> pair) {
+		logEvent("ScorebotStop", pair);
 	}
 	
 	public Scorebot getScorebot() {

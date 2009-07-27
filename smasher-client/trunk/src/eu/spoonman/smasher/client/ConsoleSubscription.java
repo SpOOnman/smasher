@@ -73,6 +73,15 @@ public class ConsoleSubscription extends Subscription {
 		
 		firstRun = false;
 	}
+	
+	@Override
+	protected void onScorebotStopEvent(Pair<Scorebot, Scorebot> pair) {
+		super.onScorebotStopEvent(pair);
+		
+		formatter.ensureMainLine();
+		formatter.formatScorebotStop(getScorebot());
+		formatter.flush();
+	}
 
 	@Override
 	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
