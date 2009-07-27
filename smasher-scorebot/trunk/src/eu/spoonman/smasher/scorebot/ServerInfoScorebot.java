@@ -110,6 +110,8 @@ public class ServerInfoScorebot extends Scorebot {
 
 	protected void internalStart() {
 
+		scorebotStartEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
+		
 		while (isRunning()) {
 
 			currentServerInfo = internalQuery();
@@ -135,6 +137,8 @@ public class ServerInfoScorebot extends Scorebot {
 				log.error("Scorebot thread unexpectedly interrupted.", e);
 			}
 		}
+		
+		scorebotStopEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
 		
 		log.info(String.format("Scorebot %s has stopped.", getId()));
 	}
