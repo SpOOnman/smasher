@@ -48,6 +48,8 @@ public abstract class Scorebot {
 	protected GameDelegate<TeamInfo> teamNameChangedEvent;
 	protected GameDelegate<TeamInfo> teamScoreChangedEvent;
 	
+	protected String exitMessage;
+	
 	private final String id;
 	
 	Scorebot(String id) {
@@ -87,6 +89,10 @@ public abstract class Scorebot {
 	
 	public String getId() {
 		return id;
+	}
+	
+	public String getExitMessage() {
+		return exitMessage;
 	}
 
 	public GameDelegate<GameInfo> getGameInfoChange() {

@@ -18,7 +18,6 @@
 
 package eu.spoonman.smasher.scorebot;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -37,7 +36,6 @@ import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfoStatus;
-import eu.spoonman.smasher.serverinfo.ServerQuery;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
 
@@ -91,6 +89,7 @@ public class ServerInfoScorebot extends Scorebot {
 			internalStart();
 		} catch (ScorebotFatalException e) {
 			log.error(e);
+			exitMessage = e.getMessage();
 			setRunning(false);
 		}
 		
