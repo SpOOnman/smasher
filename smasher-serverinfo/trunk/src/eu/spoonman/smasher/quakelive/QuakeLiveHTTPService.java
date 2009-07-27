@@ -198,6 +198,10 @@ public class QuakeLiveHTTPService {
         
     }
     
+    public Integer searchForPlayer(String name) {
+        return null;
+    }
+    
     public JSONObject getStatsDetails(Integer matchId, Integer gametype) {
         String url = String.format(QUAKELIVE_URL_STATS_FORMAT, matchId, gametypeAddressMap.get(gametype));
         
