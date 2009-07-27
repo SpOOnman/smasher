@@ -50,29 +50,12 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
     
     private boolean alreadyBuilded;
     
-    private String username;
-    private String password;
-
     public QuakeLiveHTTPQuery(Builder builder, String argument) {
         this.builder = builder;
         httpService = new QuakeLiveHTTPService();
         this.argument = argument;
         
         alreadyBuilded = false;
-    }
-    
-    private void login() {
-        try {
-            Properties properties = new Properties();
-            properties.load(new FileInputStream("quakelive.properties"));
-            username = (String) properties.get("username");
-            password = (String) properties.get("password");
-            
-            httpService.login(username, password);
-            
-        } catch (IOException e) {
-            log.error(e);
-        }
     }
     
     private void buildParsers(ServerInfo serverInfo) {
@@ -113,7 +96,6 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
             
             if (!alreadyBuilded) {
                 buildParsers(serverInfo);
-                login();
                 
                 if (!ensureMatchId()) {
                     serverInfo.setStatus(ServerInfoStatus.FATAL_RESPONSE);
@@ -163,7 +145,10 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
     
     @Override
     public String getIdentification() {
-        return Integer.toString(matchId);
+        if (matchId < 0)
+            return argument;
+        
+        return String.format("%d (http://www.quakelive.com/r/home/join/%d)", Integer.toString(matchId));
     }
 
     @Override
