@@ -59,7 +59,7 @@ public class ConsoleFormatter {
 	}
 	
 	private final String SCOREBOT_START = "%s%s%s. Starting %s%s%s scorebot on %s.";
-	private final String SCOREBOT_STOP = "%s%s%s. Scorebot stopped";
+	private final String SCOREBOT_STOP = "%s%s%s. Scorebot stopped. %s";
 
 	private final String PLAYER_CONNECTED_EVENT = "Player %s connected";
 	private final String PLAYER_DISCONNECTED_EVENT = "Player %s disconnected";
@@ -189,7 +189,7 @@ public class ConsoleFormatter {
 	public void formatScorebotStop(Scorebot scorebot) {
 		synchronized (afterMainLines) {
 			afterMainLines.add(String.format(SCOREBOT_STOP,
-					colors.getBold(), scorebot.getId(), colors.getReset()
+					colors.getBold(), scorebot.getId(), colors.getReset(), scorebot.getExitMessage()
 					));
 		}
 	}
