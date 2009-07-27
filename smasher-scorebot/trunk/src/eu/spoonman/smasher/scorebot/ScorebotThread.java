@@ -17,6 +17,8 @@
  */
 package eu.spoonman.smasher.scorebot;
 
+import java.io.IOException;
+
 /**
  * @author Tomasz Kalkosinski
  *
@@ -31,7 +33,7 @@ class ScorebotThread extends Thread {
 	}
 	
 	@Override
-	public void run() {
+	public void run(){
 		super.run();
 		scorebot.start();
 	}

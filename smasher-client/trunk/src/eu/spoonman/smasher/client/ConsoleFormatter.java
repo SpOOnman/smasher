@@ -196,7 +196,7 @@ public class ConsoleFormatter {
 	public void formatScorebotStop(Scorebot scorebot) {
 		synchronized (afterMainLines) {
 			afterMainLines.add(String.format(SCOREBOT_STOP,
-					colors.getBold(), scorebot.getId(), colors.getReset(), scorebot.getExitMessage()
+					colors.getBold(), scorebot.getId(), colors.getReset(), scorebot.getCurrentServerInfo().getMessage()
 					));
 		}
 	}

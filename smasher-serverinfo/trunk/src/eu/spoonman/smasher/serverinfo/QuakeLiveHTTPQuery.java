@@ -77,7 +77,7 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
         
         Integer id = httpService.searchForPlayer(argument);
         if (id == null) {
-            log.warn("Cannot find a player" + argument);
+            log.warn("Cannot find a player " + argument);
             return false;
         }
         
@@ -99,7 +99,8 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
                 
                 if (!ensureMatchId()) {
                     serverInfo.setStatus(ServerInfoStatus.FATAL_RESPONSE);
-                    serverInfo.setMessage(String.format("Player %s not found playing QuakeLive" , argument));
+                    serverInfo.setMessage(String.format("Player %s was not found playing QuakeLive." , argument));
+                    return serverInfo;
                 }
             }
             

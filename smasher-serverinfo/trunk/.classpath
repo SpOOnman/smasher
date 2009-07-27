@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="lib/joda-time-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/smack.jar"/>
 	<classpathentry kind="lib" path="lib/smackx.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -19,9 +19,11 @@
 package eu.spoonman.smasher.quakelive;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -29,17 +31,19 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.jivesoftware.smack.XMPPException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 /**
- * @author Tomasz Kalkosiński
- * QuakeLive HTTP Service to retrieve information. It emulates internet browser to get match and players information.
+ * @author Tomasz Kalkosiński QuakeLive HTTP Service to retrieve information. It
+ *         emulates internet browser to get match and players information.
  */
 public class QuakeLiveHTTPService {
 
@@ -49,17 +53,26 @@ public class QuakeLiveHTTPService {
     private static final Logger log = Logger.getLogger(QuakeLiveHTTPService.class);
 
     private final static String QUAKELIVE_URL_LOGIN_STRING = "http://www.quakelive.com/user/login";
+
     private final static String QUAKELIVE_URL_STATS_FORMAT = "http://www.quakelive.com/stats/matchdetails/%d/%s";
+
     private final static String QUAKELIVE_URL_MATCH_FORMAT = "http://www.quakelive.com/home/matchdetails/%d";
+    
+    private final static String QUAKELIVE_URL_MATCHES_FORMAT = "http://www.quakelive.com/home/matches/%s";
 
     private final static String JSON_ERROR_CODE = "ECODE";
+
     private final static String JSON_ERROR_MSG = "MSG";
+
     private final static String JSON_NOT_LOGGED_IN = "-1";
-    
+
     private final static String QUAKELIVE_PARAMETERS = "u=%s&p=%s&r=0";
-    
+
+    private final static String QUAKELIVE_SEARCH_FILTER = "{\"filters\":{\"group\":\"friends\",\"game_type\":\"any\",\"arena\":\"any\",\"state\":\"any\","
+            + "\"difficulty\":\"any\",\"location\":\"ALL\",\"private\":\"%d\"},\"arena_type\":\"\",\"players\":[\"%s\"],\"game_types\":[],\"ig\":0}";
+
     private final static Map<Integer, String> gametypeAddressMap;
-    
+
     static {
         gametypeAddressMap = new HashMap<Integer, String>();
         gametypeAddressMap.put(1, "Tourney");
@@ -81,43 +94,43 @@ public class QuakeLiveHTTPService {
                 sb.append("; ");
             }
         }
-        
+
         this.cookies = sb.toString();
     }
-    
+
     JSONObject jsonQuery(String method, String urlString, String parameters, boolean reLogin) throws IOException {
         String content = httpQuery(method, urlString, parameters);
         log.debug(content);
-        
+
         if (content == null || content.trim().length() == 0 || content.equals("[]"))
             return null;
-        
+
         Object parsed = JSONValue.parse(content);
-        
+
         if (parsed != null) {
-            JSONObject json = (JSONObject)parsed;
-            
+            JSONObject json = (JSONObject) parsed;
+
             Object error = json.get(JSON_ERROR_CODE);
             if (error != null && Integer.parseInt(error.toString()) < 0) {
                 log.error(String.format("JSON response error: %s : %s", error.toString(), json.get(JSON_ERROR_MSG)));
                 if (error.toString().equals(JSON_NOT_LOGGED_IN) && reLogin) {
                     log.debug("Logging in");
-                    login("", "");
+                    login();
                     return jsonQuery(method, urlString, parameters, false);
                 }
             }
-            
+
             log.debug(json.toJSONString());
-            
+
             return json;
         }
-        
+
         return null;
     }
 
     String httpQuery(String method, String urlString, String parameters) throws IOException {
         try {
-            
+
             log.debug(String.format("Querying %s with parameters %s", urlString, parameters));
 
             URL url = new URL(urlString);
@@ -126,7 +139,7 @@ public class QuakeLiveHTTPService {
             connection.setRequestMethod(method);
             connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 
-            //Send out parameters if given
+            // Send out parameters if given
             if (parameters != null && parameters.length() > 0) {
                 connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
                 connection.setRequestProperty("Content-Length", new Integer(parameters.length()).toString());
@@ -140,7 +153,7 @@ public class QuakeLiveHTTPService {
                 dataOut.close();
             }
 
-            //Use cookies if they are set.
+            // Use cookies if they are set.
             if (cookies != null && cookies.length() > 0) {
                 connection.setRequestProperty("Cookie", this.cookies);
                 connection.connect();
@@ -173,7 +186,17 @@ public class QuakeLiveHTTPService {
 
     }
 
-    public void login(String username, String password) throws IOException {
+    void login() throws IOException {
+        Properties properties = new Properties();
+        properties.load(new FileInputStream("quakelive.properties"));
+        String username = (String) properties.get("username");
+        String password = (String) properties.get("password");
+
+        login(username, password);
+
+    }
+
+    private void login(String username, String password) throws IOException {
         try {
 
             String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
@@ -185,7 +208,7 @@ public class QuakeLiveHTTPService {
             log.error("Protocol", e);
         }
     }
-    
+
     public JSONObject getMatchDetails(Integer matchId) {
         String url = String.format(QUAKELIVE_URL_MATCH_FORMAT, matchId);
         try {
@@ -193,34 +216,71 @@ public class QuakeLiveHTTPService {
         } catch (IOException e) {
             log.error(e);
         }
-        
+
         return null;
-        
+
     }
-    
+
     public Integer searchForPlayer(String name) {
-        return null;
+        Integer matchId = searchForPlayer(name, 0);
+
+        if (matchId != null)
+            return matchId;
+
+        return searchForPlayer(name, 1);
     }
-    
+
+    private Integer searchForPlayer(String name, int privateInt) {
+        String filter = String.format(QUAKELIVE_SEARCH_FILTER, privateInt, name);
+        log.debug("Searching for filter: " + filter);
+        
+        byte[] base64 = null;
+        
+        try {
+            base64 = Base64.encodeBase64(filter.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            log.error(e);
+        }
+
+        try {
+            JSONObject query = jsonQuery("GET", String.format(QUAKELIVE_URL_MATCHES_FORMAT, new String(base64)), null, true);
+            if (query == null)
+                return null;
+
+            List<Object> list = (List<Object>) query.get("servers");
+            
+            if (list.isEmpty())
+                return null;
+            
+            return (Integer) (((JSONObject) list.get(0)).get("public_id"));
+
+        } catch (Exception e) {
+            log.error(e);
+        }
+
+        return null;
+
+    }
+
     public JSONObject getStatsDetails(Integer matchId, Integer gametype) {
         String url = String.format(QUAKELIVE_URL_STATS_FORMAT, matchId, gametypeAddressMap.get(gametype));
-        
+
         try {
             return jsonQuery("GET", url, null, true);
         } catch (IOException e) {
             log.error(e);
         }
-        
+
         return null;
-        
+
     }
 
     public static void main(String[] args) throws LoginException, IOException, XMPPException {
         QuakeLiveHTTPService qls = new QuakeLiveHTTPService();
-        //qls.getMatchDetails(9865953, 1);
-        //qls.getMatchDetails(5793181, 4);
+        // qls.getMatchDetails(9865953, 1);
+        // qls.getMatchDetails(5793181, 4);
         qls.login("tomasz2k@poczta.onet.pl", "");
-        //qls.httpQuery("GET", "http://www.quakelive.com/stats/overall", null);
+        // qls.httpQuery("GET", "http://www.quakelive.com/stats/overall", null);
         qls.httpQuery("GET", "http://www.quakelive.com/stats/recordstats/838199", null);
         qls.httpQuery("GET", "http://www.quakelive.com/stats/playerdetails/838199", null);
 
