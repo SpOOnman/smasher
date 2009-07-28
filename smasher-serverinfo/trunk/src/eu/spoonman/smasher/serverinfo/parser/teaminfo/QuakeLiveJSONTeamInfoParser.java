@@ -28,6 +28,9 @@ public class QuakeLiveJSONTeamInfoParser implements ServerInfoParser {
     
     public final String JSON_RED_KEY = "g_redscore";
     public final String JSON_BLUE_KEY = "g_bluescore";
+    
+    public final String RED_TEAM_NAME = "Red";
+    public final String BLUE_TEAM_NAME = "Blue";
 
     @Override
     public void parseIntoServerInfo(ServerInfo serverInfo) throws ParserException {
@@ -37,10 +40,12 @@ public class QuakeLiveJSONTeamInfoParser implements ServerInfoParser {
         
         TeamInfo red = new TeamInfo(TeamKey.RED_TEAM);
         red.setScore(((Long)serverInfo.getJson().get(JSON_RED_KEY)).intValue());
+        red.setName(RED_TEAM_NAME);
         serverInfo.getTeamInfos().put(TeamKey.RED_TEAM, red);
         
         TeamInfo blue = new TeamInfo(TeamKey.BLUE_TEAM);
         blue.setScore(((Long)serverInfo.getJson().get(JSON_BLUE_KEY)).intValue());
+        blue.setName(BLUE_TEAM_NAME);
         serverInfo.getTeamInfos().put(TeamKey.BLUE_TEAM, blue);
     }
 
