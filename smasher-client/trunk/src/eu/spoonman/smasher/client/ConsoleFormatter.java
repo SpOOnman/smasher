@@ -371,7 +371,19 @@ public class ConsoleFormatter {
 			mainLines.append(" ");
 		}
 		
-		String returnString = String.format(switchMainLineFormat(gameInfo.getGameType()),
+		String returnString = formatMainLineInternal(scorebot, redTeam, blueTeam, progressInfo, gameInfo,
+				winningColor, mainLines);
+		
+		lastPrintedRedScore = redTeam.getScore();
+		lastPrintedBlueScore = blueTeam.getScore();
+		
+		return returnString;
+	}
+
+	private String formatMainLineTDM(Scorebot scorebot, TeamInfo redTeam, TeamInfo blueTeam,
+			ProgressInfo progressInfo, GameInfo gameInfo, String winningColor, StringBuilder mainLines) {
+		
+		String returnString = String.format(MAIN_LINE_TDM,
 				colors.getBold(), scorebot.getId(), colors.getReset(),
 				colors.getRed(), colors.getBold(), redTeam.getName(), colors.getReset(),
 				formatNet(redTeam.getScore() - lastPrintedRedScore),
@@ -384,23 +396,37 @@ public class ConsoleFormatter {
 				colors.getBold(), winningColor, colors.getReset(), formatNet(Math.abs(redTeam.getScore() - blueTeam.getScore())), colors.getBold(), winningColor, colors.getReset(),
 				mainLines.toString()
 				);
-		
-		lastPrintedRedScore = redTeam.getScore();
-		lastPrintedBlueScore = blueTeam.getScore();
-		
 		return returnString;
 	}
 	
-	private String switchMainLineFormat(GameTypes gametype) {
-		if (gametype == null)
+	private String formatMainLineCTF(Scorebot scorebot, TeamInfo redTeam, TeamInfo blueTeam,
+			ProgressInfo progressInfo, GameInfo gameInfo, String winningColor, StringBuilder mainLines) {
+		
+		String returnString = String.format(MAIN_LINE_CTF,
+				colors.getBold(), scorebot.getId(), colors.getReset(),
+				colors.getRed(), colors.getBold(), redTeam.getName(), colors.getReset(),
+				colors.getBold(), redTeam.getScore(), colors.getReset(),
+				colors.getBold(), blueTeam.getScore(), colors.getReset(),
+				colors.getBlue(), colors.getBold(), blueTeam.getName(), colors.getReset(),
+				formatProgressInfo(progressInfo),
+				gameInfo.getMap(),
+				colors.getBold(), winningColor, colors.getReset(), formatNet(Math.abs(redTeam.getScore() - blueTeam.getScore())), colors.getBold(), winningColor, colors.getReset(),
+				mainLines.toString()
+		);
+		return returnString;
+	}
+	
+	private String formatMainLineInternal(Scorebot scorebot, TeamInfo redTeam, TeamInfo blueTeam,
+			ProgressInfo progressInfo, GameInfo gameInfo, String winningColor, StringBuilder mainLines) {
+		if (gameInfo.getGameType() == null)
 			return MAIN_LINE_TDM;
 		
-		switch (gametype) {
+		switch (gameInfo.getGameType()) {
 			case CAPTURE_THE_FLAG:
-				return MAIN_LINE_CTF;
+				return formatMainLineCTF(scorebot, redTeam, blueTeam, progressInfo, gameInfo, winningColor, mainLines);
 				
 			default:
-				return MAIN_LINE_TDM;
+				return formatMainLineTDM(scorebot, redTeam, blueTeam, progressInfo, gameInfo, winningColor, mainLines);
 		}
 	}
 	
