@@ -33,6 +33,7 @@ import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.GameTypes;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
+import eu.spoonman.smasher.serverinfo.ProgressInfoFlags;
 import eu.spoonman.smasher.serverinfo.RoundInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfoStatus;
@@ -71,8 +72,8 @@ public class ConsoleFormatter {
 	private final String TEAM_NAME_CHANGE = "Team %s renames to %s";
 	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
 	
-	private final String TIME_PERIOD_INFO = "%d:%02d";
-	private final String ROUND_INFO = "%d/%d";
+	private final String TIME_PERIOD_INFO = "%d:%02d%s";
+	private final String ROUND_INFO = "%d/%d%s";
 	
 	private final int TDM_INTERVAL = 30; //seconds
 	private final int INTERVAL = TDM_INTERVAL * 2;
@@ -437,16 +438,32 @@ public class ConsoleFormatter {
 		if (progressInfo instanceof TimePeriodInfo) {
 			TimePeriodInfo time = (TimePeriodInfo)progressInfo;
 			
-			return String.format(TIME_PERIOD_INFO, time.getPeriod().getMinutes(), time.getPeriod().getSeconds());
+			String flags = formatProgressInfoFlags(time);
+			
+			return String.format(TIME_PERIOD_INFO, time.getPeriod().getMinutes(), time.getPeriod().getSeconds(), flags);
 		}
 		
 		if (progressInfo instanceof RoundInfo) {
 			RoundInfo rounds = (RoundInfo)progressInfo;
+			String flags = formatProgressInfoFlags(rounds);
 			
-			return String.format(ROUND_INFO, rounds.getRoundNumber(), rounds.getRoundLimit());
+			return String.format(ROUND_INFO, rounds.getRoundNumber(), rounds.getRoundLimit(), flags);
 		}
 		
 		return progressInfo.getRawText();
+	}
+
+	private String formatProgressInfoFlags(ProgressInfo time) {
+		StringBuilder flags = new StringBuilder();
+		for (ProgressInfoFlags f : time.getProgressInfoFlags()) {
+			if (f == ProgressInfoFlags.IN_PLAY)
+				continue;
+			
+			flags.append(" ");
+			flags.append(f.toString());
+		}
+		
+		return flags.toString();
 	}
 	
 	private String formatNet(int net) {
