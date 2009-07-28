@@ -149,9 +149,9 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
         if (matchId < 0)
             return argument;
         
-        return String.format("%d (http://www.quakelive.com/r/home/join/%d)", matchId);
+        return String.format("%d (http://www.quakelive.com/r/home/join/%d)", matchId, matchId);
     }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
