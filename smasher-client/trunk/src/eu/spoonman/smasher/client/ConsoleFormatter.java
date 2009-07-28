@@ -30,6 +30,7 @@ import eu.spoonman.smasher.output.OutputStyle;
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
+import eu.spoonman.smasher.serverinfo.GameTypes;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.RoundInfo;
@@ -77,6 +78,7 @@ public class ConsoleFormatter {
 	private final int INTERVAL = TDM_INTERVAL * 2;
 	
 	private final static String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%s) %s%d%s  vs  %s%d%s (%s)  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
+	private final static String MAIN_LINE_CTF = "%s%s%s. %s%s%s%s  %s%d%s  vs  %s%d%s  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
 
 	private final Colors colors;
 	private OutputConfiguration outputConfiguration;
@@ -369,7 +371,7 @@ public class ConsoleFormatter {
 			mainLines.append(" ");
 		}
 		
-		String returnString = String.format(MAIN_LINE_TDM,
+		String returnString = String.format(switchMainLineFormat(gameInfo.getGameType()),
 				colors.getBold(), scorebot.getId(), colors.getReset(),
 				colors.getRed(), colors.getBold(), redTeam.getName(), colors.getReset(),
 				formatNet(redTeam.getScore() - lastPrintedRedScore),
@@ -387,6 +389,19 @@ public class ConsoleFormatter {
 		lastPrintedBlueScore = blueTeam.getScore();
 		
 		return returnString;
+	}
+	
+	private String switchMainLineFormat(GameTypes gametype) {
+		if (gametype == null)
+			return MAIN_LINE_TDM;
+		
+		switch (gametype) {
+			case CAPTURE_THE_FLAG:
+				return MAIN_LINE_CTF;
+				
+			default:
+				return MAIN_LINE_TDM;
+		}
 	}
 	
 	private String formatProgressInfo(ProgressInfo progressInfo) {
