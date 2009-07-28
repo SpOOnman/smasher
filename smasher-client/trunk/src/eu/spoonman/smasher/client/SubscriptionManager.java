@@ -87,7 +87,7 @@ public class SubscriptionManager {
 	private Subscription getSubscription(Client client, Scorebot scorebot) {
 		
 		// Formatting theme
-		ConsoleFormatter consoleFormatter = new ConsoleFormatter(client.getColors(), new OutputConfiguration());
+		ConsoleFormatter consoleFormatter = new ConsoleFormatter(client.getColors(), null);
 		
 		// Client is console based - lines with ASCII characters.
 		Subscription subscription = new ConsoleSubscription(scorebot, client, consoleFormatter);

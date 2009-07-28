@@ -20,6 +20,7 @@ package eu.spoonman.smasher.client;
 
 import eu.spoonman.smasher.common.Pair;
 import eu.spoonman.smasher.output.OutputConfiguration;
+import eu.spoonman.smasher.output.OutputConfigurationFactory;
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
@@ -57,7 +58,7 @@ public class ConsoleSubscription extends Subscription {
 		
 		//If scorebot was already running and it's first run of a client - we need to force setting new OutputConfiguration.
 		if (firstRun != false && pair.getSecond().getCurrentServerInfo() != null)
-			formatter.setOutputConfiguration(new OutputConfiguration());
+			formatter.setOutputConfiguration(OutputConfigurationFactory.getInstance().createOutputConfiguration(pair.getSecond().getCurrentServerInfo().getGameInfo().getGameType()));
 	}
 	
 	@Override
@@ -90,7 +91,7 @@ public class ConsoleSubscription extends Subscription {
 		assert(pair.getSecond() != null);
 		
 		if (pair.getFirst() == null || pair.getFirst().getGameType() != pair.getSecond().getGameType())
-			formatter.setOutputConfiguration(new OutputConfiguration());
+			formatter.setOutputConfiguration(OutputConfigurationFactory.getInstance().createOutputConfiguration(pair.getSecond().getGameType()));
 		
 		formatter.formatGameInfoChange(pair);
 	}

@@ -15,35 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with Smasher.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package eu.spoonman.smasher.output;
 
 /**
  * @author Tomasz Kalkosiński
  *
  */
-public class OutputConfiguration extends OutputConfigurationFactory {
+public class OutputCTFConfiguration extends OutputConfiguration {
 	
-	OutputConfiguration() {
-	}
-
-	public OutputStyle getShowEveryPlayerScoreChange() {
-		return OutputStyle.DONT_SHOW;
-	}
-
-	public OutputStyle getShowEveryPlayerNameChange() {
-		return OutputStyle.JOINT_NEW_LINE;
-	}
-
-	public OutputStyle getShowEveryPlayerConnectEvent() {
-		return OutputStyle.JOINT_NEW_LINE;
-	}
-
-	public OutputStyle getShowEveryPlayerDisconnectEvent() {
-		return OutputStyle.JOINT_NEW_LINE;
-	}
-
+	@Override
 	public OutputStyle getShowEveryTeamScoreChange() {
-		return OutputStyle.DONT_SHOW;
+		return OutputStyle.MAIN_LINE;
 	}
-	
+
 }

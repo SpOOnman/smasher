@@ -15,35 +15,37 @@
  * You should have received a copy of the GNU General Public License
  * along with Smasher.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package eu.spoonman.smasher.output;
+
+import eu.spoonman.smasher.serverinfo.GameTypes;
 
 /**
  * @author Tomasz Kalkosiński
- *
+ * 
  */
-public class OutputConfiguration extends OutputConfigurationFactory {
-	
-	OutputConfiguration() {
+public class OutputConfigurationFactory {
+
+	private static final OutputConfigurationFactory instance = new OutputConfigurationFactory();
+
+	OutputConfigurationFactory() {
 	}
 
-	public OutputStyle getShowEveryPlayerScoreChange() {
-		return OutputStyle.DONT_SHOW;
+	public static OutputConfigurationFactory getInstance() {
+		return instance;
 	}
 
-	public OutputStyle getShowEveryPlayerNameChange() {
-		return OutputStyle.JOINT_NEW_LINE;
+	public OutputConfiguration createOutputConfiguration(GameTypes gameType) {
+		if (gameType == null)
+			return new OutputConfiguration();
+
+		switch (gameType) {
+		case CAPTURE_THE_FLAG:
+			return new OutputCTFConfiguration();
+
+		default:
+			return new OutputConfiguration();
+		}
 	}
 
-	public OutputStyle getShowEveryPlayerConnectEvent() {
-		return OutputStyle.JOINT_NEW_LINE;
-	}
-
-	public OutputStyle getShowEveryPlayerDisconnectEvent() {
-		return OutputStyle.JOINT_NEW_LINE;
-	}
-
-	public OutputStyle getShowEveryTeamScoreChange() {
-		return OutputStyle.DONT_SHOW;
-	}
-	
 }
