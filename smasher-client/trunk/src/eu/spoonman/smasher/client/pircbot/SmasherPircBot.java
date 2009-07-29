@@ -25,10 +25,6 @@ public class SmasherPircBot extends PircBot {
     	
     	if (message.startsWith("!"))
     		parseLine(channel, message.replaceFirst("!", ""));
-
-        if(message.equalsIgnoreCase("hello")) {
-        	sendMessage(channel, "Hello World!");
-        }
     }
     
     private void parseLine(String channel, String message) {
