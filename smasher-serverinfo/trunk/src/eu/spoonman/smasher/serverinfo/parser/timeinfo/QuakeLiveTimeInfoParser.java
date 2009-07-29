@@ -39,9 +39,8 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
     
     public static final String G_LEVEL_START_TIME = "g_levelStartTime";
     public static final String G_GAME_STATE = "g_gameState";
-    /**
-     * Logger for this class
-     */
+    public static final String CAPTURELIMIT = "capturelimit";
+    
     private static final Logger log = Logger.getLogger(QuakeLiveTimeInfoParser.class);
     
     @Override
@@ -73,8 +72,10 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
             timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.WARMUP);
         else if (gameState.equals("COUNT_DOWN"))
             timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.COUNTDOWN);
-        else
+        else {
+            log.warn("Game state unknown: " + gameState);
             timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.UNKONWN);
+        }
         
         LocalDateTime now = new LocalDateTime();
         LocalDateTime start = new LocalDateTime(Long.parseLong(levelStartTime) * 1000);
