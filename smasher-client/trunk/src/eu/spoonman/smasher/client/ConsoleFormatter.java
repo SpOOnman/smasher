@@ -492,10 +492,8 @@ public class ConsoleFormatter {
 		this.subscription = subscription;
 	}
 	
-	void setOutputConfiguration(OutputConfiguration outputConfiguration) {
-		synchronized (this.outputConfiguration) {
-			this.outputConfiguration = outputConfiguration;
-		}
+	synchronized void setOutputConfiguration(OutputConfiguration outputConfiguration) {
+		this.outputConfiguration = outputConfiguration;
 	}
 
 	
