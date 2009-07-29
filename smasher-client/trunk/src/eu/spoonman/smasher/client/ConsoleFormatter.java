@@ -570,6 +570,9 @@ public class ConsoleFormatter {
 	}
 
 	public void showPlayers() {
+		synchronized (formatPlayers) {
+			formatPlayers = true;
+		}
 	}
 	
 }
