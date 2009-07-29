@@ -27,7 +27,7 @@ import eu.spoonman.smasher.scorebot.ScorebotManager;
  */
 public class DebugMain {
 	
-	private static String commands = "start ql vampir\n"; 
+	private static String commands = "start ql 714202\n"; 
 	
 	private static final Logger log = Logger.getLogger(DebugMain.class);
 	

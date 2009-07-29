@@ -210,7 +210,7 @@ public class ConsoleFormatter {
 	public void formatScorebotStop(Scorebot scorebot) {
 		synchronized (afterMainLines) {
 			afterMainLines.add(String.format(SCOREBOT_STOP,
-					colors.getBold(), scorebot.getId(), colors.getReset(), scorebot.getCurrentServerInfo().getMessage()
+					colors.getBold(), scorebot.getId(), colors.getReset(), scorebot.getCurrentServerInfo() != null ? scorebot.getCurrentServerInfo().getMessage() : ""
 					));
 		}
 	}
@@ -351,9 +351,11 @@ public class ConsoleFormatter {
 		ServerInfoScorebot serverInfoScorebot = (ServerInfoScorebot)scorebot;
 		ServerInfo serverInfo = null;
 		
-		if (serverInfoScorebot.getCurrentServerInfo().getStatus() == ServerInfoStatus.OK)
+		if (serverInfoScorebot.getCurrentServerInfo() != null && 
+				serverInfoScorebot.getCurrentServerInfo().getStatus() == ServerInfoStatus.OK)
 			serverInfo = serverInfoScorebot.getCurrentServerInfo();
-		// When currentServerInfo is not ok and prevoius is ok - use it
+		
+		// When currentServerInfo is not ok and previous is ok - use it
 		else if (serverInfoScorebot.getPreviousServerInfo() != null &&
 				serverInfoScorebot.getPreviousServerInfo().getStatus() == ServerInfoStatus.OK)
 			serverInfo = serverInfoScorebot.getPreviousServerInfo();
