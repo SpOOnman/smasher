@@ -52,6 +52,19 @@ public class ConsoleSubscription extends Subscription {
 		formatter.flush();
 	}
 	
+	/* (non-Javadoc)
+	 * @see eu.spoonman.smasher.client.Subscription#showPlayers()
+	 */
+	@Override
+	public void showPlayers() {
+		formatter.showPlayers();
+	}
+	
+	@Override
+	public void renameTeams(String redTeam, String blueTeam) {
+		formatter.setTeamNames(redTeam, blueTeam);
+	}
+	
 	@Override
 	protected void onDifferenceStartEvent(Pair<Scorebot, Scorebot> pair) {
 		super.onDifferenceStartEvent(pair);

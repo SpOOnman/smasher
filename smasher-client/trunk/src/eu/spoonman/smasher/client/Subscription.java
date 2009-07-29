@@ -135,6 +135,10 @@ public abstract class Subscription {
 		playerPingChangeEventObserver = null;
 		playerScoreChangeEventObserver = null;
 	}
+	
+	public abstract void showPlayers();
+	
+	public abstract void renameTeams(String redTeam, String blueTeam);
 
 	protected <T> void logEvent(String name, Pair<T, T> pair) {
 		log.debug(String.format(loggingPattern, name, pair.getFirst(), pair.getSecond()));

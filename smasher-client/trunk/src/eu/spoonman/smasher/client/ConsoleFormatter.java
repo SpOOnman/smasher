@@ -30,7 +30,6 @@ import eu.spoonman.smasher.output.OutputStyle;
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.scorebot.ServerInfoScorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
-import eu.spoonman.smasher.serverinfo.GameTypes;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfo;
 import eu.spoonman.smasher.serverinfo.ProgressInfoFlags;
@@ -70,7 +69,11 @@ public class ConsoleFormatter {
 	private final String PLAYER_SCORE_CHANGE = "Player %s scores to %d";
 	
 	private final String TEAM_NAME_CHANGE = "Team %s renames to %s";
+	private final String SUBSCRIPTION_TEAM_NAME_CHANGE = "Teams are now known as %s%s%s%s and %s%s%s%s.";
 	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
+	private final String TEAM_PLAYERS = "Team %s%s%s%s is: %s.";
+	private final String SPEC_PLAYERS = "%s%s%s%s: %s.";
+	private final String TEAM_PLAYER = "%s%s%s (%d), "; //clan/null, space/null, name, score
 	
 	private final String TIME_PERIOD_INFO = "%d:%02d%s";
 	private final String ROUND_INFO = "%d/%d%s";
@@ -85,6 +88,7 @@ public class ConsoleFormatter {
 	private OutputConfiguration outputConfiguration;
 
 	private Boolean formatMainLine;
+	private Boolean formatPlayers;
 	private List<String> beforeMainLines;
 	private List<String> mainInlines;
 	private List<String> secondMainInlines;
@@ -93,6 +97,9 @@ public class ConsoleFormatter {
 	private Subscription subscription;
 	private int lastPrintedRedScore;
 	private int lastPrintedBlueScore;
+	
+	private String redTeamName;
+	private String blueTeamName;
 	
 	private String timeMark = "NULL";
 
@@ -104,6 +111,7 @@ public class ConsoleFormatter {
 		this.outputConfiguration = outputConfiguration;
 		
 		formatMainLine = false;
+		formatPlayers = false;
 
 		beforeMainLines = new ArrayList<String>();
 		mainInlines = new ArrayList<String>();
@@ -125,6 +133,7 @@ public class ConsoleFormatter {
 
 	private synchronized void clear() {
 		formatMainLine = false;
+		formatPlayers = false;
 
 		beforeMainLines.clear();
 		mainInlines.clear();
@@ -153,6 +162,9 @@ public class ConsoleFormatter {
 		}
 		
 		output.addAll(afterMainLines);
+		
+		if (formatPlayers)
+			output.addAll(formatPlayers(subscription.getScorebot()));
 
 		// Remove blank lines
 		for (Iterator<String> iterator = output.iterator(); iterator.hasNext();) {
@@ -348,20 +360,7 @@ public class ConsoleFormatter {
 		if (!(scorebot instanceof ServerInfoScorebot))
 			throw new RuntimeException("Cannot draw line with scorebot different than ServerInfoScorebot");
 		
-		ServerInfoScorebot serverInfoScorebot = (ServerInfoScorebot)scorebot;
-		ServerInfo serverInfo = null;
-		
-		if (serverInfoScorebot.getCurrentServerInfo() != null && 
-				serverInfoScorebot.getCurrentServerInfo().getStatus() == ServerInfoStatus.OK)
-			serverInfo = serverInfoScorebot.getCurrentServerInfo();
-		
-		// When currentServerInfo is not ok and previous is ok - use it
-		else if (serverInfoScorebot.getPreviousServerInfo() != null &&
-				serverInfoScorebot.getPreviousServerInfo().getStatus() == ServerInfoStatus.OK)
-			serverInfo = serverInfoScorebot.getPreviousServerInfo();
-		
-		if (serverInfo == null)
-			return null;
+		ServerInfo serverInfo = ensureServerInfo(scorebot);
 		
 		TeamInfo redTeam = serverInfo.getTeamInfos().get(TeamKey.RED_TEAM);
 		TeamInfo blueTeam = serverInfo.getTeamInfos().get(TeamKey.BLUE_TEAM);
@@ -394,17 +393,33 @@ public class ConsoleFormatter {
 		return returnString;
 	}
 
+	private ServerInfo ensureServerInfo(Scorebot scorebot) {
+		ServerInfoScorebot serverInfoScorebot = (ServerInfoScorebot)scorebot;
+		ServerInfo serverInfo = null;
+		
+		if (serverInfoScorebot.getCurrentServerInfo() != null && 
+				serverInfoScorebot.getCurrentServerInfo().getStatus() == ServerInfoStatus.OK)
+			serverInfo = serverInfoScorebot.getCurrentServerInfo();
+		
+		// When currentServerInfo is not ok and previous is ok - use it
+		else if (serverInfoScorebot.getPreviousServerInfo() != null &&
+				serverInfoScorebot.getPreviousServerInfo().getStatus() == ServerInfoStatus.OK)
+			serverInfo = serverInfoScorebot.getPreviousServerInfo();
+		
+		return serverInfo;
+	}
+
 	private String formatMainLineTDM(Scorebot scorebot, TeamInfo redTeam, TeamInfo blueTeam,
 			ProgressInfo progressInfo, GameInfo gameInfo, String winningColor, StringBuilder mainLines) {
 		
 		String returnString = String.format(MAIN_LINE_TDM,
 				colors.getBold(), scorebot.getId(), colors.getReset(),
-				colors.getRed(), colors.getBold(), redTeam.getName(), colors.getReset(),
+				colors.getRed(), colors.getBold(), formatTeamName(redTeam.getName(), true) , colors.getReset(),
 				formatNet(redTeam.getScore() - lastPrintedRedScore),
 				colors.getBold(), redTeam.getScore(), colors.getReset(),
 				colors.getBold(), blueTeam.getScore(), colors.getReset(),
 				formatNet(blueTeam.getScore() - lastPrintedBlueScore),
-				colors.getBlue(), colors.getBold(), blueTeam.getName(), colors.getReset(),
+				colors.getBlue(), colors.getBold(), formatTeamName(blueTeam.getName(), false), colors.getReset(),
 				formatProgressInfo(progressInfo),
 				gameInfo.getMap(),
 				colors.getBold(), winningColor, colors.getReset(), formatNet(Math.abs(redTeam.getScore() - blueTeam.getScore())), colors.getBold(), winningColor, colors.getReset(),
@@ -418,10 +433,10 @@ public class ConsoleFormatter {
 		
 		String returnString = String.format(MAIN_LINE_CTF,
 				colors.getBold(), scorebot.getId(), colors.getReset(),
-				colors.getRed(), colors.getBold(), redTeam.getName(), colors.getReset(),
+				colors.getRed(), colors.getBold(), formatTeamName(redTeam.getName(), true) , colors.getReset(),
 				colors.getBold(), redTeam.getScore(), colors.getReset(),
 				colors.getBold(), blueTeam.getScore(), colors.getReset(),
-				colors.getBlue(), colors.getBold(), blueTeam.getName(), colors.getReset(),
+				colors.getBlue(), colors.getBold(), formatTeamName(blueTeam.getName(), false), colors.getReset(),
 				formatProgressInfo(progressInfo),
 				gameInfo.getMap(),
 				colors.getBold(), winningColor, colors.getReset(), formatNet(Math.abs(redTeam.getScore() - blueTeam.getScore())), colors.getBold(), winningColor, colors.getReset(),
@@ -442,6 +457,35 @@ public class ConsoleFormatter {
 			default:
 				return formatMainLineTDM(scorebot, redTeam, blueTeam, progressInfo, gameInfo, winningColor, mainLines);
 		}
+	}
+	
+	private List<String> formatPlayers(Scorebot scorebot) {
+		ServerInfo serverInfo = ensureServerInfo(scorebot);
+		List<String> strings = new ArrayList<String>();
+		
+		TeamInfo redTeam = serverInfo.getTeamInfos().get(TeamKey.RED_TEAM);
+		if (redTeam != null)
+			strings.add(String.format(TEAM_PLAYERS, colors.getRed(), colors.getBold(), formatTeamName(redTeam.getName(), true) , colors.getReset(), formatPlayersTeam(redTeam, serverInfo.getPlayerInfos())));
+		
+		TeamInfo blueTeam = serverInfo.getTeamInfos().get(TeamKey.BLUE_TEAM);
+		if (blueTeam != null)
+			strings.add(String.format(TEAM_PLAYERS, colors.getBlue(), colors.getBold(), formatTeamName(blueTeam.getName(), false) , colors.getReset(), formatPlayersTeam(blueTeam, serverInfo.getPlayerInfos())));
+		
+		TeamInfo specTeam = serverInfo.getTeamInfos().get(TeamKey.SPECTATORS_TEAM);
+		if (specTeam != null)
+			strings.add(String.format(SPEC_PLAYERS, colors.getBlue(), colors.getBold(), specTeam.getName() , colors.getReset(), formatPlayersTeam(specTeam, serverInfo.getPlayerInfos())));
+		
+		return strings;
+	}
+	
+	private String formatPlayersTeam(TeamInfo teamInfo, List<PlayerInfo> players) {
+		StringBuilder sb = new StringBuilder();
+		for (PlayerInfo player : players)
+			if (player.getTeamKey() == teamInfo.getKey()) {
+				sb.append(String.format(TEAM_PLAYER, null, null, player.getName(), player.getScore()));
+			}
+		
+		return sb.toString();
 	}
 	
 	private String formatProgressInfo(ProgressInfo progressInfo) {
@@ -479,6 +523,13 @@ public class ConsoleFormatter {
 		return flags.toString();
 	}
 	
+	private String formatTeamName(String name, boolean redTeam) {
+		if (redTeam)
+			return redTeamName != null ? redTeamName : name;
+		
+		return blueTeamName != null ? blueTeamName : name;
+	}
+	
 	private String formatNet(int net) {
 		if (net == 0)
 			return "  ";
@@ -509,6 +560,16 @@ public class ConsoleFormatter {
 		this.outputConfiguration = outputConfiguration;
 	}
 
-	
+	public synchronized void setTeamNames(String redTeam, String blueTeam) {
+		redTeamName = redTeam;
+		blueTeamName = blueTeam;
+		
+		afterMainLines.add(String.format(SUBSCRIPTION_TEAM_NAME_CHANGE,
+				colors.getRed(), colors.getBold(), redTeamName , colors.getReset(),
+				colors.getBlue(), colors.getBold(), blueTeamName , colors.getReset()));
+	}
+
+	public void showPlayers() {
+	}
 	
 }

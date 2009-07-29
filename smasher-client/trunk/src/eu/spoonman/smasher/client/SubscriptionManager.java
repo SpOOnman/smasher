@@ -96,6 +96,33 @@ public class SubscriptionManager {
 		return subscription;
 		
 	}
+
+	public void showPlayers(Client client, Scorebot scorebot) throws ClientException {
+		Subscription subscription = find(client, scorebot);
+		
+		if (subscription == null) {
+			log.error(String.format("Cannot find subscription of scorebot %s for client %s.", scorebot.getId(), client.getName() ));
+			throw new ClientException("Cannot find subscription");
+		}
+		
+		subscription.showPlayers();
+	}
+
+	public void renameTeams(Client client, Scorebot scorebot, List<String> args) throws ClientException {
+		Subscription subscription = find(client, scorebot);
+		
+		if (subscription == null) {
+			log.error(String.format("Cannot find subscription of scorebot %s for client %s.", scorebot.getId(), client.getName() ));
+			throw new ClientException("Cannot find subscription");
+		}
+		
+		if (args == null || args.size() != 2) {
+			log.error("To rename teams you must give their new names: redTeam blueTeam");
+			throw new ClientException("To rename teams you must give their new names: redTeam blueTeam");
+		}
+			
+		subscription.renameTeams(args.get(0), args.get(1));
+	}
 	
 	
 

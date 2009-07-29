@@ -45,7 +45,7 @@ public class CommandLineParser {
 	private static Map<String, Games> gameMapping = new HashMap<String, Games>();
 
 	enum Commands {
-		START, STOP, SHOW
+		START, STOP, SHOW, PLAYERS, TEAMS
 	}
 	
 	private static CommandLineParser parser;
@@ -154,6 +154,22 @@ public class CommandLineParser {
 			ScorebotManager.getInstance().stopScorebot(data.scorebot);
 			
 			break;
+			
+		case PLAYERS:
+			if (data.scorebot == null)
+				throw new ClientException("Scorebot ID is needed.");
+			
+			SubscriptionManager.getInstance().showPlayers(client, data.scorebot);
+			
+			break;
+			
+		case TEAMS:
+			if (data.scorebot == null)
+				throw new ClientException("Scorebot ID is needed.");
+			
+			SubscriptionManager.getInstance().renameTeams(client, data.scorebot, data.args);
+			break;
+			
 
 		default:
 			throw new ClientException("Unknown command " + data.command);
