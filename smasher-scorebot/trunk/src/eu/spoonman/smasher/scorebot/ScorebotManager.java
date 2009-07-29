@@ -19,14 +19,16 @@ package eu.spoonman.smasher.scorebot;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.log4j.Logger;
+
 import eu.spoonman.smasher.serverinfo.AbstractQuery;
 import eu.spoonman.smasher.serverinfo.Games;
-import eu.spoonman.smasher.serverinfo.ServerQuery;
 import eu.spoonman.smasher.serverinfo.ServerQueryManager;
 
 /**
@@ -34,12 +36,17 @@ import eu.spoonman.smasher.serverinfo.ServerQueryManager;
  * 
  */
 public class ScorebotManager {
+	
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger log = Logger.getLogger(ScorebotManager.class);
 
 	private final ExecutorService executorService;
 	private List<ServerInfoScorebot> scorebots;
 	private Random random = new Random();
 
-	private static ScorebotManager scorebotManager;
+	private final static ScorebotManager scorebotManager = new ScorebotManager(); 
 
 	private ScorebotManager() {
 		scorebots = new ArrayList<ServerInfoScorebot>();
@@ -47,28 +54,32 @@ public class ScorebotManager {
 	}
 
 	public synchronized static ScorebotManager getInstance() {
-
-		if (scorebotManager == null)
-			scorebotManager = new ScorebotManager();
-
 		return scorebotManager;
 	}
 
 	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port, List<String> args) {
+		
+		log.debug(String.format("Create or get scorebot for %s %s %d %s", game.toString(), address != null ? address.toString() : "null", port, args.toString()));
 
 		synchronized (scorebots) {
 			AbstractQuery abstractQuery = ServerQueryManager.createServerQuery(game, address, port, args);
 			
 			for (ServerInfoScorebot scorebot : scorebots) {
-				if (scorebot.getServerQuery().equals(abstractQuery))
+				if (scorebot.getServerQuery().equals(abstractQuery)) {
+					log.debug(String.format("Scorebot %s founded as matching description", scorebot.getId()));
 					return scorebot;
+				}
 			}
 
+			log.debug("Scorebot with given description not found, creating new one");
 			ServerInfoScorebot scorebot = new ServerInfoScorebot(createUniqueId(), abstractQuery);
+			
+			synchronized (scorebots) {
+				scorebots.add(scorebot);
+				runScorebot(scorebot);
+				return scorebot;
+			}
 
-			scorebots.add(scorebot);
-			runScorebot(scorebot);
-			return scorebot;
 		}
 	}
 
