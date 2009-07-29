@@ -135,10 +135,21 @@ public class ConsoleFormatter {
 	private synchronized List<String> formatOutput() {
 		List<String> output = new ArrayList<String>();
 		
+		StringBuilder s = new StringBuilder();
+		
 		output.addAll(beforeMainLines);
 		
 		if (formatMainLine) {
 			output.add(formatMatchLine(subscription.getScorebot()));
+		}
+		
+		if (secondMainInlines.size() > 0) {
+			StringBuilder sb = new StringBuilder();
+			for (String string : secondMainInlines) {
+				sb.append(string);
+				sb.append(" ");
+			}
+			output.add(sb.toString());
 		}
 		
 		output.addAll(afterMainLines);
