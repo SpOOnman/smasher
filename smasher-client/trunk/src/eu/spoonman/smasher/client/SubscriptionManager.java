@@ -36,16 +36,13 @@ public class SubscriptionManager {
 	 */
 	private static final Logger log = Logger.getLogger(SubscriptionManager.class);
 	
-	private static SubscriptionManager subscriptionManager;
+	private static SubscriptionManager subscriptionManager = new SubscriptionManager();
 	
 	private List<Subscription> subscriptions = new ArrayList<Subscription>();
 	
 	private SubscriptionManager() {}
 	
 	public synchronized static SubscriptionManager getInstance() {
-		if (subscriptionManager == null)
-			subscriptionManager = new SubscriptionManager();
-		
 		return subscriptionManager;
 	}
 	
@@ -57,7 +54,10 @@ public class SubscriptionManager {
 		
 		subscription = getSubscription(client, scorebot);
 		subscription.register();
-		subscriptions.add(subscription);
+		
+		synchronized (subscriptions) {
+			subscriptions.add(subscription);
+		}
 		
 		log.info(String.format("Scorebot %s has been subscribed to client %s.", scorebot.getId(), client.getName() ));
 	}
@@ -70,15 +70,19 @@ public class SubscriptionManager {
 		}
 		
 		subscription.unregister();
-		subscriptions.remove(subscription);
+		synchronized (subscriptions) {
+			subscriptions.remove(subscription);
+		}
 		
 		log.info(String.format("Scorebot %s has been unsubscribed from client %s.", scorebot.getId(), client.getName() ));
 	}
 	
 	private Subscription find(Client client, Scorebot scorebot) {
+		synchronized (subscriptions) {
 		for (Subscription subscription : subscriptions) {
 			if (subscription.getClient() == client && subscription.getScorebot() == scorebot)
 				return subscription;
+		}
 		}
 		
 		return null;
@@ -123,7 +127,4 @@ public class SubscriptionManager {
 			
 		subscription.renameTeams(args.get(0), args.get(1));
 	}
-	
-	
-
 }
