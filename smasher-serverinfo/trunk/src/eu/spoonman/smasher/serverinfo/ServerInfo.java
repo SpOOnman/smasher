@@ -219,5 +219,17 @@ public class ServerInfo {
         this.json = json;
     }
     
+    public TeamInfo getRedTeam() {
+        return getTeamInfos().get(TeamKey.RED_TEAM);
+    }
+    
+    public TeamInfo getBlueTeam() {
+        return getTeamInfos().get(TeamKey.BLUE_TEAM);
+    }
+    
+    public TeamInfo getSpecTeam() {
+        return getTeamInfos().get(TeamKey.SPECTATORS_TEAM);
+    }
+    
     
 }
