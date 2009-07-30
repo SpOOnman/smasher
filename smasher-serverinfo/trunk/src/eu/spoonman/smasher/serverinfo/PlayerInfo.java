@@ -25,11 +25,7 @@ import java.util.Map;
 
 public class PlayerInfo
 {
-    //Some common keys
-    public final String PLAYER_CLAN = "clan";
-    public final String PLAYER_RANK = "rank";
-    public final String PLAYER_MODEL = "model";
-    
+    private String clan;
     private String name;
     private int score;
     private int ping;
@@ -44,21 +40,21 @@ public class PlayerInfo
         playerFlags = EnumSet.noneOf(PlayerFlags.class);
     }
     
-    /**
-     * @param name
-     * @param score
-     * @param ping
-     */
-    public PlayerInfo(String name, int score, int ping) {
+    public PlayerInfo(String clan, String name, int score, int ping) {
         this();
+        this.clan = clan;
         this.name = name;
         this.score = score;
         this.ping = ping;
+        
+    }
+    public PlayerInfo(String name, int score, int ping) {
+        this(null, name, score, ping);
     }
 
     @Override
     public String toString() {
-        return String.format("[PlayerInfo: %s, P: %d ms, S: %d, T: %s, %s (%s)]", name, ping, score, teamKey, namedAttributes, playerFlags);
+        return String.format("[PlayerInfo: %s %s, P: %d ms, S: %d, T: %s, %s (%s)]", clan, name, ping, score, teamKey, namedAttributes, playerFlags);
     }
     
     
@@ -70,6 +66,7 @@ public class PlayerInfo
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((clan == null) ? 0 : clan.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((namedAttributes == null) ? 0 : namedAttributes.hashCode());
         result = prime * result + ping;
@@ -92,6 +89,11 @@ public class PlayerInfo
         if (!(obj instanceof PlayerInfo))
             return false;
         PlayerInfo other = (PlayerInfo) obj;
+        if (clan == null) {
+            if (other.clan != null)
+                return false;
+        } else if (!clan.equals(other.clan))
+            return false;
         if (name == null) {
             if (other.name != null)
                 return false;
@@ -122,6 +124,14 @@ public class PlayerInfo
         } else if (!teamKey.equals(other.teamKey))
             return false;
         return true;
+    }
+    
+    public String getClan() {
+        return clan;
+    }
+
+    public void setClan(String clan) {
+        this.clan = clan;
     }
 
     /**
