@@ -72,7 +72,7 @@ public class ConsoleFormatter {
 	private final String TEAM_NAME_CHANGE = "Team %s renames to %s";
 	private final String SUBSCRIPTION_TEAM_NAME_CHANGE = "Teams are now known as %s%s%s%s and %s%s%s%s.";
 	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
-	private final String TEAM_PLAYERS = "Team %s%s%s%s is: %s.";
+	private final String TEAM_PLAYERS = "%sTeam %s%s%s%s is: %s.";
 	private final String SPEC_PLAYERS = "%s%s%s%s: %s.";
 	private final String TEAM_PLAYER = "%s%s%s (%d), "; //clan/null, space/null, name, score
 	
@@ -155,6 +155,8 @@ public class ConsoleFormatter {
 		
 		if (secondMainInlines.size() > 0) {
 			StringBuilder sb = new StringBuilder();
+			sb.append(formatScorebotId(subscription.getScorebot()));
+			
 			for (String string : secondMainInlines) {
 				sb.append(string);
 				sb.append(" ");
@@ -162,7 +164,9 @@ public class ConsoleFormatter {
 			output.add(sb.toString());
 		}
 		
-		output.addAll(afterMainLines);
+		for(String string : afterMainLines) {
+			output.add(formatScorebotId(subscription.getScorebot()) + string);
+		}
 		
 		if (formatPlayers)
 			output.addAll(formatPlayers(subscription.getScorebot()));
@@ -471,15 +475,15 @@ public class ConsoleFormatter {
 		
 		TeamInfo redTeam = serverInfo.getTeamInfos().get(TeamKey.RED_TEAM);
 		if (redTeam != null)
-			strings.add(String.format(TEAM_PLAYERS, colors.getRed(), colors.getBold(), formatTeamName(redTeam.getName(), true) , colors.getReset(), formatPlayersTeam(redTeam, serverInfo.getPlayerInfos())));
+			strings.add(String.format(TEAM_PLAYERS, formatScorebotId(scorebot), colors.getRed(), colors.getBold(), formatTeamName(redTeam.getName(), true) , colors.getReset(), formatPlayersTeam(redTeam, serverInfo.getPlayerInfos())));
 		
 		TeamInfo blueTeam = serverInfo.getTeamInfos().get(TeamKey.BLUE_TEAM);
 		if (blueTeam != null)
-			strings.add(String.format(TEAM_PLAYERS, colors.getBlue(), colors.getBold(), formatTeamName(blueTeam.getName(), false) , colors.getReset(), formatPlayersTeam(blueTeam, serverInfo.getPlayerInfos())));
+			strings.add(String.format(TEAM_PLAYERS, formatScorebotId(scorebot), colors.getBlue(), colors.getBold(), formatTeamName(blueTeam.getName(), false) , colors.getReset(), formatPlayersTeam(blueTeam, serverInfo.getPlayerInfos())));
 		
 		TeamInfo specTeam = serverInfo.getTeamInfos().get(TeamKey.SPECTATORS_TEAM);
 		if (specTeam != null)
-			strings.add(String.format(SPEC_PLAYERS, colors.getBlue(), colors.getBold(), specTeam.getName() , colors.getReset(), formatPlayersTeam(specTeam, serverInfo.getPlayerInfos())));
+			strings.add(String.format(SPEC_PLAYERS, formatScorebotId(scorebot), colors.getBold(), specTeam.getName() , colors.getReset(), formatPlayersTeam(specTeam, serverInfo.getPlayerInfos())));
 		
 		return strings;
 	}
