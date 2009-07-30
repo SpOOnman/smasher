@@ -39,7 +39,7 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
     
     public static final String G_LEVEL_START_TIME = "g_levelStartTime";
     public static final String G_GAME_STATE = "g_gameState";
-    public static final String CAPTURELIMIT = "capturelimit";
+    public static final String TIMELIMIT = "timelimit";
     
     private static final Logger log = Logger.getLogger(QuakeLiveTimeInfoParser.class);
     
@@ -79,6 +79,9 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
         
         LocalDateTime now = new LocalDateTime();
         LocalDateTime start = new LocalDateTime(Long.parseLong(levelStartTime) * 1000);
+        
+        log.debug("Parsing period from " + start.toString() + " to " + now.toString());
+        
         Period period = new Period(start, now);
         
         timePeriodInfo.setPeriod(period);
