@@ -46,8 +46,8 @@ public class PersisterFactory {
 		
 		case QUAKELIVE:
 			persisters.add(new QuakeLiveLimitsPersister(scorebot));
-			persisters.add(new AddMissingPropertiesPersister(scorebot));
-			persisters.add(new AddUpPlayerScoresPersister(scorebot));
+			//persisters.add(new AddMissingPropertiesPersister(scorebot));
+			//persisters.add(new AddUpPlayerScoresPersister(scorebot));
 			break;
 		}
 
