@@ -24,7 +24,7 @@ public class LCSTest {
 
 	}
 	
-	private List<Pair<String,String>> getLCSPairs(List<String> left, List<String> right) {
+	private List<DiffData<String>> getLCSPairs(List<String> left, List<String> right) {
 		LCS<String> lcs = new LCS<String>(left, right, new Comparator<String>() {
 			
 			@Override
@@ -39,9 +39,9 @@ public class LCSTest {
 	
 	@Test
 	public void testGetLCSPairs() {
-		List<Pair<String,String>> pairs = getLCSPairs(getList(), getList());
+		List<DiffData<String>> pairs = getLCSPairs(getList(), getList());
 		
-		for (Pair<String,String> pair : pairs) {
+		for (DiffData<String> pair : pairs) {
 			assertEquals(pair.getFirst(), pair.getSecond());
 			//System.out.println(String.format("Left %s right %s", pair.getFirst(), pair.getSecond()));
 		}
@@ -66,7 +66,7 @@ public class LCSTest {
 		List<String> right = getList();
 		right.set(3, "Armadillo");
 		
-		List<Pair<String,String>> pairs = getLCSPairs(getList(), right);
+		List<DiffData<String>> pairs = getLCSPairs(getList(), right);
 		TestHelper.printPairs(pairs);
 		assertEquals(right.size() + 1, pairs.size());
 		assertEquals("Dave", pairs.get(3).getFirst());
@@ -78,7 +78,7 @@ public class LCSTest {
 		List<String> right = getList();
 		right.remove(index);
 		
-		List<Pair<String,String>> pairs = getLCSPairs(getList(), right);
+		List<DiffData<String>> pairs = getLCSPairs(getList(), right);
 		
 		assertEquals(right.size() + 1, pairs.size());
 		assertNotNull(pairs.get(index).getFirst());
@@ -89,7 +89,7 @@ public class LCSTest {
 		List<String> left = getList();
 		left.remove(index);
 		
-		List<Pair<String,String>> pairs = getLCSPairs(left, getList());
+		List<DiffData<String>> pairs = getLCSPairs(left, getList());
 		
 		assertEquals(left.size() + 1, pairs.size());
 		assertNull(pairs.get(index).getFirst());

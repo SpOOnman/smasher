@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.common.DiffData;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamInfo;
@@ -26,18 +26,18 @@ public class TeamAssignPersisterTest {
         return serverInfo;
     }
     
-    List<Pair<PlayerInfo, PlayerInfo>> getLCSPairs() {
-    	List<Pair<PlayerInfo, PlayerInfo>> pairs = new ArrayList<Pair<PlayerInfo,PlayerInfo>>();
+    List<DiffData<PlayerInfo>> getLCSPairs() {
+    	List<DiffData<PlayerInfo>> pairs = new ArrayList<DiffData<PlayerInfo>>();
     	
-        pairs.add(new Pair<PlayerInfo, PlayerInfo>(new PlayerInfo ("dza.mp3", 2, 10), new PlayerInfo ("dza.mp3", 2, 10)));
-        pairs.add(new Pair<PlayerInfo, PlayerInfo>(new PlayerInfo (":czesio:", 0, 20), new PlayerInfo (":czesio:", 0, 20)));
-        pairs.add(new Pair<PlayerInfo, PlayerInfo>(new PlayerInfo ("[klan]jaro", 9, 30), new PlayerInfo ("[klan]jaro", 9, 30)));
-        pairs.add(new Pair<PlayerInfo, PlayerInfo>(new PlayerInfo ("zw", -1, 40), new PlayerInfo ("zw", -1, 40)));
-        pairs.add(new Pair<PlayerInfo, PlayerInfo>(new PlayerInfo ("roln!ck^^", 2, 50), new PlayerInfo ("roln!ck^^", 2, 50)));
-        pairs.add(new Pair<PlayerInfo, PlayerInfo>(new PlayerInfo ("DARKMAN^^", 5, 60), new PlayerInfo ("DARKMAN^^", 5, 60)));
-        pairs.add(new Pair<PlayerInfo, PlayerInfo>(new PlayerInfo ("a", 0, 70), new PlayerInfo ("a", 0, 70)));
-        pairs.add(new Pair<PlayerInfo, PlayerInfo>(new PlayerInfo ("Tre", 7, 80), new PlayerInfo ("Tre", 7, 80)));
-        pairs.add(new Pair<PlayerInfo, PlayerInfo>(new PlayerInfo ("M-c/B0R0", 2, 90), new PlayerInfo ("M-c/B0R0", 2, 90)));
+        pairs.add(new DiffData<PlayerInfo>(new PlayerInfo ("dza.mp3", 2, 10), new PlayerInfo ("dza.mp3", 2, 10)));
+        pairs.add(new DiffData<PlayerInfo>(new PlayerInfo (":czesio:", 0, 20), new PlayerInfo (":czesio:", 0, 20)));
+        pairs.add(new DiffData<PlayerInfo>(new PlayerInfo ("[klan]jaro", 9, 30), new PlayerInfo ("[klan]jaro", 9, 30)));
+        pairs.add(new DiffData<PlayerInfo>(new PlayerInfo ("zw", -1, 40), new PlayerInfo ("zw", -1, 40)));
+        pairs.add(new DiffData<PlayerInfo>(new PlayerInfo ("roln!ck^^", 2, 50), new PlayerInfo ("roln!ck^^", 2, 50)));
+        pairs.add(new DiffData<PlayerInfo>(new PlayerInfo ("DARKMAN^^", 5, 60), new PlayerInfo ("DARKMAN^^", 5, 60)));
+        pairs.add(new DiffData<PlayerInfo>(new PlayerInfo ("a", 0, 70), new PlayerInfo ("a", 0, 70)));
+        pairs.add(new DiffData<PlayerInfo>(new PlayerInfo ("Tre", 7, 80), new PlayerInfo ("Tre", 7, 80)));
+        pairs.add(new DiffData<PlayerInfo>(new PlayerInfo ("M-c/B0R0", 2, 90), new PlayerInfo ("M-c/B0R0", 2, 90)));
         
         return pairs;
 
@@ -50,9 +50,9 @@ public class TeamAssignPersisterTest {
         TeamAssignPersister persister = new TeamAssignPersister(null);
         persister.persist(null, serverInfo);
         
-        List<Pair<PlayerInfo,PlayerInfo>> pairs = getLCSPairs();
+        List<DiffData<PlayerInfo>> pairs = getLCSPairs();
         
-        for (Pair<PlayerInfo, PlayerInfo> pair : pairs) {
+        for (DiffData<PlayerInfo> pair : pairs) {
 			pair.setFirst(null);
 		}
         
@@ -79,9 +79,9 @@ public class TeamAssignPersisterTest {
         TeamAssignPersister persister = new TeamAssignPersister(null);
         persister.persist(null, serverInfo);
         
-        List<Pair<PlayerInfo,PlayerInfo>> pairs = getLCSPairs();
+        List<DiffData<PlayerInfo>> pairs = getLCSPairs();
         
-        for (Pair<PlayerInfo, PlayerInfo> pair : pairs) {
+        for (DiffData<PlayerInfo> pair : pairs) {
 			pair.setFirst(null);
 		}
         

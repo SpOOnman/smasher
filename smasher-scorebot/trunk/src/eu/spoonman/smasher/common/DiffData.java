@@ -18,59 +18,57 @@
 
 package eu.spoonman.smasher.common;
 
+import eu.spoonman.smasher.scorebot.Scorebot;
+
 /**
  * @author Tomasz Kalkosiński
  *
  */
-public class Pair<F, S> {
+public class DiffData<T> {
 	
-	private F first;
-	private S second;
+	private Scorebot scorebot;
+	private T first;
+	private T second;
 	
-	public Pair() {
+	public DiffData() {
+	}
+	
+	public DiffData(T first, T second) {
+		this(null, first, second);
 	}
 
-	/**
-	 * @param first
-	 * @param second
-	 */
-	public Pair(F first, S second) {
-		super();
+	public DiffData(Scorebot scorebot, T first, T second) {
+		this.scorebot = scorebot;
 		this.first = first;
 		this.second = second;
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("first: %s, second: %s", first, second);
+		return String.format("scorebot: %s, first: %s, second: %s", scorebot, first, second);
 	}
 
-	/**
-	 * @return the first
-	 */
-	public F getFirst() {
+	public T getFirst() {
 		return first;
 	}
 
-	/**
-	 * @param first the first to set
-	 */
-	public void setFirst(F first) {
+	public void setFirst(T first) {
 		this.first = first;
 	}
 
-	/**
-	 * @return the second
-	 */
-	public S getSecond() {
+	public T getSecond() {
 		return second;
 	}
 
-	/**
-	 * @param second the second to set
-	 */
-	public void setSecond(S second) {
+	public void setSecond(T second) {
 		this.second = second;
 	}
 
+	public Scorebot getScorebot() {
+		return scorebot;
+	}
+
+	public void setScorebot(Scorebot scorebot) {
+		this.scorebot = scorebot;
+	}
 }

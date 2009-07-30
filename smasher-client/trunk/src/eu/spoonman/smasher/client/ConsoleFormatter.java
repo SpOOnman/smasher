@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.joda.time.Seconds;
 
-import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.common.DiffData;
 import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.output.OutputStyle;
 import eu.spoonman.smasher.scorebot.Scorebot;
@@ -227,39 +227,39 @@ public class ConsoleFormatter {
 		}
 	}
 	
-	public void formatGameInfoChange(final Pair<GameInfo, GameInfo> pair) {
-		if (pair.getFirst() == null && pair.getSecond() != null) {
+	public void formatGameInfoChange(final DiffData<GameInfo> diffData) {
+		if (diffData.getFirst() == null && diffData.getSecond() != null) {
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
 			return;
 		}
 		
-		if (pair.getFirst().getClass() != pair.getSecond().getClass()) {
+		if (diffData.getFirst().getClass() != diffData.getSecond().getClass()) {
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
 			return;
 		}
 	}
 	
-	public void formatProgressInfoChange(final Pair<ProgressInfo, ProgressInfo> pair) {
+	public void formatProgressInfoChange(final DiffData<ProgressInfo> diffData) {
 		
-		assert(pair.getSecond() != null);
+		assert(diffData.getSecond() != null);
 		
-		if (pair.getFirst() == null && pair.getSecond() != null) {
+		if (diffData.getFirst() == null && diffData.getSecond() != null) {
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
 			return;
 		}
 		
-		if (pair.getFirst().getClass() != pair.getSecond().getClass()) {
+		if (diffData.getFirst().getClass() != diffData.getSecond().getClass()) {
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
 			return;
 		}
 
 		//Show every change
-		String mark = pair.getSecond().getRawText();
+		String mark = diffData.getSecond().getRawText();
 		
 		//Or every 30 minutes
-		if (pair.getFirst() instanceof TimePeriodInfo) { //both are
-			Seconds secondsFirst = Seconds.standardSecondsIn(((TimePeriodInfo)pair.getFirst()).getPeriod());
-			Seconds secondsSecond = Seconds.standardSecondsIn(((TimePeriodInfo)pair.getSecond()).getPeriod());
+		if (diffData.getFirst() instanceof TimePeriodInfo) { //both are
+			Seconds secondsFirst = Seconds.standardSecondsIn(((TimePeriodInfo)diffData.getFirst()).getPeriod());
+			Seconds secondsSecond = Seconds.standardSecondsIn(((TimePeriodInfo)diffData.getSecond()).getPeriod());
 			
 			int modifier = secondsFirst.getSeconds() < secondsSecond.getSeconds() ? -1 : 1;
 			modifier = -1;
@@ -268,8 +268,8 @@ public class ConsoleFormatter {
 		}
 		
 		//Or every round
-		if (pair.getFirst() instanceof RoundInfo) { //both are
-			mark = Integer.toString(((RoundInfo) pair.getSecond()).getRoundNumber());
+		if (diffData.getFirst() instanceof RoundInfo) { //both are
+			mark = Integer.toString(((RoundInfo) diffData.getSecond()).getRoundNumber());
 		}
 		
 		if (!(mark.equals(timeMark))) {
@@ -278,73 +278,73 @@ public class ConsoleFormatter {
 		}
 	}
 
-	public void formatPlayerConnectedEvent(final Pair<PlayerInfo, PlayerInfo> pair) {
+	public void formatPlayerConnectedEvent(final DiffData<PlayerInfo> diffData) {
 		format(outputConfiguration.getShowEveryPlayerConnectEvent(), new LazyFormat() {
 			
 			@Override
 			public String format() {
-				return String.format(PLAYER_CONNECTED_EVENT, pair.getSecond().getName());
+				return String.format(PLAYER_CONNECTED_EVENT, diffData.getSecond().getName());
 			}
 		});
 	}
 	
-	public void formatPlayerDisconnectedEvent(final Pair<PlayerInfo, PlayerInfo> pair) {
+	public void formatPlayerDisconnectedEvent(final DiffData<PlayerInfo> diffData) {
 		format(outputConfiguration.getShowEveryPlayerDisconnectEvent(), new LazyFormat() {
 			
 			@Override
 			public String format() {
-				return String.format(PLAYER_DISCONNECTED_EVENT, pair.getFirst().getName());
+				return String.format(PLAYER_DISCONNECTED_EVENT, diffData.getFirst().getName());
 			}
 		});
 	}
 	
-	public void formatPlayerNameChange(final Pair<PlayerInfo, PlayerInfo> pair) {
+	public void formatPlayerNameChange(final DiffData<PlayerInfo> diffData) {
 		format(outputConfiguration.getShowEveryPlayerNameChange(), new LazyFormat() {
 
 			@Override
 			public String format() {
-				return String.format(PLAYER_NAME_CHANGE, pair.getFirst().getName(), pair.getSecond()
+				return String.format(PLAYER_NAME_CHANGE, diffData.getFirst().getName(), diffData.getSecond()
 						.getName());
 			}
 		});
 	}
 	
-	public void formatPlayerScoreChange(final Pair<PlayerInfo, PlayerInfo> pair) {
+	public void formatPlayerScoreChange(final DiffData<PlayerInfo> diffData) {
 		format(outputConfiguration.getShowEveryPlayerScoreChange(), new LazyFormat() {
 			
 			@Override
 			public String format() {
-				return String.format(PLAYER_SCORE_CHANGE, pair.getSecond().getName(), pair.getSecond()
+				return String.format(PLAYER_SCORE_CHANGE, diffData.getSecond().getName(), diffData.getSecond()
 						.getScore());
 			}
 		});
 	}
 	
-	public void formatTeamNameChange(final Pair<TeamInfo, TeamInfo> pair) {
+	public void formatTeamNameChange(final DiffData<TeamInfo> diffData) {
 		format(outputConfiguration.getShowEveryPlayerNameChange(), new LazyFormat() {
 			
 			@Override
 			public String format() {
-				return String.format(TEAM_NAME_CHANGE, pair.getFirst().getName(), pair.getSecond()
+				return String.format(TEAM_NAME_CHANGE, diffData.getFirst().getName(), diffData.getSecond()
 						.getName());
 			}
 		});
 	}
 	
-	public void formatTeamScoreChange(final Pair<TeamInfo, TeamInfo> pair) {
+	public void formatTeamScoreChange(final DiffData<TeamInfo> diffData) {
 		format(outputConfiguration.getShowEveryTeamScoreChange(), new LazyFormat() {
 			
 			@Override
 			public String format() {
-				return String.format(TEAM_SCORE_CHANGE, pair.getSecond().getName(), pair.getSecond()
+				return String.format(TEAM_SCORE_CHANGE, diffData.getSecond().getName(), diffData.getSecond()
 						.getScore());
 			}
 		});
 	}
 	
-	public void formatDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
-		TeamInfo redTeam = pair.getSecond().getCurrentServerInfo().getTeamInfos().get(TeamKey.RED_TEAM);
-		TeamInfo blueTeam = pair.getSecond().getCurrentServerInfo().getTeamInfos().get(TeamKey.BLUE_TEAM);
+	public void formatDifferenceStopEvent(DiffData<Scorebot> diffData) {
+		TeamInfo redTeam = diffData.getSecond().getCurrentServerInfo().getTeamInfos().get(TeamKey.RED_TEAM);
+		TeamInfo blueTeam = diffData.getSecond().getCurrentServerInfo().getTeamInfos().get(TeamKey.BLUE_TEAM);
 		
 		if (redTeam == null || blueTeam == null) {
 			log.error("Cannot format score differences - no red or blue team");

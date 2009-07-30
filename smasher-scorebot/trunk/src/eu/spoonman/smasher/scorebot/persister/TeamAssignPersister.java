@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.common.DiffData;
 import eu.spoonman.smasher.common.TwoRowEquationSolver;
 import eu.spoonman.smasher.common.TwoRowMatrix;
 import eu.spoonman.smasher.scorebot.Scorebot;
@@ -50,7 +50,7 @@ public class TeamAssignPersister extends ScorebotPersister {
     private TwoRowEquationSolver solver;
     private boolean couldntSolve = false;
 
-	private ArrayList<Pair<PlayerInfo, PlayerInfo>> sortedPlayerPairs;
+	private ArrayList<DiffData<PlayerInfo>> sortedPlayerPairs;
     
     public TeamAssignPersister(Scorebot scorebot) {
     	super(scorebot);
@@ -58,7 +58,7 @@ public class TeamAssignPersister extends ScorebotPersister {
     }
     
     @Override
-    public void persist(List<Pair<PlayerInfo, PlayerInfo>> playerPairs) {
+    public void persist(List<DiffData<PlayerInfo>> playerPairs) {
     	super.persist(playerPairs);
     	prepareMatricesOverlayAndX(playerPairs);
     	
@@ -157,17 +157,17 @@ public class TeamAssignPersister extends ScorebotPersister {
         solver.setB(scores);
     }
     
-    private void prepareMatricesOverlayAndX(List<Pair<PlayerInfo, PlayerInfo>> pairs) {
-    	sortedPlayerPairs = new ArrayList<Pair<PlayerInfo,PlayerInfo>>(pairs);
+    private void prepareMatricesOverlayAndX(List<DiffData<PlayerInfo>> pairs) {
+    	sortedPlayerPairs = new ArrayList<DiffData<PlayerInfo>>(pairs);
     	
     	//Remove all players with score 0
-        for (Iterator<Pair<PlayerInfo, PlayerInfo>> iterator = sortedPlayerPairs.iterator(); iterator.hasNext();) {
+        for (Iterator<DiffData<PlayerInfo>> iterator = sortedPlayerPairs.iterator(); iterator.hasNext();) {
             if (iterator.next().getSecond().getScore() == 0)
                 iterator.remove();
         }
         
         //Sort by score descending
-        Collections.sort(sortedPlayerPairs, new Comparator<Pair<PlayerInfo, PlayerInfo>> (
+        Collections.sort(sortedPlayerPairs, new Comparator<DiffData<PlayerInfo>> (
                 ){
             
                     /**
@@ -177,7 +177,7 @@ public class TeamAssignPersister extends ScorebotPersister {
                      * @return
                      */
                     @Override
-                    public int compare(Pair<PlayerInfo, PlayerInfo> o1, Pair<PlayerInfo, PlayerInfo> o2) {
+                    public int compare(DiffData<PlayerInfo> o1, DiffData<PlayerInfo> o2) {
                         
                         int s1 = o1.getSecond().getScore();
                         int s2 = o2.getSecond().getScore();
@@ -198,7 +198,7 @@ public class TeamAssignPersister extends ScorebotPersister {
         ArrayList<Integer> playerScores = new ArrayList<Integer>();
         TwoRowMatrix templateMatrix = new TwoRowMatrix();
         
-        for (Pair<PlayerInfo, PlayerInfo> pair : sortedPlayerPairs) {
+        for (DiffData<PlayerInfo> pair : sortedPlayerPairs) {
             playerScores.add(pair.getSecond().getScore());
             templateMatrix.getFirstRow().add(pair.getFirst() != null && pair.getFirst().getTeamKey() == TeamKey.RED_TEAM ? 1 : 0);
             templateMatrix.getSecondRow().add(pair.getFirst() != null && pair.getFirst().getTeamKey() == TeamKey.BLUE_TEAM ? 1 : 0);

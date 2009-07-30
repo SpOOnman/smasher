@@ -20,7 +20,7 @@ package eu.spoonman.smasher.client;
 import org.apache.log4j.Logger;
 
 import eu.spoonman.smasher.common.Observer;
-import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.common.DiffData;
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.serverinfo.GameInfo;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
@@ -35,19 +35,19 @@ import eu.spoonman.smasher.serverinfo.TeamInfo;
  */
 public abstract class Subscription {
 
-	private Observer<Pair<GameInfo, GameInfo>> gameInfoChangeObserver;
-	private Observer<Pair<ProgressInfo, ProgressInfo>> progressInfoChangeObserver;
-	private Observer<Pair<TeamInfo, TeamInfo>> teamNameChangeEventObserver;
-	private Observer<Pair<TeamInfo, TeamInfo>> teamScoreChangeEventObserver;
-	private Observer<Pair<PlayerInfo, PlayerInfo>> playerConnectedEventObserver;
-	private Observer<Pair<PlayerInfo, PlayerInfo>> playerDisconnectedEventObserver;
-	private Observer<Pair<PlayerInfo, PlayerInfo>> playerNameChangeEventObserver;
-	private Observer<Pair<PlayerInfo, PlayerInfo>> playerPingChangeEventObserver;
-	private Observer<Pair<PlayerInfo, PlayerInfo>> playerScoreChangeEventObserver;
-	private Observer<Pair<Scorebot, Scorebot>> differenceStartEventObserver;
-	private Observer<Pair<Scorebot, Scorebot>> differenceStopEventObserver;
-	private Observer<Pair<Scorebot, Scorebot>> scorebotStartEventObserver;
-	private Observer<Pair<Scorebot, Scorebot>> scorebotStopEventObserver;
+	private Observer<DiffData<GameInfo>> gameInfoChangeObserver;
+	private Observer<DiffData<ProgressInfo>> progressInfoChangeObserver;
+	private Observer<DiffData<TeamInfo>> teamNameChangeEventObserver;
+	private Observer<DiffData<TeamInfo>> teamScoreChangeEventObserver;
+	private Observer<DiffData<PlayerInfo>> playerConnectedEventObserver;
+	private Observer<DiffData<PlayerInfo>> playerDisconnectedEventObserver;
+	private Observer<DiffData<PlayerInfo>> playerNameChangeEventObserver;
+	private Observer<DiffData<PlayerInfo>> playerPingChangeEventObserver;
+	private Observer<DiffData<PlayerInfo>> playerScoreChangeEventObserver;
+	private Observer<DiffData<Scorebot>> differenceStartEventObserver;
+	private Observer<DiffData<Scorebot>> differenceStopEventObserver;
+	private Observer<DiffData<Scorebot>> scorebotStartEventObserver;
+	private Observer<DiffData<Scorebot>> scorebotStopEventObserver;
 	
 	private Scorebot scorebot;
 	private Client client;
@@ -140,13 +140,13 @@ public abstract class Subscription {
 	
 	public abstract void renameTeams(String redTeam, String blueTeam);
 
-	protected <T> void logEvent(String name, Pair<T, T> pair) {
+	protected <T> void logEvent(String name, DiffData<T> pair) {
 		log.debug(String.format(loggingPattern, name, pair.getFirst(), pair.getSecond()));
 	}
 
 	protected void registerOnGameInfoChange(Scorebot scorebot) {
-		gameInfoChangeObserver = new Observer<Pair<GameInfo, GameInfo>>() {
-			public void notify(Pair<GameInfo, GameInfo> pair) {
+		gameInfoChangeObserver = new Observer<DiffData<GameInfo>>() {
+			public void notify(DiffData<GameInfo> pair) {
 				onGameInfoChange(pair);
 			}
 		};
@@ -155,8 +155,8 @@ public abstract class Subscription {
 	}
 
 	protected void registerOnProgressInfoChange(Scorebot scorebot) {
-		progressInfoChangeObserver = new Observer<Pair<ProgressInfo, ProgressInfo>>() {
-			public void notify(Pair<ProgressInfo, ProgressInfo> pair) {
+		progressInfoChangeObserver = new Observer<DiffData<ProgressInfo>>() {
+			public void notify(DiffData<ProgressInfo> pair) {
 				onProgressInfoChange(pair);
 			}
 		};
@@ -164,8 +164,8 @@ public abstract class Subscription {
 	}
 
 	protected void registerOnTeamNameChangeEvent(Scorebot scorebot) {
-		teamNameChangeEventObserver = new Observer<Pair<TeamInfo, TeamInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<TeamInfo, TeamInfo> pair) {
+		teamNameChangeEventObserver = new Observer<DiffData<TeamInfo>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<TeamInfo> pair) {
 				onTeamNameChangeEvent(pair);
 
 			};
@@ -175,8 +175,8 @@ public abstract class Subscription {
 	}
 
 	protected void registerOnTeamScoreChangeEvent(Scorebot scorebot) {
-		teamScoreChangeEventObserver = new Observer<Pair<TeamInfo, TeamInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<TeamInfo, TeamInfo> pair) {
+		teamScoreChangeEventObserver = new Observer<DiffData<TeamInfo>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<TeamInfo> pair) {
 				onTeamScoreChangeEvent(pair);
 
 			};
@@ -185,8 +185,8 @@ public abstract class Subscription {
 	}
 
 	protected void registerOnPlayerConnectedEvent(Scorebot scorebot) {
-		playerConnectedEventObserver = new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
+		playerConnectedEventObserver = new Observer<DiffData<PlayerInfo>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<PlayerInfo> pair) {
 				onPlayerConnectedEvent(pair);
 			}
 		};
@@ -195,8 +195,8 @@ public abstract class Subscription {
 	}
 
 	protected void registerOnPlayerDisconnectedEvent(Scorebot scorebot) {
-		playerDisconnectedEventObserver = new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
+		playerDisconnectedEventObserver = new Observer<DiffData<PlayerInfo>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<PlayerInfo> pair) {
 				onPlayerDisconnectedEvent(pair);
 			}
 		};
@@ -205,8 +205,8 @@ public abstract class Subscription {
 	}
 
 	protected void registerOnPlayerNameChangeEvent(Scorebot scorebot) {
-		playerNameChangeEventObserver = new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
+		playerNameChangeEventObserver = new Observer<DiffData<PlayerInfo>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<PlayerInfo> pair) {
 				onPlayerNameChangeEvent(pair);
 			}
 		};
@@ -215,8 +215,8 @@ public abstract class Subscription {
 	}
 
 	protected void registerOnPlayerPingChangeEvent(Scorebot scorebot) {
-		playerPingChangeEventObserver = new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
+		playerPingChangeEventObserver = new Observer<DiffData<PlayerInfo>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<PlayerInfo> pair) {
 				onPlayerPingChangeEvent(pair);
 			}
 		};
@@ -225,8 +225,8 @@ public abstract class Subscription {
 	}
 
 	protected void registerOnPlayerScoreChangeEvent(Scorebot scorebot) {
-		playerScoreChangeEventObserver = new Observer<Pair<PlayerInfo, PlayerInfo>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<PlayerInfo, PlayerInfo> pair) {
+		playerScoreChangeEventObserver = new Observer<DiffData<PlayerInfo>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<PlayerInfo> pair) {
 				onPlayerScoreChangeEvent(pair);
 			}
 		};
@@ -235,8 +235,8 @@ public abstract class Subscription {
 	}
 	
 	protected void registerOnDifferenceStartEvent(Scorebot scorebot) {
-		differenceStartEventObserver = new Observer<Pair<Scorebot, Scorebot>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<Scorebot, Scorebot> pair) {
+		differenceStartEventObserver = new Observer<DiffData<Scorebot>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<Scorebot> pair) {
 				onDifferenceStartEvent(pair);
 			}
 		};
@@ -245,8 +245,8 @@ public abstract class Subscription {
 	}
 	
 	protected void registerOnDifferenceStopEvent(Scorebot scorebot) {
-		differenceStopEventObserver = new Observer<Pair<Scorebot, Scorebot>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<Scorebot, Scorebot> pair) {
+		differenceStopEventObserver = new Observer<DiffData<Scorebot>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<Scorebot> pair) {
 				onDifferenceStopEvent(pair);
 			}
 		};
@@ -255,8 +255,8 @@ public abstract class Subscription {
 	}
 	
 	protected void registerOnScorebotStartEvent(Scorebot scorebot) {
-		scorebotStartEventObserver = new Observer<Pair<Scorebot, Scorebot>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<Scorebot, Scorebot> pair) {
+		scorebotStartEventObserver = new Observer<DiffData<Scorebot>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<Scorebot> pair) {
 				onScorebotStartEvent(pair);
 			}
 		};
@@ -265,8 +265,8 @@ public abstract class Subscription {
 	}
 	
 	protected void registerOnScorebotStopEvent(Scorebot scorebot) {
-		scorebotStopEventObserver = new Observer<Pair<Scorebot, Scorebot>>() {
-			public void notify(eu.spoonman.smasher.common.Pair<Scorebot, Scorebot> pair) {
+		scorebotStopEventObserver = new Observer<DiffData<Scorebot>>() {
+			public void notify(eu.spoonman.smasher.common.DiffData<Scorebot> pair) {
 				onScorebotStopEvent(pair);
 			}
 		};
@@ -274,55 +274,55 @@ public abstract class Subscription {
 		scorebot.getScorebotStopEvent().register(scorebotStopEventObserver);
 	}
 
-	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
+	protected void onGameInfoChange(DiffData<GameInfo> pair) {
 		logEvent("GameInfo", pair);
 	}
 
-	protected void onProgressInfoChange(Pair<ProgressInfo, ProgressInfo> pair) {
+	protected void onProgressInfoChange(DiffData<ProgressInfo> pair) {
 		logEvent("ProgressInfo", pair);
 	}
 
-	protected void onTeamNameChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
+	protected void onTeamNameChangeEvent(DiffData<TeamInfo> pair) {
 		logEvent("TeamName", pair);
 	}
 
-	protected void onTeamScoreChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
+	protected void onTeamScoreChangeEvent(DiffData<TeamInfo> pair) {
 		logEvent("TeamScore", pair);
 	}
 
-	protected void onPlayerConnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void onPlayerConnectedEvent(DiffData<PlayerInfo> pair) {
 		logEvent("PlayerConnected", pair);
 	}
 
-	protected void onPlayerDisconnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void onPlayerDisconnectedEvent(DiffData<PlayerInfo> pair) {
 		logEvent("PlayerDisconnected", pair);
 	}
 
-	protected void onPlayerNameChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void onPlayerNameChangeEvent(DiffData<PlayerInfo> pair) {
 		logEvent("PlayerName", pair);
 	}
 
-	protected void onPlayerPingChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void onPlayerPingChangeEvent(DiffData<PlayerInfo> pair) {
 		logEvent("PlayerPing", pair);
 	}
 
-	protected void onPlayerScoreChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void onPlayerScoreChangeEvent(DiffData<PlayerInfo> pair) {
 		logEvent("PlayerScore", pair);
 	}
 	
-	protected void onDifferenceStartEvent(Pair<Scorebot, Scorebot> pair) {
+	protected void onDifferenceStartEvent(DiffData<Scorebot> pair) {
 		logEvent("DifferenceStart", pair);
 	}
 	
-	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
+	protected void onDifferenceStopEvent(DiffData<Scorebot> pair) {
 		logEvent("DifferenceStop", pair);
 	}
 	
-	protected void onScorebotStartEvent(Pair<Scorebot, Scorebot> pair) {
+	protected void onScorebotStartEvent(DiffData<Scorebot> pair) {
 		logEvent("ScorebotStart", pair);
 	}
 	
-	protected void onScorebotStopEvent(Pair<Scorebot, Scorebot> pair) {
+	protected void onScorebotStopEvent(DiffData<Scorebot> pair) {
 		logEvent("ScorebotStop", pair);
 	}
 	

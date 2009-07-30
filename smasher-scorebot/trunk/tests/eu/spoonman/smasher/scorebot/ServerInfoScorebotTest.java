@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Test;
 
 import eu.spoonman.smasher.common.Observer;
-import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.common.DiffData;
 import eu.spoonman.smasher.serverinfo.PlayerInfo;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 
@@ -29,7 +29,7 @@ public class ServerInfoScorebotTest {
 
 	@Test
 	public void testReviseLCSPlayerPairs() {
-		List<Pair<PlayerInfo,PlayerInfo>> playerInfoPairs = TestHelper.getPlayerInfoPairs();
+		List<DiffData<PlayerInfo>> playerInfoPairs = TestHelper.getPlayerInfoPairs();
 		
 		playerInfoPairs.get(3).setSecond(null);
 		playerInfoPairs.get(4).setFirst(null);
@@ -44,10 +44,10 @@ public class ServerInfoScorebotTest {
 
 	@Test
 	public void testPlayerInfoChangeScore() throws InterruptedException {
-		Observer<Pair<PlayerInfo, PlayerInfo>> observer = new Observer<Pair<PlayerInfo,PlayerInfo>> () {
+		Observer<DiffData<PlayerInfo>> observer = new Observer<DiffData<PlayerInfo>> () {
 			
 			@Override
-			public void notify(Pair<PlayerInfo, PlayerInfo> t) {
+			public void notify(DiffData<PlayerInfo> t) {
 				assertEquals(9, t.getFirst().getScore());
 				assertEquals(10, t.getSecond().getScore());
 				setAssertMehodName("testPlayerInfoChangeScore");

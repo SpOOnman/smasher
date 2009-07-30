@@ -18,7 +18,7 @@
 
 package eu.spoonman.smasher.client;
 
-import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.common.DiffData;
 import eu.spoonman.smasher.output.OutputConfiguration;
 import eu.spoonman.smasher.output.OutputConfigurationFactory;
 import eu.spoonman.smasher.scorebot.Scorebot;
@@ -66,7 +66,7 @@ public class ConsoleSubscription extends Subscription {
 	}
 	
 	@Override
-	protected void onDifferenceStartEvent(Pair<Scorebot, Scorebot> pair) {
+	protected void onDifferenceStartEvent(DiffData<Scorebot> pair) {
 		super.onDifferenceStartEvent(pair);
 		
 		//If scorebot was already running and it's first run of a client - we need to force setting new OutputConfiguration.
@@ -75,7 +75,7 @@ public class ConsoleSubscription extends Subscription {
 	}
 	
 	@Override
-	protected void onDifferenceStopEvent(Pair<Scorebot, Scorebot> pair) {
+	protected void onDifferenceStopEvent(DiffData<Scorebot> pair) {
 		super.onDifferenceStopEvent(pair);
 		
 		if (firstRun)
@@ -89,7 +89,7 @@ public class ConsoleSubscription extends Subscription {
 	}
 	
 	@Override
-	protected void onScorebotStopEvent(Pair<Scorebot, Scorebot> pair) {
+	protected void onScorebotStopEvent(DiffData<Scorebot> pair) {
 		super.onScorebotStopEvent(pair);
 		
 		formatter.ensureMainLine();
@@ -98,7 +98,7 @@ public class ConsoleSubscription extends Subscription {
 	}
 
 	@Override
-	protected void onGameInfoChange(Pair<GameInfo, GameInfo> pair) {
+	protected void onGameInfoChange(DiffData<GameInfo> pair) {
 		super.onGameInfoChange(pair);
 		
 		assert(pair.getSecond() != null);
@@ -110,49 +110,49 @@ public class ConsoleSubscription extends Subscription {
 	}
 
 	@Override
-	protected void onPlayerConnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void onPlayerConnectedEvent(DiffData<PlayerInfo> pair) {
 		super.onPlayerConnectedEvent(pair);
 		formatter.formatPlayerConnectedEvent(pair);
 	}
 
 	@Override
-	protected void onPlayerDisconnectedEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void onPlayerDisconnectedEvent(DiffData<PlayerInfo> pair) {
 		super.onPlayerDisconnectedEvent(pair);
 		formatter.formatPlayerDisconnectedEvent(pair);
 	}
 
 	@Override
-	protected void onPlayerNameChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void onPlayerNameChangeEvent(DiffData<PlayerInfo> pair) {
 		super.onPlayerNameChangeEvent(pair);
 		formatter.formatPlayerNameChange(pair);
 	}
 
 	@Override
-	protected void onPlayerPingChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void onPlayerPingChangeEvent(DiffData<PlayerInfo> pair) {
 		super.onPlayerPingChangeEvent(pair);
 		formatter.formatPlayerNameChange(pair);
 	}
 
 	@Override
-	protected void onPlayerScoreChangeEvent(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void onPlayerScoreChangeEvent(DiffData<PlayerInfo> pair) {
 		super.onPlayerScoreChangeEvent(pair);
 		formatter.formatPlayerScoreChange(pair);
 	}
 
 	@Override
-	protected void onProgressInfoChange(Pair<ProgressInfo, ProgressInfo> pair) {
+	protected void onProgressInfoChange(DiffData<ProgressInfo> pair) {
 		super.onProgressInfoChange(pair);
 		formatter.formatProgressInfoChange(pair);
 	}
 
 	@Override
-	protected void onTeamNameChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
+	protected void onTeamNameChangeEvent(DiffData<TeamInfo> pair) {
 		super.onTeamNameChangeEvent(pair);
 		formatter.formatTeamNameChange(pair);
 	}
 
 	@Override
-	protected void onTeamScoreChangeEvent(Pair<TeamInfo, TeamInfo> pair) {
+	protected void onTeamScoreChangeEvent(DiffData<TeamInfo> pair) {
 		super.onTeamScoreChangeEvent(pair);
 		formatter.formatTeamScoreChange(pair);
 	}

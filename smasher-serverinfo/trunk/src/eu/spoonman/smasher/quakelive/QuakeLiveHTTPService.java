@@ -68,7 +68,7 @@ public class QuakeLiveHTTPService {
 
     private final static String QUAKELIVE_PARAMETERS = "u=%s&p=%s&r=0";
 
-    private final static String QUAKELIVE_SEARCH_FILTER = "{\"filters\":{\"group\":\"friends\",\"game_type\":\"any\",\"arena\":\"any\",\"state\":\"any\","
+    private final static String QUAKELIVE_SEARCH_FILTER = "{\"filters\":{\"group\":\"any\",\"game_type\":\"any\",\"arena\":\"any\",\"state\":\"any\","
             + "\"difficulty\":\"any\",\"location\":\"ALL\",\"private\":\"%d\"},\"arena_type\":\"\",\"players\":[\"%s\"],\"game_types\":[],\"ig\":0}";
 
     private final static Map<Integer, String> gametypeAddressMap;

@@ -44,7 +44,7 @@ public class LCS<T> {
 		this.comparator = comparator;
 	}
 	
-	public List<Pair<T, T>> getLCSPairs() {
+	public List<DiffData<T>> getLCSPairs() {
 		createLCSMatrix();
 		return readPairs();
 	}
@@ -66,8 +66,8 @@ public class LCS<T> {
                     lcsMatrix [i][j] = Math.max(lcsMatrix [i][j-1], lcsMatrix[i-1][j]);
 	}
 	
-	private List<Pair<T, T>> readPairs() {
-		List<Pair<T, T>> pairs = new ArrayList<Pair<T,T>>();
+	private List<DiffData<T>> readPairs() {
+		List<DiffData<T>> pairs = new ArrayList<DiffData<T>>();
 
         //Starting from bottom right corner
         int i = left.size ();
@@ -77,7 +77,7 @@ public class LCS<T> {
         {
             if (i > 0 && j > 0 && comparator.compare(left.get(i - 1), right.get(j - 1)) == 0)
             {
-            	pairs.add(0, new Pair<T, T>(left.get(i - 1), right.get(j - 1)));
+            	pairs.add(0, new DiffData<T>(left.get(i - 1), right.get(j - 1)));
                 i--;
                 j--;
             }
@@ -86,13 +86,13 @@ public class LCS<T> {
                 if (j > 0 && (i == 0 || lcsMatrix [i][j-1] >= lcsMatrix [i-1][j]))
                 {
                     //New object on the right
-                	pairs.add(0, new Pair<T, T>(null, right.get(j - 1)));
+                	pairs.add(0, new DiffData<T>(null, right.get(j - 1)));
                     j--;
                 }
                 else if (i > 0 && (j == 0 || lcsMatrix [i][j-1] < lcsMatrix [i-1][j]))
                 {
                     //New object on the left
-                	pairs.add(0, new Pair<T, T>(left.get(i - 1), null));
+                	pairs.add(0, new DiffData<T>(left.get(i - 1), null));
                     i--;
                 }
             }

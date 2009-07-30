@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import eu.spoonman.smasher.common.LCS;
-import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.common.DiffData;
 import eu.spoonman.smasher.scorebot.persister.PersisterFactory;
 import eu.spoonman.smasher.scorebot.persister.ScorebotPersister;
 import eu.spoonman.smasher.serverinfo.AbstractQuery;
@@ -93,7 +93,7 @@ public class ServerInfoScorebot extends Scorebot {
 			setRunning(false);
 		}
 		
-		scorebotStopEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
+		scorebotStopEvent.notifyAll(new DiffData<Scorebot>(this, this));
 		
 		log.info(String.format("Scorebot %s has stopped.", getId()));
 	}
@@ -118,7 +118,7 @@ public class ServerInfoScorebot extends Scorebot {
 
 	protected void internalStart() throws ScorebotFatalException {
 
-		scorebotStartEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
+		scorebotStartEvent.notifyAll(new DiffData<Scorebot>(this, this));
 		
 		while (isRunning()) {
 
@@ -158,12 +158,12 @@ public class ServerInfoScorebot extends Scorebot {
 		GameInfo prevGameInfo = previousServerInfo == null ? null : previousServerInfo.getGameInfo();
 
 		if (prevGameInfo == null && currentServerInfo.getGameInfo() != null) {
-			gameInfoChange.notifyAll(new Pair<GameInfo, GameInfo>(null, currentServerInfo.getGameInfo()));
+			gameInfoChange.notifyAll(new DiffData<GameInfo>(null, currentServerInfo.getGameInfo()));
 			return;
 		}
 
 		if (!(prevGameInfo.equals(currentServerInfo.getGameInfo())))
-			gameInfoChange.notifyAll(new Pair<GameInfo, GameInfo>(previousServerInfo.getGameInfo(),
+			gameInfoChange.notifyAll(new DiffData<GameInfo>(previousServerInfo.getGameInfo(),
 					currentServerInfo.getGameInfo()));
 	}
 
@@ -175,13 +175,13 @@ public class ServerInfoScorebot extends Scorebot {
 			persister.persist(prevProgressInfo, currentServerInfo.getProgressInfo());
 
 		if (prevProgressInfo == null && currentServerInfo.getProgressInfo() != null) {
-			progressInfoChange.notifyAll(new Pair<ProgressInfo, ProgressInfo>(null, currentServerInfo
+			progressInfoChange.notifyAll(new DiffData<ProgressInfo>(null, currentServerInfo
 					.getProgressInfo()));
 			return;
 		}
 
 		if (!(prevProgressInfo.equals(currentServerInfo.getProgressInfo())))
-			progressInfoChange.notifyAll(new Pair<ProgressInfo, ProgressInfo>(previousServerInfo
+			progressInfoChange.notifyAll(new DiffData<ProgressInfo>(previousServerInfo
 					.getProgressInfo(), currentServerInfo.getProgressInfo()));
 	}
 	
@@ -199,7 +199,7 @@ public class ServerInfoScorebot extends Scorebot {
 				for (ScorebotPersister persister : persisters)
 					persister.persist(left, right);
 				
-				differenceTeamInfo(new Pair<TeamInfo, TeamInfo>(left, right));
+				differenceTeamInfo(new DiffData<TeamInfo>(left, right));
 			}
 			
 			if ((left == null && right != null) || (left != null && right == null)) {
@@ -208,7 +208,7 @@ public class ServerInfoScorebot extends Scorebot {
 		}
 	}
 
-	protected void differenceTeamInfo(Pair<TeamInfo, TeamInfo> pair) {
+	protected void differenceTeamInfo(DiffData<TeamInfo> pair) {
 		if (!(pair.getFirst().getName() == null && pair.getSecond().getName() == null) &&
 				(pair.getFirst().getName() == null && pair.getSecond().getName() != null ||
 				pair.getFirst().getName() != null && pair.getSecond().getName() == null ||
@@ -238,18 +238,18 @@ public class ServerInfoScorebot extends Scorebot {
 					}
 				});
 
-		List<Pair<PlayerInfo, PlayerInfo>> pairs = lcs.getLCSPairs();
+		List<DiffData<PlayerInfo>> pairs = lcs.getLCSPairs();
 		reviseLCSPlayerPairs(pairs);
 		
 		for (ScorebotPersister persister : persisters)
 			persister.persist(pairs);
 
-		for (Pair<PlayerInfo, PlayerInfo> pair : pairs) {
+		for (DiffData<PlayerInfo> pair : pairs) {
 			differencePlayerInfo(pair);
 		}
 	}
 
-	protected void differencePlayerInfo(Pair<PlayerInfo, PlayerInfo> pair) {
+	protected void differencePlayerInfo(DiffData<PlayerInfo> pair) {
 		
 		for (ScorebotPersister persister : persisters)
 			persister.persist(pair.getFirst(), pair.getSecond());
@@ -279,12 +279,12 @@ public class ServerInfoScorebot extends Scorebot {
 	 * Check if player changed name, connect or disconnect based on LCS pairs.
 	 * 
 	 */
-	void reviseLCSPlayerPairs(List<Pair<PlayerInfo, PlayerInfo>> pairs) {
+	void reviseLCSPlayerPairs(List<DiffData<PlayerInfo>> pairs) {
 
-		Pair<PlayerInfo, PlayerInfo> prevPair = null;
+		DiffData<PlayerInfo> prevPair = null;
 
-		for (Iterator<Pair<PlayerInfo, PlayerInfo>> iterator = pairs.iterator(); iterator.hasNext();) {
-			Pair<PlayerInfo, PlayerInfo> pair = iterator.next();
+		for (Iterator<DiffData<PlayerInfo>> iterator = pairs.iterator(); iterator.hasNext();) {
+			DiffData<PlayerInfo> pair = iterator.next();
 
 			// This is the case when player renames.
 			// Other case are old disconnected or new connected - leave them as it is.
@@ -303,7 +303,7 @@ public class ServerInfoScorebot extends Scorebot {
 		assert (previousServerInfo != null || count == 0);
 		assert (currentServerInfo != null);
 		
-		differenceStartEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
+		differenceStartEvent.notifyAll(new DiffData<Scorebot>(this, this));
 		
 		for (ScorebotPersister persister : persisters)
 			persister.prePersist();
@@ -321,7 +321,7 @@ public class ServerInfoScorebot extends Scorebot {
 		for (ScorebotPersister persister : persisters)
 			persister.postPersist();
 		
-		differenceStopEvent.notifyAll(new Pair<Scorebot, Scorebot>(this, this));
+		differenceStopEvent.notifyAll(new DiffData<Scorebot>(this, this));
 	}
 	
 	protected void differenceFirst() {

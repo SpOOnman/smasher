@@ -19,12 +19,12 @@
 package eu.spoonman.smasher.scorebot;
 
 import eu.spoonman.smasher.common.Observable;
-import eu.spoonman.smasher.common.Pair;
+import eu.spoonman.smasher.common.DiffData;
 
 /**
  * @author Tomasz Kalkosiński
  * 
  */
-public class GameDelegate<T> extends Observable<Pair<T, T>> {
+public class GameDelegate<T> extends Observable<DiffData<T>> {
 
 }
