@@ -100,32 +100,28 @@ public class QuakeLiveHTTPService {
 
     JSONObject jsonQuery(String method, String urlString, String parameters, boolean reLogin) throws IOException {
         String content = httpQuery(method, urlString, parameters);
-        log.debug(content);
 
         if (content == null || content.trim().length() == 0 || content.equals("[]"))
             return null;
 
         Object parsed = JSONValue.parse(content);
 
-        if (parsed != null) {
-            JSONObject json = (JSONObject) parsed;
+        if (parsed == null)
+            return null;
+        
+        JSONObject json = (JSONObject) parsed;
 
-            Object error = json.get(JSON_ERROR_CODE);
-            if (error != null && Integer.parseInt(error.toString()) < 0) {
-                log.error(String.format("JSON response error: %s : %s", error.toString(), json.get(JSON_ERROR_MSG)));
-                if (error.toString().equals(JSON_NOT_LOGGED_IN) && reLogin) {
-                    log.debug("Logging in");
-                    login();
-                    return jsonQuery(method, urlString, parameters, false);
-                }
+        Object error = json.get(JSON_ERROR_CODE);
+        if (error != null && Integer.parseInt(error.toString()) < 0) {
+            log.error(String.format("JSON response error: %s : %s", error.toString(), json.get(JSON_ERROR_MSG)));
+            if (error.toString().equals(JSON_NOT_LOGGED_IN) && reLogin) {
+                log.debug("Logging in");
+                login();
+                return jsonQuery(method, urlString, parameters, false);
             }
-
-            log.debug(json.toJSONString());
-
-            return json;
         }
 
-        return null;
+        return json;
     }
 
     String httpQuery(String method, String urlString, String parameters) throws IOException {
