@@ -55,13 +55,14 @@ public class QuakeLiveJSONPlayerInfoParserTest {
         ServerInfo serverInfo = testParse(players);
         assertEquals(7, serverInfo.getPlayerInfos().size());
         
-        assertPlayer(serverInfo.getPlayerInfos().get(0), "^7laun^41^7zed", 8, TeamKey.BLUE_TEAM);
-        assertPlayer(serverInfo.getPlayerInfos().get(3), "Wanglyih", 0, TeamKey.SPECTATORS_TEAM);
-        assertPlayer(serverInfo.getPlayerInfos().get(4), "Rogon", 17, TeamKey.RED_TEAM);
-        assertPlayer(serverInfo.getPlayerInfos().get(6), "^155", 13, TeamKey.BLUE_TEAM);
+        assertPlayer(serverInfo.getPlayerInfos().get(0), null, "^7laun^41^7zed", 8, TeamKey.BLUE_TEAM);
+        assertPlayer(serverInfo.getPlayerInfos().get(3), null, "Wanglyih", 0, TeamKey.SPECTATORS_TEAM);
+        assertPlayer(serverInfo.getPlayerInfos().get(4), null, "Rogon", 17, TeamKey.RED_TEAM);
+        assertPlayer(serverInfo.getPlayerInfos().get(6), "BoH", "^155", 13, TeamKey.BLUE_TEAM);
     }
     
-    private static void assertPlayer(PlayerInfo playerInfo, String name, int score, TeamKey teamKey) {
+    private static void assertPlayer(PlayerInfo playerInfo, String clan, String name, int score, TeamKey teamKey) {
+        assertEquals(clan, playerInfo.getClan());
         assertEquals(name, playerInfo.getName());
         assertEquals(score, playerInfo.getScore());
         assertEquals(teamKey, playerInfo.getTeamKey());

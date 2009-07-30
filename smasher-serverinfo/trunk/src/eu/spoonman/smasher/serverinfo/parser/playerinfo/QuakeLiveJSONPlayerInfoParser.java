@@ -76,6 +76,7 @@ public class QuakeLiveJSONPlayerInfoParser implements ServerInfoParser {
         PlayerInfo playerInfo = new PlayerInfo();
         playerInfo.setNamedAttributes(player);
         
+        playerInfo.setClan((String)player.get(JSONPlayerClanKey));
         playerInfo.setName((String)player.get(JSONPlayerNameKey));
         playerInfo.setScore(Integer.valueOf((String)player.get(JSONPlayerScoreKey)));
         
