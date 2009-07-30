@@ -60,8 +60,9 @@ public class ConsoleFormatter {
 		public String format();
 	}
 	
-	private final String SCOREBOT_START = "%s%s%s. Starting %s%s%s scorebot on %s.";
-	private final String SCOREBOT_STOP = "%s%s%s. Scorebot stopped. %s";
+	private final String SCOREBOT_ID = "%s%s%s. ";
+	private final String SCOREBOT_START = "%sStarting %s%s%s scorebot on %s.";
+	private final String SCOREBOT_STOP = "%sScorebot stopped. %s";
 
 	private final String PLAYER_CONNECTED_EVENT = "Player %s connected";
 	private final String PLAYER_DISCONNECTED_EVENT = "Player %s disconnected";
@@ -81,8 +82,8 @@ public class ConsoleFormatter {
 	private final int TDM_INTERVAL = 30; //seconds
 	private final int INTERVAL = TDM_INTERVAL * 2;
 	
-	private final static String MAIN_LINE_TDM = "%s%s%s. %s%s%s%s  (%s) %s%d%s  vs  %s%d%s (%s)  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
-	private final static String MAIN_LINE_CTF = "%s%s%s. %s%s%s%s  %s%d%s  vs  %s%d%s  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
+	private final static String MAIN_LINE_TDM = "%s%s%s%s%s  (%s) %s%d%s  vs  %s%d%s (%s)  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
+	private final static String MAIN_LINE_CTF = "%s%s%s%s%s  %s%d%s  vs  %s%d%s  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
 
 	private final Colors colors;
 	private OutputConfiguration outputConfiguration;
@@ -210,10 +211,14 @@ public class ConsoleFormatter {
 		}
 	}
 	
+	private String formatScorebotId(Scorebot scorebot) {
+		return String.format(SCOREBOT_ID, colors.getBold(), scorebot.getId(), colors.getReset());
+	}
+	
 	public void formatScorebotStart(Scorebot scorebot) {
 		synchronized (beforeMainLines) {
 			beforeMainLines.add(String.format(SCOREBOT_START,
-					colors.getBold(), scorebot.getId(), colors.getReset(),
+					formatScorebotId(scorebot),
 					colors.getBold(), scorebot.getGame().getFullName(), colors.getReset(),
 					scorebot.getIdentification().toString().replaceFirst("^/", "")));
 		}
@@ -222,7 +227,8 @@ public class ConsoleFormatter {
 	public void formatScorebotStop(Scorebot scorebot) {
 		synchronized (afterMainLines) {
 			afterMainLines.add(String.format(SCOREBOT_STOP,
-					colors.getBold(), scorebot.getId(), colors.getReset(), scorebot.getCurrentServerInfo() != null ? scorebot.getCurrentServerInfo().getMessage() : ""
+					formatScorebotId(scorebot),
+					scorebot.getCurrentServerInfo() != null ? scorebot.getCurrentServerInfo().getMessage() : ""
 					));
 		}
 	}
@@ -413,7 +419,7 @@ public class ConsoleFormatter {
 			ProgressInfo progressInfo, GameInfo gameInfo, String winningColor, StringBuilder mainLines) {
 		
 		String returnString = String.format(MAIN_LINE_TDM,
-				colors.getBold(), scorebot.getId(), colors.getReset(),
+				formatScorebotId(scorebot),
 				colors.getRed(), colors.getBold(), formatTeamName(redTeam.getName(), true) , colors.getReset(),
 				formatNet(redTeam.getScore() - lastPrintedRedScore),
 				colors.getBold(), redTeam.getScore(), colors.getReset(),
@@ -432,7 +438,7 @@ public class ConsoleFormatter {
 			ProgressInfo progressInfo, GameInfo gameInfo, String winningColor, StringBuilder mainLines) {
 		
 		String returnString = String.format(MAIN_LINE_CTF,
-				colors.getBold(), scorebot.getId(), colors.getReset(),
+				formatScorebotId(scorebot),
 				colors.getRed(), colors.getBold(), formatTeamName(redTeam.getName(), true) , colors.getReset(),
 				colors.getBold(), redTeam.getScore(), colors.getReset(),
 				colors.getBold(), blueTeam.getScore(), colors.getReset(),
