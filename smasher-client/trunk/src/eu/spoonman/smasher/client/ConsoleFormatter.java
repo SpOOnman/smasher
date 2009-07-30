@@ -492,7 +492,10 @@ public class ConsoleFormatter {
 		StringBuilder sb = new StringBuilder();
 		for (PlayerInfo player : players)
 			if (player.getTeamKey() == teamInfo.getKey()) {
-				sb.append(String.format(TEAM_PLAYER, null, null, player.getName(), player.getScore()));
+				sb.append(String.format(TEAM_PLAYER,
+						player.getClan() != null ? player.getClan() : "",
+						player.getClan() != null ? " " : "",
+						null, player.getName(), player.getScore()));
 			}
 		
 		return sb.toString();
