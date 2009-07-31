@@ -30,6 +30,7 @@ public class GameInfo {
     private String rawGameType;
     
     private String map;
+    private String mapFullName;
     
     private String hostName;
     
@@ -45,7 +46,7 @@ public class GameInfo {
      */
     @Override
     public String toString() {
-        return String.format("[GameInfo: %s (%s) @ %s, map %s, %d/%d, %dms, pass: %b]", gameType, rawGameType, hostName, map, playerCount, playerMaxCount, ping, isPassworded);
+        return String.format("[GameInfo: %s (%s) @ %s, map %s (%s), %d/%d, %dms, pass: %b]", gameType, rawGameType, hostName, map, mapFullName, playerCount, playerMaxCount, ping, isPassworded);
     }
     
     
@@ -62,6 +63,7 @@ public class GameInfo {
         result = prime * result + ((hostName == null) ? 0 : hostName.hashCode());
         result = prime * result + (isPassworded ? 1231 : 1237);
         result = prime * result + ((map == null) ? 0 : map.hashCode());
+        result = prime * result + ((mapFullName == null) ? 0 : mapFullName.hashCode());
         result = prime * result + ping;
         result = prime * result + playerCount;
         result = prime * result + playerMaxCount;
@@ -100,6 +102,11 @@ public class GameInfo {
             if (other.map != null)
                 return false;
         } else if (!map.equals(other.map))
+            return false;
+        if (mapFullName == null) {
+            if (other.mapFullName != null)
+                return false;
+        } else if (!mapFullName.equals(other.mapFullName))
             return false;
         if (ping != other.ping)
             return false;
@@ -154,6 +161,15 @@ public class GameInfo {
     public void setMap(String map) {
         this.map = map;
     }
+    
+    public String getMapFullName() {
+        return mapFullName;
+    }
+
+    public void setMapFullName(String mapFullName) {
+        this.mapFullName = mapFullName;
+    }
+
     /**
      * @return the hostName
      */
