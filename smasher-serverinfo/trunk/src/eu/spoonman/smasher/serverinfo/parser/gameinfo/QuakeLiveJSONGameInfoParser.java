@@ -31,6 +31,7 @@ public class QuakeLiveJSONGameInfoParser extends QuakeLiveGameInfoParser {
     public final String JSON_HOSTNAME_KEY = "host_name";
     public final String JSON_MAX_PLAYERS_KEY = "max_clients";
     public final String JSON_MAP_KEY = "map"; 
+    public final String JSON_MAP_TITLE_KEY = "map_title"; 
     public final String JSON_GAMETYPE_KEY = "game_type"; 
     public final String JSON_PLAYERCOUNT_KEY = "num_clients";
     
@@ -50,6 +51,7 @@ public class QuakeLiveJSONGameInfoParser extends QuakeLiveGameInfoParser {
         gameInfo.setHostName((String)serverInfo.getJson().get(JSON_HOSTNAME_KEY));
         gameInfo.setPlayerMaxCount(((Long)serverInfo.getJson().get(JSON_MAX_PLAYERS_KEY)).intValue());
         gameInfo.setMap((String)serverInfo.getJson().get(JSON_MAP_KEY));
+        gameInfo.setMapFullName((String)serverInfo.getJson().get(JSON_MAP_TITLE_KEY));
         gameInfo.setPassworded(false);
 
         Long gametype = (Long)serverInfo.getJson().get(JSON_GAMETYPE_KEY);
