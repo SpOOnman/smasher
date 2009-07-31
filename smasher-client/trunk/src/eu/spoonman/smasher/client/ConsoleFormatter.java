@@ -435,7 +435,7 @@ public class ConsoleFormatter {
 				formatNet(blueTeam.getScore() - lastPrintedBlueScore),
 				formatTeamId(blueTeam),
 				formatProgressInfo(progressInfo),
-				gameInfo.getMap(),
+				gameInfo.getMapFullName() != null ? gameInfo.getMapFullName() : gameInfo.getMap(),
 				colors.getBold(), winningColor, colors.getReset(), formatNet(Math.abs(redTeam.getScore() - blueTeam.getScore())), colors.getBold(), winningColor, colors.getReset(),
 				mainLines.toString()
 				);
@@ -452,7 +452,7 @@ public class ConsoleFormatter {
 				colors.getBold(), blueTeam.getScore(), colors.getReset(),
 				formatTeamId(blueTeam),
 				formatProgressInfo(progressInfo),
-				gameInfo.getMap(),
+				gameInfo.getMapFullName() != null ? gameInfo.getMapFullName() : gameInfo.getMap(),
 				colors.getBold(), winningColor, colors.getReset(), formatNet(Math.abs(redTeam.getScore() - blueTeam.getScore())), colors.getBold(), winningColor, colors.getReset(),
 				mainLines.toString()
 		);
