@@ -39,11 +39,15 @@ public class OutputConfiguration extends OutputConfigurationFactory {
 	}
 
 	public OutputStyle getShowEveryPlayerConnectEvent() {
-		return OutputStyle.JOINT_NEW_LINE;
+		//QL has huge problems with that.
+		return OutputStyle.DONT_SHOW;
+		//return OutputStyle.JOINT_NEW_LINE;
 	}
 
 	public OutputStyle getShowEveryPlayerDisconnectEvent() {
-		return OutputStyle.JOINT_NEW_LINE;
+		//QL has huge problems with that.
+		return OutputStyle.DONT_SHOW;
+		//return OutputStyle.JOINT_NEW_LINE;
 	}
 
 	public OutputStyle getShowEveryTeamScoreChange() {
