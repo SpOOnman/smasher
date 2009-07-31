@@ -48,14 +48,16 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
 
         String gameState = serverInfo.getNamedAttributes().get(G_GAME_STATE);
         String levelStartTime = serverInfo.getNamedAttributes().get(G_LEVEL_START_TIME);
+        String timelimit = serverInfo.getNamedAttributes().get(TIMELIMIT);
         
-        parseTime(serverInfo, gameState, levelStartTime);
+        parseTime(serverInfo, gameState, levelStartTime, timelimit);
     }
 
-    protected void parseTime(ServerInfo serverInfo, String gameState, String levelStartTime) throws AttributeNotFoundException {
+    protected void parseTime(ServerInfo serverInfo, String gameState, String levelStartTime, String timelimit) throws AttributeNotFoundException {
         if (log.isDebugEnabled()) {
             log.debug(String.format(ServerInfoParser.fieldLogFormat, G_GAME_STATE, gameState));
             log.debug(String.format(ServerInfoParser.fieldLogFormat, G_LEVEL_START_TIME, levelStartTime));
+            log.debug(String.format(ServerInfoParser.fieldLogFormat, TIMELIMIT, timelimit));
         }
         
         TimePeriodInfo timePeriodInfo = new TimePeriodInfo(gameState + levelStartTime);
@@ -82,9 +84,11 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
         
         log.debug("Parsing period from " + start.toString() + " to " + now.toString());
         
-        Period period = new Period(start, now);
-        
-        timePeriodInfo.setPeriod(period);
+        if (timelimit != null && timelimit.length() > 0 && timelimit != "0") {
+            timePeriodInfo.setPeriod(new Period(now, start.plusMinutes(Integer.parseInt(timelimit))));
+        } else {
+            timePeriodInfo.setPeriod(new Period(start, now));
+        }
         
         serverInfo.setProgressInfo(timePeriodInfo);
     }
