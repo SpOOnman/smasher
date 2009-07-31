@@ -495,7 +495,7 @@ public class ConsoleFormatter {
 				sb.append(String.format(TEAM_PLAYER,
 						player.getClan() != null ? player.getClan() : "",
 						player.getClan() != null ? " " : "",
-						null, player.getName(), player.getScore()));
+						player.getName(), player.getScore()));
 			}
 		
 		return sb.toString();
