@@ -51,13 +51,13 @@ public class QuakeLiveLimitsPersister extends ScorebotPersister {
 		
 		try {
 			JSONObject json = right.getJson();
-			Integer climit = (Integer) json.get(CAPTURELIMIT);
+			Long climit = (Long) json.get(CAPTURELIMIT);
 			
 			if (climit == null)
 				return;
 			
-			if (right.getTeamInfos().get(TeamKey.RED_TEAM) != null && right.getTeamInfos().get(TeamKey.RED_TEAM).getScore() == climit ||
-				right.getTeamInfos().get(TeamKey.BLUE_TEAM) != null && right.getTeamInfos().get(TeamKey.BLUE_TEAM).getScore() == climit) {
+			if (right.getTeamInfos().get(TeamKey.RED_TEAM) != null && right.getTeamInfos().get(TeamKey.RED_TEAM).getScore() == climit.intValue() ||
+				right.getTeamInfos().get(TeamKey.BLUE_TEAM) != null && right.getTeamInfos().get(TeamKey.BLUE_TEAM).getScore() == climit.intValue()) {
 				
 				log.debug("One of teams has reached capturelimit");
 				
