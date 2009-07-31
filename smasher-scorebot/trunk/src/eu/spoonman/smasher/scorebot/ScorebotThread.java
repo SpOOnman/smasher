@@ -17,6 +17,7 @@
  */
 package eu.spoonman.smasher.scorebot;
 
+import java.io.IOException;
 
 /**
  * @author Tomasz Kalkosinski
@@ -24,9 +25,9 @@ package eu.spoonman.smasher.scorebot;
  */
 class ScorebotThread extends Thread {
 	
-	private final ServerInfoScorebot scorebot;
+	private final Scorebot scorebot;
 	
-	ScorebotThread(ServerInfoScorebot scorebot) {
+	ScorebotThread(Scorebot scorebot) {
 		super("scbot " + scorebot.getId());
 		this.scorebot = scorebot;
 	}
@@ -37,7 +38,7 @@ class ScorebotThread extends Thread {
 		scorebot.start();
 	}
 
-	public ServerInfoScorebot getScorebot() {
+	public Scorebot getScorebot() {
 		return scorebot;
 	}
 }

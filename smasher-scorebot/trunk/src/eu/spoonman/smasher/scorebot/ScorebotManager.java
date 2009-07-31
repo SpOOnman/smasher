@@ -20,7 +20,6 @@ package eu.spoonman.smasher.scorebot;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -43,16 +42,14 @@ public class ScorebotManager {
 	 */
 	private static final Logger log = Logger.getLogger(ScorebotManager.class);
 
-	private final static ScorebotManager scorebotManager = new ScorebotManager();
-	
 	private final ExecutorService executorService;
+	private List<ServerInfoScorebot> scorebots;
 	private Random random = new Random();
-	
-	private List<ScorebotThread> threads;
 
+	private final static ScorebotManager scorebotManager = new ScorebotManager(); 
 
 	private ScorebotManager() {
-		threads = new ArrayList<ScorebotThread>();
+		scorebots = new ArrayList<ServerInfoScorebot>();
 		executorService = Executors.newCachedThreadPool();
 	}
 
@@ -64,33 +61,25 @@ public class ScorebotManager {
 		
 		log.debug(String.format("Create or get scorebot for %s %s %d %s", game, address, port, args));
 
-		synchronized (threads) {
-			clearOldThreads();
+		synchronized (scorebots) {
 			AbstractQuery abstractQuery = ServerQueryManager.createServerQuery(game, address, port, args);
 			
-			for(ScorebotThread thread : threads) {
-			
-				if (thread.getScorebot().getServerQuery().equals(abstractQuery)) {
-					log.debug(String.format("Scorebot %s founded as matching description", thread.getScorebot().getId()));
-					return thread.getScorebot();
+			for (ServerInfoScorebot scorebot : scorebots) {
+				if (scorebot.getServerQuery().equals(abstractQuery)) {
+					log.debug(String.format("Scorebot %s founded as matching description", scorebot.getId()));
+					return scorebot;
 				}
 			}
 
 			log.debug("Scorebot with given description not found, creating new one");
 			ServerInfoScorebot scorebot = new ServerInfoScorebot(createUniqueId(), abstractQuery);
 			
-			runScorebot(scorebot);
-			return scorebot;
-		}
-	}
+			synchronized (scorebots) {
+				scorebots.add(scorebot);
+				runScorebot(scorebot);
+				return scorebot;
+			}
 
-	/**
-	 * Call only in already synchronized environment.
-	 */
-	private void clearOldThreads() {
-		for (Iterator<ScorebotThread> iterator = threads.iterator(); iterator.hasNext();) {
-			if (!iterator.next().isAlive())
-				iterator.remove();
 		}
 	}
 
@@ -98,11 +87,8 @@ public class ScorebotManager {
 		scorebot.stop();
 	}
 
-	private void runScorebot(final ServerInfoScorebot scorebot) {
-		ScorebotThread scorebotThread = new ScorebotThread(scorebot);
-		scorebotThread.run();
-		
-		threads.add(scorebotThread);
+	private void runScorebot(final Scorebot scorebot) {
+		executorService.execute(new ScorebotThread(scorebot));
 	}
 
 	private String createUniqueId() {
@@ -114,8 +100,8 @@ public class ScorebotManager {
 			char letter = (char) (random.nextInt(26) + 65); // 'A' = 65
 			id = String.format("%c%d", letter, random.nextInt(8) + 1);
 			
-			for (ScorebotThread thread : threads) {
-				if (thread.getScorebot().getId().equals(id)) {
+			for (ServerInfoScorebot scorebot : scorebots) {
+				if (scorebot.getId().equals(id)) {
 					found = true;
 					continue;
 				}
@@ -132,12 +118,10 @@ public class ScorebotManager {
 	 */
 	public Scorebot getScorebotById(String word) {
 
-		synchronized (threads) {
-			clearOldThreads();
-			
-			for (ScorebotThread thread : threads) {
-				if (thread.getScorebot().getId().equals(word))
-					return thread.getScorebot();
+		synchronized (scorebots) {
+			for (ServerInfoScorebot scorebot : scorebots) {
+				if (scorebot.getId().equals(word))
+					return scorebot;
 			}
 		}
 
