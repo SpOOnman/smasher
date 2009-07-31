@@ -55,7 +55,7 @@ public class ConsoleMain {
 				CommandLineParser.getInstance().parseAndExecute(client, line);
 			} catch (ClientException e) {
 				log.info("Client exception", e);
-				console.writer().print(e.toString());
+				console.writer().print(e.getMessage());
 				console.writer().print("\n");
 				console.flush();
 			}
