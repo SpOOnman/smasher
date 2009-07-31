@@ -25,6 +25,10 @@ public class OutputConfiguration extends OutputConfigurationFactory {
 	
 	OutputConfiguration() {
 	}
+	
+	public int getInterval() {
+		return 30;
+	}
 
 	public OutputStyle getShowEveryPlayerScoreChange() {
 		return OutputStyle.DONT_SHOW;

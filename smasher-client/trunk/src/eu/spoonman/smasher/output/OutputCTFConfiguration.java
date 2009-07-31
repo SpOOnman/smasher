@@ -28,5 +28,10 @@ public class OutputCTFConfiguration extends OutputConfiguration {
 	public OutputStyle getShowEveryTeamScoreChange() {
 		return OutputStyle.MAIN_LINE;
 	}
+	
+	@Override
+	public int getInterval() {
+		return 60;
+	}
 
 }
