@@ -59,7 +59,7 @@ public class ScorebotManager {
 
 	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port, List<String> args) {
 		
-		log.debug(String.format("Create or get scorebot for %s %s %d %s", game.toString(), address != null ? address.toString() : "null", port, args.toString()));
+		log.debug(String.format("Create or get scorebot for %s %s %d %s", game, address, port, args));
 
 		synchronized (scorebots) {
 			AbstractQuery abstractQuery = ServerQueryManager.createServerQuery(game, address, port, args);
