@@ -85,6 +85,9 @@ public class ScorebotManager {
 
 	public void stopScorebot(Scorebot scorebot) {
 		scorebot.stop();
+		synchronized (scorebots) {
+			scorebots.remove(scorebot);
+		}
 	}
 
 	private void runScorebot(final Scorebot scorebot) {
