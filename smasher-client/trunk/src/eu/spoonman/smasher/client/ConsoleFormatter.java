@@ -209,6 +209,9 @@ public class ConsoleFormatter {
 			synchronized (mainInlines) {
 				mainInlines.add(lazyFormatString.format());
 			}
+			synchronized (formatMainLine) {
+				formatMainLine = true;
+			}
 			break;
 
 		default:
