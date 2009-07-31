@@ -72,18 +72,19 @@ public class ConsoleFormatter {
 	private final String PLAYER_NAME_CHANGE = "Player %s changed name to %s";
 	private final String PLAYER_SCORE_CHANGE = "Player %s scores to %d";
 	
-	private final String TEAM_NAME_CHANGE = "Team %s renames to %s";
+	private final String TEAM_ID = "%s%s%s%s";
+	private final String TEAM_NAME_CHANGE = "%s renames to %s";
 	private final String SUBSCRIPTION_TEAM_NAME_CHANGE = "Teams are now known as %s%s%s%s and %s%s%s%s.";
-	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
-	private final String TEAM_PLAYERS = "%sTeam %s%s%s%s is: %s.";
+	private final String TEAM_SCORE_CHANGE = "%s scores to %d";
+	private final String TEAM_PLAYERS = "%sTeam %s is: %s.";
 	private final String SPEC_PLAYERS = "%s%s%s%s: %s.";
 	private final String TEAM_PLAYER = "%s%s%s (%d)"; //clan/null, space/null, name, score
 	
 	private final String TIME_PERIOD_INFO = "%d:%02d%s";
 	private final String ROUND_INFO = "%d/%d%s";
 	
-	private final static String MAIN_LINE_TDM = "%s%s%s%s%s  (%s) %s%d%s  vs  %s%d%s (%s)  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
-	private final static String MAIN_LINE_CTF = "%s%s%s%s%s  %s%d%s  vs  %s%d%s  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
+	private final static String MAIN_LINE_TDM = "%s%s  (%s) %s%d%s  vs  %s%d%s (%s)  %s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
+	private final static String MAIN_LINE_CTF = "%s%s  %s%d%s  vs  %s%d%s  %s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
 
 	private final Colors colors;
 	private OutputConfiguration outputConfiguration;
@@ -335,7 +336,7 @@ public class ConsoleFormatter {
 			
 			@Override
 			public String format() {
-				return String.format(TEAM_NAME_CHANGE, diffData.getFirst().getName(), diffData.getSecond()
+				return String.format(TEAM_NAME_CHANGE, formatTeamId(diffData.getFirst()), diffData.getSecond()
 						.getName());
 			}
 		});
@@ -346,7 +347,7 @@ public class ConsoleFormatter {
 			
 			@Override
 			public String format() {
-				return String.format(TEAM_SCORE_CHANGE, diffData.getSecond().getName(), diffData.getSecond()
+				return String.format(TEAM_SCORE_CHANGE, formatTeamId(diffData.getSecond()), diffData.getSecond()
 						.getScore());
 			}
 		});
@@ -478,11 +479,11 @@ public class ConsoleFormatter {
 		
 		TeamInfo redTeam = serverInfo.getTeamInfos().get(TeamKey.RED_TEAM);
 		if (redTeam != null)
-			strings.add(String.format(TEAM_PLAYERS, formatScorebotId(scorebot), colors.getRed(), colors.getBold(), formatTeamName(redTeam.getName(), true) , colors.getReset(), formatPlayersTeam(redTeam, serverInfo.getPlayerInfos())));
+			strings.add(String.format(TEAM_PLAYERS, formatScorebotId(scorebot), formatTeamId(redTeam), formatPlayersTeam(redTeam, serverInfo.getPlayerInfos())));
 		
 		TeamInfo blueTeam = serverInfo.getTeamInfos().get(TeamKey.BLUE_TEAM);
 		if (blueTeam != null)
-			strings.add(String.format(TEAM_PLAYERS, formatScorebotId(scorebot), colors.getBlue(), colors.getBold(), formatTeamName(blueTeam.getName(), false) , colors.getReset(), formatPlayersTeam(blueTeam, serverInfo.getPlayerInfos())));
+			strings.add(String.format(TEAM_PLAYERS, formatScorebotId(scorebot), formatTeamId(blueTeam), formatPlayersTeam(blueTeam, serverInfo.getPlayerInfos())));
 		
 		TeamInfo specTeam = serverInfo.getTeamInfos().get(TeamKey.SPECTATORS_TEAM);
 		if (specTeam != null)
@@ -543,6 +544,19 @@ public class ConsoleFormatter {
 		}
 		
 		return flags.toString();
+	}
+	
+	private String formatTeamId (TeamInfo team) {
+		switch (team.getKey()) {
+		case RED_TEAM:
+			return String.format(TEAM_ID, colors.getRed(), colors.getBold(), formatTeamName(team.getName(), true) , colors.getReset());
+			
+		case BLUE_TEAM:
+			return String.format(TEAM_ID, colors.getBlue(), colors.getBold(), formatTeamName(team.getName(), false) , colors.getReset());
+			
+		default:
+			return null;
+		}
 	}
 	
 	private String formatTeamName(String name, boolean redTeam) {
