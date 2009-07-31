@@ -372,8 +372,11 @@ public class ConsoleFormatter {
 		
 		ServerInfo serverInfo = ensureServerInfo(scorebot);
 		
-		TeamInfo redTeam = serverInfo.getTeamInfos().get(TeamKey.RED_TEAM);
-		TeamInfo blueTeam = serverInfo.getTeamInfos().get(TeamKey.BLUE_TEAM);
+		if (serverInfo == null)
+			return null;
+		
+		TeamInfo redTeam = serverInfo.getRedTeam();
+		TeamInfo blueTeam = serverInfo.getBlueTeam();
 		ProgressInfo progressInfo = serverInfo.getProgressInfo();
 		GameInfo gameInfo = serverInfo.getGameInfo();
 		
