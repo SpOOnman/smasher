@@ -17,13 +17,11 @@
  */
 package eu.spoonman.smasher.client;
 
-import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.spoonman.smasher.client.pircbot.PircBotColors;
-import eu.spoonman.smasher.output.OutputConfiguration;
+import org.apache.log4j.Logger;
+
 import eu.spoonman.smasher.scorebot.Scorebot;
 
 /**
@@ -98,6 +96,18 @@ public class SubscriptionManager {
 		consoleFormatter.setSubscription(subscription);
 		
 		return subscription;
+		
+	}
+	
+	public void showOnDemand(Client client, Scorebot scorebot) throws ClientException {
+		Subscription subscription = find(client, scorebot);
+		
+		if (subscription == null) {
+			log.error(String.format("Cannot find subscription of scorebot %s for client %s.", scorebot.getId(), client.getName() ));
+			throw new ClientException("Cannot find subscription");
+		}
+		
+		subscription.showOnDemand();
 		
 	}
 

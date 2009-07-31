@@ -52,9 +52,11 @@ public class ConsoleSubscription extends Subscription {
 		formatter.flush();
 	}
 	
-	/* (non-Javadoc)
-	 * @see eu.spoonman.smasher.client.Subscription#showPlayers()
-	 */
+	@Override
+	public void showOnDemand() {
+		formatter.ensureMainLine();
+	}
+	
 	@Override
 	public void showPlayers() {
 		formatter.showPlayers();

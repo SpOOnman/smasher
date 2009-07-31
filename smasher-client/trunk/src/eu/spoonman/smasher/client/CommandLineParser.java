@@ -142,6 +142,9 @@ public class CommandLineParser {
 		case SHOW:
 			if (data.scorebot == null)
 				throw new ClientException("Scorebot ID is needed.");
+			
+			SubscriptionManager.getInstance().showOnDemand(client, data.scorebot);
+			
 			break;
 			
 		case STOP:

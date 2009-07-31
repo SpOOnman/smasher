@@ -136,6 +136,8 @@ public abstract class Subscription {
 		playerScoreChangeEventObserver = null;
 	}
 	
+	public abstract void showOnDemand();
+	
 	public abstract void showPlayers();
 	
 	public abstract void renameTeams(String redTeam, String blueTeam);
