@@ -20,6 +20,7 @@ package eu.spoonman.smasher.client;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.joda.time.Seconds;
@@ -60,6 +61,8 @@ public class ConsoleFormatter {
 		public String format();
 	}
 	
+	private final Pattern carrets = Pattern.compile("\\^[\\w]");
+	
 	private final String SCOREBOT_ID = "%s%s%s. ";
 	private final String SCOREBOT_START = "%sStarting %s%s%s scorebot on %s.";
 	private final String SCOREBOT_STOP = "%sScorebot stopped. %s";
@@ -74,7 +77,7 @@ public class ConsoleFormatter {
 	private final String TEAM_SCORE_CHANGE = "Team %s scores to %d";
 	private final String TEAM_PLAYERS = "%sTeam %s%s%s%s is: %s.";
 	private final String SPEC_PLAYERS = "%s%s%s%s: %s.";
-	private final String TEAM_PLAYER = "%s%s%s (%d), "; //clan/null, space/null, name, score
+	private final String TEAM_PLAYER = "%s%s%s (%d)"; //clan/null, space/null, name, score
 	
 	private final String TIME_PERIOD_INFO = "%d:%02d%s";
 	private final String ROUND_INFO = "%d/%d%s";
@@ -490,12 +493,18 @@ public class ConsoleFormatter {
 	
 	private String formatPlayersTeam(TeamInfo teamInfo, List<PlayerInfo> players) {
 		StringBuilder sb = new StringBuilder();
+		boolean first = true;
 		for (PlayerInfo player : players)
 			if (player.getTeamKey() == teamInfo.getKey()) {
+				if (!first)
+					sb.append(", ");
+				
 				sb.append(String.format(TEAM_PLAYER,
-						player.getClan() != null ? player.getClan() : "",
-						player.getClan() != null ? " " : "",
-						player.getName(), player.getScore()));
+					player.getClan() != null ? trimCarets(player.getClan()) : "",
+					player.getClan() != null ? " " : "",
+					trimCarets(player.getName()), player.getScore()));
+				
+				first = false;
 			}
 		
 		return sb.toString();
@@ -548,7 +557,10 @@ public class ConsoleFormatter {
 			return "  ";
 		
 		return String.format("%+d", net);
-		
+	}
+	
+	private String trimCarets(String text) {
+		return carrets.matcher(text).replaceAll("");
 	}
 	
 	public String formatShort(PlayerInfo playerInfo) {
