@@ -146,8 +146,6 @@ public class ConsoleFormatter {
 	private synchronized List<String> formatOutput() {
 		List<String> output = new ArrayList<String>();
 		
-		StringBuilder s = new StringBuilder();
-		
 		output.addAll(beforeMainLines);
 		
 		if (formatMainLine) {
@@ -302,7 +300,7 @@ public class ConsoleFormatter {
 			
 			@Override
 			public String format() {
-				return String.format(PLAYER_CONNECTED_EVENT, diffData.getSecond().getName());
+				return String.format(PLAYER_CONNECTED_EVENT, trimCarets(diffData.getSecond().getName()));
 			}
 		});
 	}
@@ -312,7 +310,7 @@ public class ConsoleFormatter {
 			
 			@Override
 			public String format() {
-				return String.format(PLAYER_DISCONNECTED_EVENT, diffData.getFirst().getName());
+				return String.format(PLAYER_DISCONNECTED_EVENT, trimCarets(diffData.getFirst().getName()));
 			}
 		});
 	}
@@ -322,8 +320,7 @@ public class ConsoleFormatter {
 
 			@Override
 			public String format() {
-				return String.format(PLAYER_NAME_CHANGE, diffData.getFirst().getName(), diffData.getSecond()
-						.getName());
+				return String.format(PLAYER_NAME_CHANGE, trimCarets(diffData.getFirst().getName()), trimCarets(diffData.getSecond().getName()));
 			}
 		});
 	}
@@ -333,7 +330,7 @@ public class ConsoleFormatter {
 			
 			@Override
 			public String format() {
-				return String.format(PLAYER_SCORE_CHANGE, diffData.getSecond().getName(), diffData.getSecond()
+				return String.format(PLAYER_SCORE_CHANGE, trimCarets(diffData.getSecond().getName()), diffData.getSecond()
 						.getScore());
 			}
 		});
