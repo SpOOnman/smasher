@@ -26,8 +26,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import sun.security.jca.GetInstance;
-
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.scorebot.ScorebotManager;
 import eu.spoonman.smasher.serverinfo.Games;
@@ -133,8 +131,8 @@ public class CommandLineParser {
 //			if (data.address == null)
 //				throw new ClientException("I don't have IP.");
 //			
-//			if (data.game == null)
-//				throw new ClientException("I don't know what game to use.");
+			if (data.game == null)
+				throw new ClientException("I don't know what game to use. For example: ql.");
 			
 			Scorebot scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port, data.args);
 			SubscriptionManager.getInstance().subscribe(client, scorebot);
