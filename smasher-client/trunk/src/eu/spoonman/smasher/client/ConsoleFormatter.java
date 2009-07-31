@@ -290,6 +290,11 @@ public class ConsoleFormatter {
 			timeMark = mark;
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
 		}
+		
+		//Show if flags change too
+		if (diffData.getFirst().getProgressInfoFlags().equals(diffData.getSecond().getProgressInfoFlags())) {
+			format(OutputStyle.TRIGGER_MAIN_LINE, null);
+		}
 	}
 
 	public void formatPlayerConnectedEvent(final DiffData<PlayerInfo> diffData) {
