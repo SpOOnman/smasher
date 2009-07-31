@@ -79,9 +79,6 @@ public class ConsoleFormatter {
 	private final String TIME_PERIOD_INFO = "%d:%02d%s";
 	private final String ROUND_INFO = "%d/%d%s";
 	
-	private final int TDM_INTERVAL = 30; //seconds
-	private final int INTERVAL = TDM_INTERVAL * 2;
-	
 	private final static String MAIN_LINE_TDM = "%s%s%s%s%s  (%s) %s%d%s  vs  %s%d%s (%s)  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
 	private final static String MAIN_LINE_CTF = "%s%s%s%s%s  %s%d%s  vs  %s%d%s  %s%s%s%s (%s, map: %s) %s%s*%s%s%s%s*%s %s";
 
@@ -274,7 +271,7 @@ public class ConsoleFormatter {
 			int modifier = secondsFirst.getSeconds() < secondsSecond.getSeconds() ? -1 : 1;
 			modifier = -1;
 			
-			mark = Integer.toString((int) (Math.floor( (secondsSecond.getSeconds() + modifier) / TDM_INTERVAL)));
+			mark = Integer.toString((int) (Math.floor( (secondsSecond.getSeconds() + modifier) / outputConfiguration.getInterval())));
 		}
 		
 		//Or every round
