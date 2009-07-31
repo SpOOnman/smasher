@@ -290,7 +290,7 @@ public class ConsoleFormatter {
 		}
 		
 		//Show if flags change too
-		if (diffData.getFirst().getProgressInfoFlags().equals(diffData.getSecond().getProgressInfoFlags())) {
+		if (!(diffData.getFirst().getProgressInfoFlags().equals(diffData.getSecond().getProgressInfoFlags()))) {
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
 		}
 	}
