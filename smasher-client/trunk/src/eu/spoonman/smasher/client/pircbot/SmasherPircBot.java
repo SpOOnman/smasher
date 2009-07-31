@@ -32,10 +32,10 @@ public class SmasherPircBot extends PircBot {
 			CommandLineParser.getInstance().parseAndExecute(getChannelClient(channel), message);
 		} catch (ClientException e) {
 			log.info("Client exception", e);
-			sendMessage(channel, e.toString());
+			sendMessage(channel, e.getMessage());
 		} catch (Exception e) {
 			log.error(e);
-			sendMessage(channel, e.toString());
+			sendMessage(channel, e.getMessage());
 		}
     	
     }
