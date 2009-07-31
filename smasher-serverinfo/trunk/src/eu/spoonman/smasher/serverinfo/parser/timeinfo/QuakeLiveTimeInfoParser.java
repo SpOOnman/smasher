@@ -86,6 +86,10 @@ public class QuakeLiveTimeInfoParser implements ServerInfoParser {
         
         if (timelimit != null && timelimit.length() > 0 && timelimit != "0") {
             timePeriodInfo.setPeriod(new Period(now, start.plusMinutes(Integer.parseInt(timelimit))));
+            if (timePeriodInfo.getPeriod().toStandardSeconds().getSeconds() <= 0) {
+                timePeriodInfo.getProgressInfoFlags().add(ProgressInfoFlags.TIMELIMIT);
+                timePeriodInfo.getProgressInfoFlags().remove(ProgressInfoFlags.IN_PLAY);
+            }
         } else {
             timePeriodInfo.setPeriod(new Period(start, now));
         }
