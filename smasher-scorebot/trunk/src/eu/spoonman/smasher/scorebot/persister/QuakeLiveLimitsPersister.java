@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 
 import eu.spoonman.smasher.scorebot.Scorebot;
+import eu.spoonman.smasher.serverinfo.GameTypes;
 import eu.spoonman.smasher.serverinfo.ProgressInfoFlags;
 import eu.spoonman.smasher.serverinfo.ServerInfo;
 import eu.spoonman.smasher.serverinfo.TeamKey;
@@ -48,6 +49,9 @@ public class QuakeLiveLimitsPersister extends ScorebotPersister {
 		if (right == null || right.getJson() == null)
 			return;
 		
+		// And only in capture the flag.
+		if (right.getGameInfo().getGameType() != GameTypes.CAPTURE_THE_FLAG)
+			return;
 		
 		try {
 			JSONObject json = right.getJson();
