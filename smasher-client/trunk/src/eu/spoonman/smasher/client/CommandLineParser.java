@@ -80,6 +80,8 @@ public class CommandLineParser {
 	}
 
 	public void parseAndExecute(Client client, String line) throws ClientException {
+		log.info("Parsing line '" + line + "' from client " + client.getName());
+		
 		String[] split = line.split(" ");
 		
 		CommandData data = new CommandData();
