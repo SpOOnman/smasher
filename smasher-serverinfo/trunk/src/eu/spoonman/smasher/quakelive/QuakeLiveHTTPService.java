@@ -82,6 +82,17 @@ public class QuakeLiveHTTPService {
 
     private String cookies = null;
 
+    private String username;
+    private String password;
+    
+    /**
+     * 
+     */
+    public QuakeLiveHTTPService(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     private void setCookies(List<String> cookieList) {
         StringBuilder sb = new StringBuilder();
         for (String cookie : cookieList) {
@@ -182,17 +193,8 @@ public class QuakeLiveHTTPService {
 
     }
 
-    void login() throws IOException {
-        Properties properties = new Properties();
-        properties.load(new FileInputStream("quakelive.properties"));
-        String username = (String) properties.get("username");
-        String password = (String) properties.get("password");
 
-        login(username, password);
-
-    }
-
-    private void login(String username, String password) throws IOException {
+    private void login() throws IOException {
         try {
 
             String parameters = String.format(QUAKELIVE_PARAMETERS, username, password);
@@ -270,16 +272,4 @@ public class QuakeLiveHTTPService {
         return null;
 
     }
-
-    public static void main(String[] args) throws LoginException, IOException, XMPPException {
-        QuakeLiveHTTPService qls = new QuakeLiveHTTPService();
-        // qls.getMatchDetails(9865953, 1);
-        // qls.getMatchDetails(5793181, 4);
-        qls.login("tomasz2k@poczta.onet.pl", "");
-        // qls.httpQuery("GET", "http://www.quakelive.com/stats/overall", null);
-        qls.httpQuery("GET", "http://www.quakelive.com/stats/recordstats/838199", null);
-        qls.httpQuery("GET", "http://www.quakelive.com/stats/playerdetails/838199", null);
-
-    }
-
 }

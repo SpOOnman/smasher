@@ -26,6 +26,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import eu.spoonman.smasher.common.Configuration;
+import eu.spoonman.smasher.common.Configuration.ConfigurationKey;
 import eu.spoonman.smasher.scorebot.Scorebot;
 import eu.spoonman.smasher.scorebot.ScorebotManager;
 import eu.spoonman.smasher.serverinfo.Games;
@@ -136,7 +138,9 @@ public class CommandLineParser {
 			if (data.game == null)
 				throw new ClientException("I don't know what game to use. For example: ql.");
 			
-			Scorebot scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port, data.args);
+			Scorebot scorebot = ScorebotManager.getInstance().createOrGetScorebot(data.game, data.address, data.port, data.args,
+					Configuration.getInstance().getKey(ConfigurationKey.QUAKELIVE_USERNAME_KEY),
+					Configuration.getInstance().getKey(ConfigurationKey.QUAKELIVE_PASSWORD_KEY));
 			SubscriptionManager.getInstance().subscribe(client, scorebot);
 			
 			break;

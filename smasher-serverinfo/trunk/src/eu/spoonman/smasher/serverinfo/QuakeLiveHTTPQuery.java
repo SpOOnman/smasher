@@ -50,9 +50,9 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
     
     private boolean alreadyBuilded;
     
-    public QuakeLiveHTTPQuery(Builder builder, String argument) {
+    public QuakeLiveHTTPQuery(Builder builder, String argument, String username, String password) {
         this.builder = builder;
-        httpService = new QuakeLiveHTTPService();
+        httpService = new QuakeLiveHTTPService(username, password);
         this.argument = argument;
         
         alreadyBuilded = false;

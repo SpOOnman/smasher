@@ -21,18 +21,24 @@ package eu.spoonman.smasher.serverinfo;
 import java.net.InetAddress;
 import java.util.List;
 
+import javax.security.auth.login.Configuration;
+
 import eu.spoonman.smasher.serverinfo.builder.Builder;
 import eu.spoonman.smasher.serverinfo.builder.BuilderFactory;
 
 public class ServerQueryManager {
 
     public static AbstractQuery createServerQuery(Games game, InetAddress inetAddress, int port, List<String> args) {
+        return createServerQuery(game, inetAddress, port, args, null, null);
+    }
+    
+    public static AbstractQuery createServerQuery(Games game, InetAddress inetAddress, int port, List<String> args, String username, String password) {
         
         Builder builder = BuilderFactory.createBuilder(game);
         
         switch (game) {
             case QUAKELIVE:
-                return getQuakeLiveHTTPQuery(args, builder);
+                return getQuakeLiveHTTPQuery(args, builder, username, password);
                 
                 default:
                     return getServerQuery(inetAddress, port, builder);
@@ -48,8 +54,8 @@ public class ServerQueryManager {
         return serverQuery;
     }
     
-    private static QuakeLiveHTTPQuery getQuakeLiveHTTPQuery(List<String> args, Builder builder) {
-        QuakeLiveHTTPQuery quakeLiveHTTPQuery = new QuakeLiveHTTPQuery(builder, args.get(0));
+    private static QuakeLiveHTTPQuery getQuakeLiveHTTPQuery(List<String> args, Builder builder, String username, String password) {
+        QuakeLiveHTTPQuery quakeLiveHTTPQuery = new QuakeLiveHTTPQuery(builder, args.get(0), username, password);
         
         return quakeLiveHTTPQuery;
         

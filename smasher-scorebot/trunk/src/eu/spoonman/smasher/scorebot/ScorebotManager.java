@@ -57,12 +57,12 @@ public class ScorebotManager {
 		return scorebotManager;
 	}
 
-	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port, List<String> args) {
+	public ServerInfoScorebot createOrGetScorebot(Games game, InetAddress address, int port, List<String> args, String username, String password) {
 		
 		log.debug(String.format("Create or get scorebot for %s %s %d %s", game, address, port, args));
 
 		synchronized (scorebots) {
-			AbstractQuery abstractQuery = ServerQueryManager.createServerQuery(game, address, port, args);
+			AbstractQuery abstractQuery = ServerQueryManager.createServerQuery(game, address, port, args, username, password);
 			
 			for (ServerInfoScorebot scorebot : scorebots) {
 				if (scorebot.getServerQuery().equals(abstractQuery)) {

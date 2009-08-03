@@ -199,10 +199,10 @@ public class QuakeLiveXMPPService {
     }
 
     public static void main(String[] args) throws LoginException, IOException, XMPPException {
-        QuakeLiveHTTPService qls = new QuakeLiveHTTPService();
-        QuakeLiveXMPPService qms = new QuakeLiveXMPPService(qls);
+        //QuakeLiveHTTPService qls = new QuakeLiveHTTPService();
+        //QuakeLiveXMPPService qms = new QuakeLiveXMPPService(qls);
         //qls.login(QUAKELIVE_USER, QUAKELIVE_PASS);
-        qms.load();
+        //qms.load();
     }
 
 }
