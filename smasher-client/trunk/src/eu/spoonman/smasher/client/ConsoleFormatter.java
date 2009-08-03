@@ -278,7 +278,7 @@ public class ConsoleFormatter {
 			mark = Integer.toString((int) (Math.floor( (secondsSecond.getSeconds() + modifier) / outputConfiguration.getInterval())));
 		}
 		
-		//Or every round
+		// Or every round
 		if (diffData.getFirst() instanceof RoundInfo) { //both are
 			mark = Integer.toString(((RoundInfo) diffData.getSecond()).getRoundNumber());
 		}
@@ -288,9 +288,16 @@ public class ConsoleFormatter {
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
 		}
 		
-		//Show if flags change too
+		// Show if flags change too
 		if (!(diffData.getFirst().getProgressInfoFlags().equals(diffData.getSecond().getProgressInfoFlags()))) {
 			format(OutputStyle.TRIGGER_MAIN_LINE, null);
+			
+			// And show players if there is some limit.
+			for(ProgressInfoFlags flag : ProgressInfoFlags.getLimitFlags())
+				if (!diffData.getFirst().getProgressInfoFlags().contains(flag) &&
+					diffData.getSecond().getProgressInfoFlags().contains(flag))
+					showPlayers();
+				
 		}
 	}
 
