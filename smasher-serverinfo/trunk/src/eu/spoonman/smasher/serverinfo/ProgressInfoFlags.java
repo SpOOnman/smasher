@@ -40,6 +40,10 @@ public enum ProgressInfoFlags {
     
     TIMEOUT,
     TIMEOUT_RED,
-    TIMEOUT_BLUE,
-
+    TIMEOUT_BLUE;
+    
+    public ProgressInfoFlags[] getLimitFlags() {
+        ProgressInfoFlags[] limitFlags = { TIMELIMIT, FRAGLIMIT, CAPLIMIT, ROUNDLIMIT } ;
+        return limitFlags ;
+    }
 }
