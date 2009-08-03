@@ -45,7 +45,7 @@ public class CommandLineParser {
 	private static Map<String, Games> gameMapping = new HashMap<String, Games>();
 
 	enum Commands {
-		START, STOP, SHOW, PLAYERS, TEAMS
+		START, STOP, SHOW, PLAYERS, TEAMS, INFO, ABOUT
 	}
 	
 	private static CommandLineParser parser;
@@ -177,10 +177,21 @@ public class CommandLineParser {
 			SubscriptionManager.getInstance().renameTeams(client, data.scorebot, data.args);
 			break;
 			
+		case INFO:
+		case ABOUT:
+			showHelp(client);
+			break;
 
 		default:
 			throw new ClientException("Unknown command " + data.command);
 		}
+	}
+	
+	private void showHelp(Client client) {
+		List<String> lines = new ArrayList<String>();
+		lines.add(String.format("I am %sSmasher%s v. %s (%s) by Tomasz Kalkosiński aka SpOOnman (spoonman@op.pl).", 
+				client.getColors().getBold(), client.getColors().getReset(), Configuration.VERSION, Configuration.RELEASE_DATE));
+		client.print(lines);
 	}
 
 	private Commands searchForCommand(String word) {
