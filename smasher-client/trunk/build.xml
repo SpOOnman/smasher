@@ -1,17 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="smasher.makejar" default="makejar" basedir=".">
-	<property name="appname" value="smasher-client" />
+<project name="smasher.makejar" default="create_run_jar" basedir=".">
+	<property name="appname" value="smasher-irc" />
 	<property name="lib" value="lib" />
 	<property name="dist" value="dist" />
 	<property name="version" value="1.0" />
 	<property name="manifest" value="manifest" />
+	<property name="workspace" value="/home/spoonman/workspace" />
 
-	<target name="makejar">
-		<mkdir dir="${dist}" />
-		<delete file="${dist}/${appname}.jar" />
-		<jar manifest="${manifest}" destfile="${dist}/${appname}-${version}.jar" basedir="bin">
-			<zipfileset src="${lib}/log4j-1.2.15.jar" includes="**/*.class"/>
+	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+	<!--ANT 1.7 is required                                        -->
+	<target name="create_run_jar">
+		<jar destfile="${dist}/${appname}.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="eu.spoonman.smasher.client.pircbot.SmasherPircBotMain" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<fileset dir="${workspace}/smasher-client/bin" />
+			<fileset dir="${workspace}/smasher-scorebot/bin" />
+			<fileset dir="${workspace}/smasher-serverinfo/bin" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-serverinfo/lib/log4j-1.2.15.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-serverinfo/lib/json_simple-1.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-serverinfo/lib/joda-time-1.6.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-serverinfo/lib/smack.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-serverinfo/lib/smackx.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-serverinfo/lib/commons-codec.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-serverinfo/lib/junit.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-client/lib/pircbot.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-client/lib/easymock-2.5.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-client/lib/easymockclassextension.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-client/lib/cglib-full-2.0.2.jar" />
 		</jar>
+		<copy todir="${dist}" verbose="true" >
+			<fileset dir="${workspace}/smasher-client" includes="**.properties" />
+		</copy>
 	</target>
+
+
 
 </project>

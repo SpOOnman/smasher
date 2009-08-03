@@ -3,14 +3,14 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/smasher-scorebot"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/smasher-serverinfo"/>
-	<classpathentry kind="lib" path="/smasher-scorebot/lib/joda-time-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/pircbot.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/easymock-2.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/easymockclassextension.jar"/>
 	<classpathentry kind="lib" path="lib/cglib-full-2.0.2.jar"/>
+	<classpathentry kind="lib" path="/smasher-serverinfo/lib/joda-time-1.6.jar"/>
+	<classpathentry kind="lib" path="/smasher-serverinfo/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="/smasher-serverinfo/lib/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
