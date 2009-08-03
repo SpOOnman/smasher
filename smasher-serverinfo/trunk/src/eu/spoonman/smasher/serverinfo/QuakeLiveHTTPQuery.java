@@ -151,12 +151,12 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
         
         return String.format("%d (http://www.quakelive.com/r/home/join/%d)", matchId, matchId);
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + matchId;
+        result = prime * result + ((argument == null) ? 0 : argument.hashCode());
         return result;
     }
 
@@ -169,7 +169,10 @@ public class QuakeLiveHTTPQuery extends AbstractQuery {
         if (!(obj instanceof QuakeLiveHTTPQuery))
             return false;
         QuakeLiveHTTPQuery other = (QuakeLiveHTTPQuery) obj;
-        if (matchId != other.matchId)
+        if (argument == null) {
+            if (other.argument != null)
+                return false;
+        } else if (!argument.equalsIgnoreCase(other.argument))
             return false;
         return true;
     }
