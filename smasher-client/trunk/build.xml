@@ -34,6 +34,8 @@
 		<copy todir="${dist}" verbose="true" >
 			<fileset dir="${workspace}/smasher-client/resources" />
 		</copy>
+		<chmod dir="${dist}" perm="ugo+rx" includes="**/*.sh"/>
+
 	</target>
 
 
