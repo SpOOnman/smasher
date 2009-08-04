@@ -45,7 +45,7 @@ public class CommandLineParser {
 	private static Map<String, Games> gameMapping = new HashMap<String, Games>();
 
 	enum Commands {
-		START, STOP, SHOW, PLAYERS, TEAMS, INFO, ABOUT
+		START, STOP, SHOW, PLAYERS, TEAMS, INFO, ABOUT, HELP
 	}
 	
 	private static CommandLineParser parser;
@@ -179,6 +179,10 @@ public class CommandLineParser {
 			
 		case INFO:
 		case ABOUT:
+			showInfo(client);
+			break;
+			
+		case HELP:
 			showHelp(client);
 			break;
 
@@ -188,6 +192,13 @@ public class CommandLineParser {
 	}
 	
 	private void showHelp(Client client) {
+		List<String> lines = new ArrayList<String>();
+		lines.add("Use !start ql 472617 to start QL scorebot on match id 472617.");
+		lines.add("Use !show K3, !stop K3, !teams K3 red blue, !players K3 on K3 scorebot while running.");
+		client.print(lines);
+	}
+	
+	private void showInfo(Client client) {
 		List<String> lines = new ArrayList<String>();
 		lines.add(String.format("I am %sSmasher%s v. %s (%s) by Tomasz Kalkosiński aka SpOOnman (spoonman@op.pl).", 
 				client.getColors().getBold(), client.getColors().getReset(), Configuration.VERSION, Configuration.RELEASE_DATE));
