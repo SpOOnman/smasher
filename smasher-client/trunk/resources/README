@@ -1,0 +1,68 @@
+
+0. About
+--------------------------------------------------------------------------------
+
+    Smasher - scorebot for QuakeLive.
+    Version 1.0 (4.08.2009)
+    Copyright (C) 2009 by Tomasz 'SpOOnman' Kalkosiński <spoonman@op.pl>
+
+    
+1. Legal notice
+--------------------------------------------------------------------------------
+
+    Author  : Tomasz 'SpOOnman' Kalkosiński <spoonman@op.pl>
+    URL     : http://code.google.com/p/smasher/
+    Licence : GPL3
+    
+    QuakeLive is a legal registered trademark of id Software.
+
+
+2. Requirements
+--------------------------------------------------------------------------------
+
+    1. Java 6
+    2. QuakeLive account.
+
+3. Installation
+--------------------------------------------------------------------------------
+
+    1. Edit configuration.properties.
+    2. Scorebot needs QuakeLive account to log in and operate on it. It may be
+       your account (but you and bot cannot be both logged in the same time) or
+       special account registered for bot.
+
+4. Usage
+--------------------------------------------------------------------------------
+
+    Bot connects to IRC to channels you provide. Use !help for help.
+    Availible commands and examples:
+        !start ql 726152 - starts scorebot on game id 726152
+        !stop K3         - stops scorebot with K3 identifier
+        !teams K3 LLL vG - renames teams
+        !show K3         - show K3's game status.
+        !stop K3         - stops K3.
+
+5. Changelog
+--------------------------------------------------------------------------------
+
+    1.0 Release (4.08.2009)
+    - first public release
+ 
+6. Notes and Known issues
+--------------------------------------------------------------------------------
+
+7. History and credits
+--------------------------------------------------------------------------------
+
+8. Files 
+--------------------------------------------------------------------------------
+
+    Files included in smasher-1.0.zip:
+
+    - smasher-irc.jar
+    - start.sh
+    - start.bat
+    - README
+    - LICENSE
+
+--------------------------------------------------------------------------------
