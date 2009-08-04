@@ -30,6 +30,9 @@
     2. Scorebot needs QuakeLive account to log in and operate on it. It may be
        your account (but you and bot cannot be both logged in the same time) or
        special account registered for bot.
+    3. Use console to start application. For Windows users: Start->Run->'cmd',
+       then run start.bat. For Linux users use any shell and run ./start.sh.
+       This may be improved in future versions.
 
 4. Usage
 --------------------------------------------------------------------------------
@@ -60,6 +63,7 @@
     Files included in smasher-1.0.zip:
 
     - smasher-irc.jar
+    - configuration.properties
     - start.sh
     - start.bat
     - README
