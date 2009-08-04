@@ -200,7 +200,7 @@ public class CommandLineParser {
 	
 	private void showInfo(Client client) {
 		List<String> lines = new ArrayList<String>();
-		lines.add(String.format("I am %sSmasher%s v. %s (%s) by Tomasz Kalkosiński aka SpOOnman (spoonman@op.pl).", 
+		lines.add(String.format("I am %sSmasher%s v. %s (%s) by Tomasz 'SpOOnman' Kalkosiński (http://code.google.com/p/smasher/).", 
 				client.getColors().getBold(), client.getColors().getReset(), Configuration.VERSION, Configuration.RELEASE_DATE));
 		client.print(lines);
 	}
