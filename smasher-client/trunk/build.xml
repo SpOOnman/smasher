@@ -34,6 +34,9 @@
 		<copy todir="${dist}" verbose="true" >
 			<fileset dir="${workspace}/smasher-client" includes="**.properties" />
 		</copy>
+		<copy todir="${dist}" verbose="true" >
+			<fileset dir="${workspace}/smasher-client/resources" />
+		</copy>
 	</target>
 
 
