@@ -32,9 +32,6 @@
 			<zipfileset excludes="META-INF/*.SF" src="${workspace}/smasher-client/lib/cglib-full-2.0.2.jar" />
 		</jar>
 		<copy todir="${dist}" verbose="true" >
-			<fileset dir="${workspace}/smasher-client" includes="**.properties" />
-		</copy>
-		<copy todir="${dist}" verbose="true" >
 			<fileset dir="${workspace}/smasher-client/resources" />
 		</copy>
 	</target>
