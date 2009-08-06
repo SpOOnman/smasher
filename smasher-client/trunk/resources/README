@@ -3,7 +3,7 @@
 --------------------------------------------------------------------------------
 
     Smasher - scorebot for QuakeLive.
-    Version 1.0 (4.08.2009)
+    Version 1.0.1 (6.08.2009)
     Copyright (C) 2009 by Tomasz 'SpOOnman' Kalkosiński <spoonman@op.pl>
 
     
@@ -48,8 +48,11 @@
 5. Changelog
 --------------------------------------------------------------------------------
 
+	1.0.1 Release (6.08.2009)
+	- change interval from 1,5 sec to 10 sec.
+
     1.0 Release (4.08.2009)
-    - first public release
+    - first public release, withdrawed.
  
 6. Notes and Known issues
 --------------------------------------------------------------------------------
@@ -60,7 +63,7 @@
 8. Files 
 --------------------------------------------------------------------------------
 
-    Files included in smasher-1.0.zip:
+    Files included in smasher-1.0.1.zip:
 
     - smasher-irc.jar
     - configuration.properties

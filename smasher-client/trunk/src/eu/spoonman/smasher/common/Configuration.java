@@ -30,8 +30,8 @@ import java.util.Properties;
  */
 public class Configuration {
 	
-	public final static String VERSION = "1.0";
-	public final static String RELEASE_DATE = "4.08.2009";
+	public final static String VERSION = "1.0.1";
+	public final static String RELEASE_DATE = "6.08.2009";
 	
 	public enum ConfigurationKey {
 		BOT_NAME_KEY ("bot.name"),
