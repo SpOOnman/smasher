@@ -49,7 +49,7 @@ public class ServerInfoScorebot extends Scorebot {
 	 */
 	private static final Logger log = Logger.getLogger(ServerInfoScorebot.class);
 
-	protected final long interval = 1500; // ms
+	protected final long interval = 10000; // ms
 	protected int count = 0;
 
 	private Boolean running = false;
