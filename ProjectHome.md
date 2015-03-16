@@ -1,0 +1,1 @@
+Scorebot queries QuakeLive server every 10 seconds and reports status on desired IRC channel. It may be not accurate to actual game status but it's sufficient for reporting purposes.
